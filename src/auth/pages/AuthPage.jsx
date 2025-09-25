@@ -1,117 +1,142 @@
-import { Box, Button, Grid, InputAdornment, MenuItem, Select, TextField, Typography } from "@mui/material";
+import {
+    Box,
+    FormControl,
+    Grid,
+    InputAdornment,
+    InputLabel,
+    MenuItem,
+    Typography,
+} from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
-import LockIcon from '@mui/icons-material/Lock';
+import LockIcon from "@mui/icons-material/Lock";
+import { useNavigate } from "react-router";
+
+import { useForm } from "../../ui/hooks/useForm";
+import Button from "../components/Button";
+import TextField from "../components/TextField";
+import Select from "../components/Select";
 import { useState } from "react";
 
 export const AuthPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [rol, setRole] = useState("technical");
+    const { email, password, rol, handleFormInputChange, resetForm } = useForm({
+        email: '',
+        password: '',
+        rol: ''
+    });
+    const [role, setRole] = useState(null);
+
+    const handleRoleChange = (event) => {
+        setRole(event.target.value)
+    }
+
+    const navigate = useNavigate();
 
     const handleLoginButtonPress = (e) => {
         e.preventDefault();
         console.log({
-            email,
-            password,
-            rol
+            email, password, rol
         })
+        resetForm();
+        navigate('/admin/products')
     }
-    
-    const handleRolSelectChange = (e) => {
-        // console.log('e: ', e)
-        // e.preventDefault();
-        // const { value } = target;
-        // setRole(value);
-    }
-    
+
     return (
         <Grid
-            sx={{ height: '100vh', }}
+            sx={{ height: '100vh' }}
             container
             justifyContent="center"
             alignItems="center"
+            bgcolor="#E4E4E4"
         >
-            <Grid 
+            <Grid
                 container
-                sx={{ width: 366, px: 6, }}
+                sx={{ 
+                    width: 366, 
+                    px: 6,
+                    borderRadius: 6,
+                    paddingBlock: 5,
+                    boxShadow: 3,
+                }}
                 rowSpacing={1}
                 component="form"
+                bgcolor="white"
             >
                 <Grid
                     size={12}
                     alignItems="center"
                     container
+                    sx={{}}
                 >
                     <Box
                         component="img"
                         src="/public/logo.png"
                         alt="Logo"
-                        sx={{ 
-                            height: 57, 
-                            width: '100%', 
+                        sx={{
+                            height: 57,
+                            width: '100%',
                         }}
                     />
                 </Grid>
                 <Grid
+                    sx={{ my: 1 }}
                     size={12}
                 >
                     <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Login</Typography>
                 </Grid>
                 <Grid
                     size={12}
+                    sx={{ mb: 1, }}
                 >
-                    <TextField 
-                        label="E-mail" 
-                        variant="filled"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        required
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <PersonIcon />
-                                    </InputAdornment>
-                                )
-                            }
-                        }}
+                    <TextField
+                        name="email"
+                        placeholder="Ingrese su correo"
+                        requiered
+                        iconLeft={<PersonIcon sx={{ color: '#CFA968', opacity: 0.5 }} />}
+                        labelText="E-email"
                     />
                 </Grid>
                 <Grid
                     size={12}
                 >
-                    <TextField 
-                        label="Password" 
-                        variant="filled" 
-                        type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <LockIcon />
-                                    </InputAdornment>
-                                )
-                            }
-                        }}
+                    <TextField
+                        name="password"
+                        placeholder="Ingrese su contraseña"
+                        requiered
+                        iconLeft={<LockIcon sx={{ color: '#CFA968', opacity: 0.5 }} />}
+                        labelText="Password"
                     />
                 </Grid>
-                <Grid>
+
+                <Grid
+                    size={12}
+                    sx={{ my: 1, }}
+                >
                     <Select
-                        value={rol}
-                        label="Rol"
-                        onChange={handleRolSelectChange}
+                        textLabel="Rol"
+                        value={role}
+                        name="role"
+                        onChange={handleRoleChange}
+                        placeholder="Seleccione"
+                        labelId="select-label"
+                        id="select"
                     >
                         <MenuItem value="admin">Admin</MenuItem>
                         <MenuItem value="technical">Técnico</MenuItem>
                     </Select>
                 </Grid>
+
                 <Grid
                     size={12}
+                    sx={{ mt: 3, }}
                 >
-                    <Button variant="contained" onClick={handleLoginButtonPress} type="submit">Ingresar</Button>
+                    <Button
+                        variant="contained"
+                        onClick={handleLoginButtonPress}
+                        type="submit"
+                        kind="primary"
+                    >
+                        Ingresar
+                    </Button>
                 </Grid>
             </Grid>
         </Grid>
