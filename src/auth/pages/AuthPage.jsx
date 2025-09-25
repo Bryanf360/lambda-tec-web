@@ -11,11 +11,10 @@ import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate } from "react-router";
 
-import { useForm } from "../../ui/hooks/useForm";
-import Button from "../components/Button";
-import TextField from "../components/TextField";
-import Select from "../components/Select";
+// import { useForm } from "../../ui/hooks/useForm";
 import { useState } from "react";
+import { TextField, Select, Button } from "../components";
+import { useForm } from "../../core/hooks";
 
 export const AuthPage = () => {
     const { email, password, rol, handleFormInputChange, resetForm } = useForm({

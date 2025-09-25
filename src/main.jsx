@@ -8,8 +8,7 @@ import { createRoot } from 'react-dom/client';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 
 import { BrowserRouter } from 'react-router';
-
-import { AppRoutes } from './routes/AppRoutes';
+import { LambdaTecApp } from './LambdaTecApp';
 
 const theme = createTheme({
   palette: {
@@ -51,7 +50,7 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppRoutes />
+        <LambdaTecApp />
       </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,

@@ -17,7 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LockIcon from '@mui/icons-material/Lock';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-import { useFetch } from "../../ui/hooks";
+import { useFetch } from "../../core/hooks";
 
 const userList = [
     {
