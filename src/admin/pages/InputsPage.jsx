@@ -1,5 +1,5 @@
 export const InputsPage = () => {
     return (
-        <div>InputsPage</div>
+        <h1>InputsPage</h1>
     )
 }

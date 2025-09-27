@@ -1,18 +1,18 @@
 import { Navigate, Route, Routes } from "react-router"
 
 import { 
-    AuthLayoutPage,
     DashboardPage,
     InputsPage, 
     OutputsPage, 
     ProductsPage, 
-    UsersPage
+    UsersPage,
+    AdminLayoutPage,
 } from "../pages"
 
 export const AdminRoutes = () => {
     return (
         <Routes>
-            <Route element={<AuthLayoutPage />}>
+            <Route element={<AdminLayoutPage />}>
                 <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="products" element={<ProductsPage />} />
                 <Route path="inputs" element={<InputsPage />} />

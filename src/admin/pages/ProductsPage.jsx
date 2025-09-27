@@ -23,6 +23,10 @@ export const ProductsPage = () => {
     }
 
     return (
+        <h1>ProductsPage</h1>
+    )
+
+    return (
         <div>
             <form onSubmit={handleFormSubmit}>
                 <label htmlFor="name">Nombre*</label>

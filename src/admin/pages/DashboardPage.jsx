@@ -1,10 +1,7 @@
-import { LockOutlined } from "@mui/icons-material"
-import { InputAdornment, TextField } from "@mui/material"
-
 export const DashboardPage = () => {
     return (
         <>
-            <h2>DashboardPage</h2>
+            <h1>DashboardPage</h1>
         </>
     )
 }

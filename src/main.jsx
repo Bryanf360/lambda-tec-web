@@ -38,6 +38,11 @@ const theme = createTheme({
       letterSpacing: '0.1em',
     },
     h2: {
+      fontSize: '0.875rem',
+      fontWeight: 600,
+      letterSpacing: '0.1em',
+    },
+    h3: {
       fontSize: '0.75rem',
       fontWeight: 600,
       letterSpacing: '0.1em',

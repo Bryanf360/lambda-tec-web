@@ -71,6 +71,10 @@ export const UsersPage = () => {
     );
 
     return (
+        <h1>UsersPage</h1>
+    )
+
+    return (
         <Box sx={{ p: 2 }}>
             <TableContainer component={Paper}>
                 <Table>
