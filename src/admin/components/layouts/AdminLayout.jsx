@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import { Button } from "../../../auth/components";
 import { DrawerHeader } from "../atoms";
@@ -95,7 +96,9 @@ export const AdminLayout = () => {
                             '&.MuiToolbar-root': {
                                 display: 'flex',
                                 justifyContent: isDrawerOpen ? 'flex-end' : 'space-between',
-                            }
+                            },
+                            boxShadow: '0 2px 8px -1px rgba(0, 0, 0, 0.08)',
+                            height: 80,
                         }}
                     >
                         <IconButton
@@ -117,6 +120,14 @@ export const AdminLayout = () => {
                             size="small"
                             fullWidth={false}
                             onClick={handleLogoutButtonClick}
+                            startIcon={<LogoutIcon />}
+                            sx={{
+                                px: 3,
+                                borderRadius: 1.5,
+                                py: 0.8,
+                                fontWeight: 700,
+                                fontSize: '0.813rem',
+                            }}
                         >
                             Cerrar Sesión
                         </Button>

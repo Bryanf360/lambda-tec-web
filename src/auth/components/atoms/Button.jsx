@@ -22,7 +22,7 @@ const StyledButton = styled(Button)(({ theme, ownerState }) => ({
 
 export default({
     kind = "primary",
-    sx,
+    // sx,
     children,
     ...props
 }) => {
