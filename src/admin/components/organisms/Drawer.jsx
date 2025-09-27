@@ -20,7 +20,7 @@ import UnarchiveOutlinedIcon from '@mui/icons-material/UnarchiveOutlined';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
 import { Link } from 'react-router';
 
-import { DrawerHeader } from './../components';
+import { DrawerHeader } from '../atoms';
 
 const menuItems = [
     {
@@ -51,9 +51,10 @@ const menuItems = [
 ]
 
 export default ({
-    drawerWidth,
-    open,
-    onClick,
+    width,
+    isOpen,
+    selectedIndex,
+    onListItemClick,
     onClose,
 }) => {
     const theme = useTheme();
@@ -61,10 +62,10 @@ export default ({
     return (
         <Drawer
             sx={{
-                width: drawerWidth,
+                width,
                 flexShrink: 0,
                 '& .MuiDrawer-paper': {
-                    width: drawerWidth,
+                    width,
                     boxSizing: 'border-box',
                 },
                 '& .MuiPaper-root': {
@@ -76,7 +77,7 @@ export default ({
             }}
             variant="persistent"
             anchor="left"
-            open={open}
+            open={isOpen}
         >
             <DrawerHeader>
                 <Box sx={{ display: 'flex', alignItems: 'center', }}>
@@ -93,8 +94,25 @@ export default ({
                         <ListItemButton
                             component={Link} 
                             to={path}
-                            selected={true}
-                            onClick={(event) => onClick(event, index)}
+                            selected={selectedIndex === index}
+                            onClick={(event) => onListItemClick(event, index)}
+                            sx={{
+                                '&.MuiListItemButton-root': {
+                                    mx: 3,
+                                    borderRadius: 3,
+                                    paddingInline: 1,
+                                },
+                                '&.Mui-selected, &.MuiListItemButton-root:hover': {
+                                    backgroundColor: 'white',
+                                    borderRadius: 3,
+                                    mx: 3,
+                                    color: '#2D2D2D',
+                                },
+                                '&.Mui-selected .MuiSvgIcon-root, &.MuiListItemButton-root:hover .MuiSvgIcon-root': {
+                                    color: '#2D2D2D',
+                                },
+                                marginBlock: 0.675,
+                            }}
                         >
                             <ListItemIcon
                                 sx={{
