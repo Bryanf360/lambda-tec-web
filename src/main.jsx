@@ -7,7 +7,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { LambdaTecApp } from './LambdaTecApp';
 
 const theme = createTheme({

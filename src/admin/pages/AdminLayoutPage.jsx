@@ -7,7 +7,7 @@ import {
     useTheme,
 } from "@mui/material"
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { Drawer, DrawerHeader } from "../components";

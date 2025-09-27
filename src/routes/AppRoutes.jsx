@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router"
+import { Route, Routes } from "react-router-dom"
 
 import { AdminRoutes } from "../admin/routes/AdminRoutes"
 import { AuthRoutes } from "../auth/routes/AuthRoutes"

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from "@mui/icons-material/Lock";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 // import { useForm } from "../../ui/hooks/useForm";
 import { useState } from "react";
