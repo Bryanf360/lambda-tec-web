@@ -1,9 +1,8 @@
+import { useState } from "react";
+
 import {
     Box,
-    FormControl,
     Grid,
-    InputAdornment,
-    InputLabel,
     MenuItem,
     Typography,
 } from "@mui/material";
@@ -12,9 +11,9 @@ import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate } from "react-router-dom";
 
 // import { useForm } from "../../ui/hooks/useForm";
-import { useState } from "react";
 import { TextField, Select, Button } from "../components";
 import { useForm } from "../../core/hooks";
+import logo from './../assets/logo.png';
 
 export const AuthPage = () => {
     const { email, password, rol, handleFormInputChange, resetForm } = useForm({
@@ -68,7 +67,7 @@ export const AuthPage = () => {
                 >
                     <Box
                         component="img"
-                        src="/public/logo.png"
+                        src={logo}
                         alt="Logo"
                         sx={{
                             height: 57,
