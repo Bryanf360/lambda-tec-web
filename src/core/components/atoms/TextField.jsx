@@ -28,7 +28,7 @@ export default function ({ value, onChange}) {
                     borderRadius: 2.5,
                 },
                 '& .MuiFilledInput-root:hover, & .MuiFilledInput-root.Mui-focused': {
-                    backgroundColor: 'grey.100',
+                    backgroundColor: 'grey.50',
                 },
                 '& .MuiInputBase-adornedStart': {
                     px: 1.75

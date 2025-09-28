@@ -18,6 +18,9 @@ const theme = createTheme({
     secondary: {
       main: '#F7F7F7',
     },
+    tertiary: {
+      main: '#CFA968',
+    },
     warning: {
       main: '#d4af37',
     },
@@ -25,7 +28,9 @@ const theme = createTheme({
       main: '#DE1200',
     },
     grey: {
-      100: '#f5f5f5',
+      100: '#A6A6A6',
+      75: '#F1F1F1',
+      50: '#f5f5f5',
     },
     text: {
       primary: '#3A3737',
@@ -38,11 +43,16 @@ const theme = createTheme({
       letterSpacing: '0.1em',
     },
     h2: {
+      fontSize: '1rem',
+      fontWeight: 500,
+      letterSpacing: '-0.011em',
+    },
+    h3: {
       fontSize: '0.875rem',
       fontWeight: 600,
       letterSpacing: '0.1em',
     },
-    h3: {
+    h4: {
       fontSize: '0.75rem',
       fontWeight: 600,
       letterSpacing: '0.1em',

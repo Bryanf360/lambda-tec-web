@@ -50,6 +50,8 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
             duration: theme.transitions.duration.leavingScreen,
         }),
         marginLeft: `-${drawerWidth}px`,
+        backgroundColor: theme.palette.grey[75],
+        height: '100vh',
         variants: [
             {
                 props: ({ open }) => open,
@@ -97,7 +99,7 @@ export const AdminLayout = () => {
                                 display: 'flex',
                                 justifyContent: isDrawerOpen ? 'flex-end' : 'space-between',
                             },
-                            boxShadow: '0 2px 8px -1px rgba(0, 0, 0, 0.08)',
+                            boxShadow: '0 4px 8px -1px rgba(0, 0, 0, 0.08)',
                             height: 80,
                         }}
                     >
