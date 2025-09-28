@@ -18,7 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import UnarchiveOutlinedIcon from '@mui/icons-material/UnarchiveOutlined';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate, useNavigation } from 'react-router-dom';
 
 import { DrawerHeader } from '../atoms';
 
@@ -53,12 +53,11 @@ const menuItems = [
 export default ({
     width,
     isOpen,
-    selectedIndex,
-    onListItemClick,
     onClose,
 }) => {
     const theme = useTheme();
-    
+    const { pathname } = useLocation();
+
     return (
         <Drawer
             sx={{
@@ -92,10 +91,9 @@ export default ({
                 {menuItems.map(({ text, path, icon }, index) => (
                     <ListItem key={path} disablePadding>
                         <ListItemButton
-                            component={Link} 
+                            component={NavLink} 
                             to={path}
-                            selected={selectedIndex === index}
-                            onClick={(event) => onListItemClick(event, index)}
+                            selected={path === pathname}
                             sx={{
                                 '&.MuiListItemButton-root': {
                                     mx: 3,

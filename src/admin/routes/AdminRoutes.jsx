@@ -5,6 +5,7 @@ import {
     InputsPage, 
     OutputsPage, 
     ProductsPage, 
+    ReportsPage, 
     UsersPage,
 } from "../pages"
 import { AdminLayout } from "../components"
@@ -17,6 +18,7 @@ export const AdminRoutes = () => {
                 <Route path="products" element={<ProductsPage />} />
                 <Route path="inputs" element={<InputsPage />} />
                 <Route path="outputs" element={<OutputsPage />} />
+                <Route path="reports" element={<ReportsPage />} />
                 <Route path="users" element={<UsersPage />} />
                 <Route path="*" element={<Navigate to="/admin/dashboard" />} />
             </Route>

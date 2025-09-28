@@ -70,7 +70,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 export const AdminLayout = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [selectedIndex, setSelectedIndex] = useState(0);
     const navigate = useNavigate();
 
     const handleDrawerOpen = () => {
@@ -79,10 +78,6 @@ export const AdminLayout = () => {
 
     const handleDrawerClose = () => {
         setIsDrawerOpen(false);
-    };
-
-    const handleListItemClick = (event, index) => {
-        setSelectedIndex(index);
     };
 
     const handleLogoutButtonClick = () => {
@@ -138,9 +133,7 @@ export const AdminLayout = () => {
                 <Drawer
                     width={drawerWidth}
                     isOpen={isDrawerOpen}
-                    onListItemClick={handleListItemClick}
                     onClose={handleDrawerClose}
-                    selectedIndex={selectedIndex}
                 />
                 <Main open={isDrawerOpen}>
                     <DrawerHeader />

@@ -35,7 +35,7 @@ export const AuthPage = () => {
             email, password, rol
         })
         resetForm();
-        navigate('/admin/products')
+        navigate('/admin/dashboard')
     }
 
     return (
