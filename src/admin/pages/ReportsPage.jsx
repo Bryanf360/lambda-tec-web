@@ -1,5 +1,10 @@
+import { CardLayout } from "../components"
+
 export const ReportsPage = () => {
     return (
-        <h1>ReportsPage</h1>
+        <CardLayout
+            title="Reportes"
+        >
+        </CardLayout>
     )
 }

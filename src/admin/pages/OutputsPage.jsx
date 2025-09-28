@@ -1,5 +1,10 @@
+import { CardLayout } from "../components"
+
 export const OutputsPage = () => {
     return (
-        <h1>OutputsPage</h1>
+        <CardLayout
+            title="Salidas"
+        >
+        </CardLayout>
     )
 }

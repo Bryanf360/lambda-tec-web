@@ -18,6 +18,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import { useFetch } from "../../core/hooks";
+import { CardLayout } from "../components";
 
 const userList = [
     {
@@ -71,7 +72,10 @@ export const UsersPage = () => {
     );
 
     return (
-        <h1>UsersPage</h1>
+        <CardLayout
+            title="Usuarios"
+        >
+        </CardLayout>
     )
 
     return (

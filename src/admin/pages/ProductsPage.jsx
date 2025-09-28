@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { CardLayout } from "../components";
+import { Typography } from "@mui/material";
 
 export const ProductsPage = () => {
     const [product, setProduct] = useState({
@@ -23,7 +25,10 @@ export const ProductsPage = () => {
     }
 
     return (
-        <h1>ProductsPage</h1>
+        <CardLayout
+            title="Artículos"
+        >
+        </CardLayout>
     )
 
     return (

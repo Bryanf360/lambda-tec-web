@@ -65,7 +65,6 @@ export const DashboardPage = () => {
             <Grid
                 sx={{
                     mt: 2,
-                    // border: '3px solid'
                 }}
                 container
                 spacing={3}
