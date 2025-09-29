@@ -1,5 +1,6 @@
 import {
     FormControl,
+    FormHelperText,
     InputAdornment,
     InputBase,
     InputLabel,
@@ -36,6 +37,8 @@ const StyledSelect = styled(Select)(({ theme }) => ({
 export default ({
     textLabel,
     placeholder,
+    error,
+    errorMessage,
     children,
     ...props
 }) => {
@@ -43,7 +46,7 @@ export default ({
     return (
         <>
             <Typography variant="h2" sx={{ mb: 0.5, }}>{textLabel}</Typography>
-            <FormControl fullWidth variant="filled">
+            <FormControl fullWidth variant="filled" error={error}>
                 <StyledSelect
                     displayEmpty
                     input={
@@ -68,6 +71,9 @@ export default ({
                 >
                     {children}
                 </StyledSelect>
+                {error && (
+                    <FormHelperText>{errorMessage}</FormHelperText>
+                )}
             </FormControl>
         </>
     )

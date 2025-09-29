@@ -2,34 +2,23 @@ import { useState } from "react";
 
 import {
     Box,
+    FormControl,
+    FormHelperText,
     Grid,
     MenuItem,
     Typography,
 } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from "@mui/icons-material/Lock";
-import { useNavigate } from "react-router-dom";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
 
 import { TextField, Select, Button } from "../components";
-import { useForm } from "../../core/hooks";
 import logo from './../assets/logo.png';
+import { useNavigate } from "react-router-dom";
 
 export const AuthPage = () => {
-    const { email, password, role, handleFormInputChange, resetForm } = useForm({
-        email: '',
-        password: '',
-        role: '',
-    });
     const navigate = useNavigate();
-
-    const handleLoginButtonPress = (e) => {
-        e.preventDefault();
-        console.log({
-            email, password, role
-        })
-        resetForm();
-        // navigate('/admin/dashboard')
-    }
 
     return (
         <Grid
@@ -39,101 +28,131 @@ export const AuthPage = () => {
             alignItems="center"
             bgcolor="#E4E4E4"
         >
-            <Grid
-                container
-                sx={{ 
-                    width: 366, 
-                    px: 6,
-                    borderRadius: 6,
-                    paddingBlock: 5,
-                    boxShadow: 3,
+            <Formik
+                initialValues={{
+                    email: '',
+                    password: '',
+                    role: '',
                 }}
-                rowSpacing={1}
-                component="form"
-                bgcolor="white"
+                onSubmit={(values) => {
+                    navigate('/admin/dashboard')
+                }}
+                validationSchema={Yup.object({
+                    email: Yup.string()
+                        .email("Correo no válido")
+                        .required("El correo es requerido"),
+                    password: Yup.string()
+                        .required("La contraseña es requerida"),
+                    role: Yup.string()
+                        .required("El rol es requerido"),
+                })}
             >
-                <Grid
-                    size={12}
-                    alignItems="center"
-                    container
-                    sx={{}}
-                >
-                    <Box
-                        component="img"
-                        src={logo}
-                        alt="Logo"
+                {({ values, errors, touched, handleSubmit, handleChange }) => (
+                    <Grid
+                        container
                         sx={{
-                            height: 57,
-                            width: '100%',
+                            width: 366,
+                            px: 6,
+                            borderRadius: 6,
+                            paddingBlock: 5,
+                            boxShadow: 3,
                         }}
-                    />
-                </Grid>
-                <Grid
-                    sx={{ my: 1 }}
-                    size={12}
-                >
-                    <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Login</Typography>
-                </Grid>
-                <Grid
-                    size={12}
-                    sx={{ mb: 1, }}
-                >
-                    <TextField
-                        name="email"
-                        placeholder="Ingrese su correo"
-                        required
-                        iconLeft={<PersonIcon sx={{ color: '#CFA968', opacity: 0.5 }} />}
-                        labelText="E-email"
-                        value={email}
-                        onChange={handleFormInputChange}
-                    />
-                </Grid>
-                <Grid
-                    size={12}
-                >
-                    <TextField
-                        name="password"
-                        placeholder="Ingrese su contraseña"
-                        required
-                        iconLeft={<LockIcon sx={{ color: '#CFA968', opacity: 0.5 }} />}
-                        labelText="Password"
-                        value={password}
-                        onChange={handleFormInputChange}
-                    />
-                </Grid>
-
-                <Grid
-                    size={12}
-                    sx={{ my: 1, }}
-                >
-                    <Select
-                        textLabel="Rol"
-                        value={role}
-                        name="role"
-                        onChange={handleFormInputChange}
-                        placeholder="Seleccione"
-                        labelId="select-label"
-                        id="select"
+                        rowSpacing={1}
+                        component={Form}
+                        bgcolor="white"
+                        onSubmit={handleSubmit}
+                        noValidate
                     >
-                        <MenuItem value="admin">Admin</MenuItem>
-                        <MenuItem value="technical">Técnico</MenuItem>
-                    </Select>
-                </Grid>
+                        <Grid
+                            size={12}
+                            alignItems="center"
+                            container
+                        >
+                            <Box
+                                component="img"
+                                src={logo}
+                                alt="Logo"
+                                sx={{
+                                    height: 57,
+                                    width: '100%',
+                                }}
+                            />
+                        </Grid>
+                        <Grid
+                            sx={{ my: 1 }}
+                            size={12}
+                        >
+                            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Login</Typography>
+                        </Grid>
+                        <Grid
+                            size={12}
+                            sx={{ mb: 1, }}
+                        >
+                            <TextField
+                                name="email"
+                                placeholder="Ingrese su correo"
+                                required
+                                iconLeft={<PersonIcon sx={{ color: '#CFA968', opacity: 0.5 }} />}
+                                labelText="E-email"
+                                value={values.email}
+                                onChange={handleChange}
+                                error={Boolean(touched.email && errors.email)}
+                                helperText={touched.email && errors.email}
+                            />
+                        </Grid>
+                        <Grid
+                            size={12}
+                        >
+                            <TextField
+                                name="password"
+                                placeholder="Ingrese su contraseña"
+                                required
+                                iconLeft={<LockIcon sx={{ color: '#CFA968', opacity: 0.5 }} />}
+                                labelText="Password"
+                                value={values.password}
+                                onChange={handleChange}
+                                error={Boolean(touched.password && errors.password)}
+                                helperText={touched.password && errors.password}
+                            />
+                        </Grid>
 
-                <Grid
-                    size={12}
-                    sx={{ mt: 3, }}
-                >
-                    <Button
-                        variant="contained"
-                        onClick={handleLoginButtonPress}
-                        type="submit"
-                        kind="primary"
-                    >
-                        Ingresar
-                    </Button>
-                </Grid>
-            </Grid>
+                        <Grid
+                            size={12}
+                            sx={{ my: 1, }}
+                        >
+                            <Select
+                                textLabel="Rol"
+                                value={values.role}
+                                name="role"
+                                onChange={handleChange}
+                                placeholder="Seleccione"
+                                labelId="select-label"
+                                id="select"
+                                required
+                                error={Boolean(touched.role && errors.role)}
+                                errorMessage={errors.role}
+                            >
+                                <MenuItem value="admin">Admin</MenuItem>
+                                <MenuItem value="technical">Técnico</MenuItem>
+                            </Select>
+                        </Grid>
+                        <Grid
+                            size={12}
+                            sx={{ mt: 3, }}
+                        >
+                            <Button
+                                variant="contained"
+                                // onClick={handleLoginButtonPress}
+                                type="submit"
+                                kind="primary"
+                            >
+                                Ingresar
+                            </Button>
+                        </Grid>
+                    </Grid>
+                )}
+
+            </Formik>
         </Grid>
     )
 }
