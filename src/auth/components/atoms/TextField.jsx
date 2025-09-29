@@ -18,7 +18,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiFilledInput-input::placeholder': {
     fontSize: 12,
     fontWeight: 500,
-    letterSpacing: 1.2
+    letterSpacing: 1.2,
   }
 }))
 

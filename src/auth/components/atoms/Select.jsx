@@ -15,7 +15,7 @@ import { useState } from "react";
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     '&.MuiInputBase-root': {
         borderRadius: 10,
-        backgroundColor: '#F7F7F7',
+        backgroundColor: theme.palette.secondary.main,
         paddingBlock: 10,
         paddingInline: 14,
     },
@@ -66,7 +66,7 @@ export default ({
                     IconComponent={ExpandMoreIcon}
                     renderValue={(selected) => {
                         if (selected === null) {
-                            return <Typography variant="h2" color="#D1D1D1">{placeholder}</Typography>
+                            return <Typography variant="h4" sx={{ opacity: 0.4, }}>{placeholder}</Typography>
                         }
                         return selected;
                     }}
