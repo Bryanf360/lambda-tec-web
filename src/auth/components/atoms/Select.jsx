@@ -39,20 +39,12 @@ export default ({
     children,
     ...props
 }) => {
-    const [value, setValue] = useState(null);
-
-    const handleChange = (event) => {
-        console.log(event.target.value)
-        setValue(event.target.value)
-    }
 
     return (
         <>
             <Typography variant="h2" sx={{ mb: 0.5, }}>{textLabel}</Typography>
             <FormControl fullWidth variant="filled">
                 <StyledSelect
-                    disableUnderline
-                    hiddenLabel
                     displayEmpty
                     input={
                         <StyledInputBase
@@ -65,10 +57,12 @@ export default ({
                     }
                     IconComponent={ExpandMoreIcon}
                     renderValue={(selected) => {
-                        if (selected === null) {
+                        if (selected === '') {
                             return <Typography variant="h4" sx={{ opacity: 0.4, }}>{placeholder}</Typography>
                         }
-                        return selected;
+                        return selected === 'admin'
+                            ? 'Admin'
+                            : 'Técnico'
                     }}
                     {...props}
                 >

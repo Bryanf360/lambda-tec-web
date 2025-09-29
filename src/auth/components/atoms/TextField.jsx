@@ -8,7 +8,7 @@ import {
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiFilledInput-root': {
     borderRadius: 10,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: theme.palette.secondary.main,
     paddingLeft: 14,
   },
   '& .MuiFilledInput-input': {
@@ -23,7 +23,6 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }))
 
 export default ({
-  name,
   labelText,
   iconLeft,
   ...props

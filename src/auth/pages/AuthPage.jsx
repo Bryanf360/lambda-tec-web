@@ -10,32 +10,25 @@ import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate } from "react-router-dom";
 
-// import { useForm } from "../../ui/hooks/useForm";
 import { TextField, Select, Button } from "../components";
 import { useForm } from "../../core/hooks";
 import logo from './../assets/logo.png';
 
 export const AuthPage = () => {
-    const { email, password, rol, handleFormInputChange, resetForm } = useForm({
+    const { email, password, role, handleFormInputChange, resetForm } = useForm({
         email: '',
         password: '',
-        rol: ''
+        role: '',
     });
-    const [role, setRole] = useState(null);
-
-    const handleRoleChange = (event) => {
-        setRole(event.target.value)
-    }
-
     const navigate = useNavigate();
 
     const handleLoginButtonPress = (e) => {
         e.preventDefault();
         console.log({
-            email, password, rol
+            email, password, role
         })
         resetForm();
-        navigate('/admin/dashboard')
+        // navigate('/admin/dashboard')
     }
 
     return (
@@ -88,9 +81,11 @@ export const AuthPage = () => {
                     <TextField
                         name="email"
                         placeholder="Ingrese su correo"
-                        requiered
+                        required
                         iconLeft={<PersonIcon sx={{ color: '#CFA968', opacity: 0.5 }} />}
                         labelText="E-email"
+                        value={email}
+                        onChange={handleFormInputChange}
                     />
                 </Grid>
                 <Grid
@@ -99,9 +94,11 @@ export const AuthPage = () => {
                     <TextField
                         name="password"
                         placeholder="Ingrese su contraseña"
-                        requiered
+                        required
                         iconLeft={<LockIcon sx={{ color: '#CFA968', opacity: 0.5 }} />}
                         labelText="Password"
+                        value={password}
+                        onChange={handleFormInputChange}
                     />
                 </Grid>
 
@@ -113,7 +110,7 @@ export const AuthPage = () => {
                         textLabel="Rol"
                         value={role}
                         name="role"
-                        onChange={handleRoleChange}
+                        onChange={handleFormInputChange}
                         placeholder="Seleccione"
                         labelId="select-label"
                         id="select"
