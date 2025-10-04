@@ -7,6 +7,7 @@ import {
     Grid,
     MenuItem,
     Typography,
+    useTheme,
 } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from "@mui/icons-material/Lock";
@@ -19,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 
 export const AuthPage = () => {
     const navigate = useNavigate();
+    const theme = useTheme();
 
     return (
         <Grid
@@ -26,7 +28,7 @@ export const AuthPage = () => {
             container
             justifyContent="center"
             alignItems="center"
-            bgcolor="#E4E4E4"
+            bgcolor={theme.palette.grey[150]}
         >
             <Formik
                 initialValues={{
@@ -59,7 +61,7 @@ export const AuthPage = () => {
                         }}
                         rowSpacing={1}
                         component={Form}
-                        bgcolor="white"
+                        bgcolor={theme.palette.white[100]}
                         onSubmit={handleSubmit}
                         noValidate
                     >
@@ -142,9 +144,9 @@ export const AuthPage = () => {
                         >
                             <Button
                                 variant="contained"
-                                // onClick={handleLoginButtonPress}
                                 type="submit"
                                 kind="primary"
+                                fullWidth
                             >
                                 Ingresar
                             </Button>

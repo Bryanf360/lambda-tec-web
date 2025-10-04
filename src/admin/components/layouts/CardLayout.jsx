@@ -1,4 +1,4 @@
-import { Card, Typography } from "@mui/material"
+import { Card, CardContent, Typography } from "@mui/material"
 
 export const CardLayout = ({
     title,
@@ -12,8 +12,7 @@ export const CardLayout = ({
                 mt: 2,
             }}
         >
-            <Typography variant="h1">{title}</Typography>
-            {children}
+                {children}
         </Card>
     )
 }

@@ -1,6 +1,10 @@
 import { useState } from "react"
-import { CardLayout } from "../components";
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+
+import { CardLayout, Table } from "../components";
+import { Button } from "../../auth/components";
+import { SearchInput } from "../components/molecules";
 
 export const ProductsPage = () => {
     const [product, setProduct] = useState({
@@ -24,10 +28,40 @@ export const ProductsPage = () => {
         })
     }
 
+    const handleSearchTextChange = (event) => {
+        // TODO: implement search
+    }
+
     return (
         <CardLayout
             title="Artículos"
         >
+            <Grid
+                sx={{
+                    display: 'flex',
+                    mb: 2,
+                }}
+                alignItems="center"
+            >
+                <Typography variant="h1" sx={{  }}>Artículos</Typography>
+                <Button
+                    kind="tertiary"
+                    sx={{
+                        // mb: 2,
+                        mx: 5,
+                    }}
+                    startIcon={<AddIcon />}
+                >
+                    Button2
+                </Button>
+                <SearchInput 
+                    placeholder="Buscar..."
+                    onChange={handleSearchTextChange}
+                />
+            </Grid>
+            <Table
+
+            />
         </CardLayout>
     )
 

@@ -3,6 +3,7 @@ import { Button, styled } from "@mui/material"
 const kindMap = {
     primary: { color: 'primary', variant: 'contained' },
     secondary: { color: 'secondary', variant: 'contained' },
+    tertiary: { color: 'tertiary', variant: 'contained' },
     danger: { color: 'error', variant: 'contained' },
     success: { color: 'success', variant: 'contained' },
 };
@@ -20,20 +21,19 @@ const StyledButton = styled(Button)(({ theme, ownerState }) => ({
     }
 }));
 
-export default({
+export default ({
     kind = "primary",
     // sx,
     children,
     ...props
 }) => {
-
     const { color, variant } = kindMap[kind];
+
 
     return (
         <StyledButton
             variant={variant}
             color={color}
-            fullWidth
             ownerState={{
                 kind
             }}

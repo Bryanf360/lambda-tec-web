@@ -40,14 +40,14 @@ export default ({
         >
             <CardActionArea sx={{ pt: 4, pb: 2, }}>
                 <Box sx={{ justifyContent: 'center', display: 'flex', }}>
-                    <SvgComponent fill={hover ? 'white' : theme.palette.tertiary.main }/>
+                    <SvgComponent fill={hover ? theme.palette.white[100] : theme.palette.tertiary.main }/>
                 </Box>
                 <CardContent>
                     <Typography 
                         variant="h2" 
                         component="div" 
                         align='center' 
-                        color={hover ? 'white' : theme.palette.grey[100]}
+                        color={hover ? theme.palette.white[100]: theme.palette.grey[300]}
                     >
                         {title} {quantity}
                     </Typography>

@@ -5,6 +5,7 @@ import {
     Toolbar,
     IconButton,
     useTheme,
+    Grid,
 } from "@mui/material"
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -24,7 +25,7 @@ const AppBar = styled(MuiAppBar, {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: 'white',
+    backgroundColor: theme.palette.white[100],
     border: 'none',
     variants: [
         {
@@ -50,8 +51,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
             duration: theme.transitions.duration.leavingScreen,
         }),
         marginLeft: `-${drawerWidth}px`,
-        backgroundColor: theme.palette.grey[75],
-        height: '100vh',
+        backgroundColor: theme.palette.grey[150],
         variants: [
             {
                 props: ({ open }) => open,
@@ -62,7 +62,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
                     }),
                     marginLeft: 0,
                 },
-            },
+            },  
         ],
     }),
 );
@@ -86,7 +86,7 @@ export const AdminLayout = () => {
 
     return (
         <>
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', }}>
                 <AppBar position="fixed" open={isDrawerOpen} elevation={0}>
                     <Toolbar
                         sx={{

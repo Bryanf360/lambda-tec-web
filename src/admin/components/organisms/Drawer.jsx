@@ -1,6 +1,6 @@
-import { 
+import {
     Avatar,
-    Box, 
+    Box,
     Drawer,
     IconButton,
     List,
@@ -10,7 +10,7 @@ import {
     ListItemText,
     Typography,
     useTheme,
-}  from '@mui/material';
+} from '@mui/material';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -18,37 +18,9 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import UnarchiveOutlinedIcon from '@mui/icons-material/UnarchiveOutlined';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-import { Link, NavLink, useLocation, useNavigate, useNavigation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate, useNavigation } from 'react-router-dom';
 
 import { DrawerHeader } from '../atoms';
-
-const menuItems = [
-    {
-        text: 'Inicio',
-        path: '/admin/dashboard',
-        icon: <HomeOutlinedIcon sx={{ color: 'white', }} />,
-    },
-    {
-        text: 'Artículos',
-        path: '/admin/products',
-        icon: <InventoryOutlinedIcon sx={{ color: 'white', }} />,
-    },
-    {
-        text: 'Ingresos',
-        path: '/admin/inputs',
-        icon: <ArchiveOutlinedIcon sx={{ color: 'white', }} />,
-    },
-    {
-        text: 'Salidas',
-        path: '/admin/outputs',
-        icon: <UnarchiveOutlinedIcon sx={{ color: 'white', }} />,
-    },
-    {
-        text: 'Reportes',
-        path: '/admin/reports',
-        icon: <AssignmentTurnedInOutlinedIcon sx={{ color: 'white', }} />,
-    },
-]
 
 export default ({
     width,
@@ -57,6 +29,34 @@ export default ({
 }) => {
     const theme = useTheme();
     const { pathname } = useLocation();
+
+    const menuItems = [
+        {
+            text: 'Inicio',
+            path: '/admin/dashboard',
+            icon: <HomeOutlinedIcon sx={{ color: theme.palette.white[100], }} />,
+        },
+        {
+            text: 'Artículos',
+            path: '/admin/products',
+            icon: <InventoryOutlinedIcon sx={{ color: theme.palette.white[100], }} />,
+        },
+        {
+            text: 'Ingresos',
+            path: '/admin/inputs',
+            icon: <ArchiveOutlinedIcon sx={{ color: theme.palette.white[100], }} />,
+        },
+        {
+            text: 'Salidas',
+            path: '/admin/outputs',
+            icon: <UnarchiveOutlinedIcon sx={{ color: theme.palette.white[100], }} />,
+        },
+        {
+            text: 'Reportes',
+            path: '/admin/reports',
+            icon: <AssignmentTurnedInOutlinedIcon sx={{ color: theme.palette.white[100], }} />,
+        },
+    ]
 
     return (
         <Drawer
@@ -69,7 +69,7 @@ export default ({
                 },
                 '& .MuiPaper-root': {
                     backgroundColor: 'primary.main',
-                    color: 'white',
+                    color: theme.palette.white[100],
                     borderTopRightRadius: 16,
                     borderBottomRightRadius: 16,
                 }
@@ -84,14 +84,14 @@ export default ({
                     <Typography variant="h2">Jhon Doe</Typography>
                 </Box>
                 <IconButton onClick={onClose}>
-                    {theme.direction === 'ltr' ? <ChevronLeftIcon sx={{ color: 'white' }} /> : <ChevronRightIcon />}
+                    {theme.direction === 'ltr' ? <ChevronLeftIcon sx={{ color: theme.palette.white[100] }} /> : <ChevronRightIcon />}
                 </IconButton>
             </DrawerHeader>
             <List>
                 {menuItems.map(({ text, path, icon }, index) => (
                     <ListItem key={path} disablePadding>
                         <ListItemButton
-                            component={NavLink} 
+                            component={NavLink}
                             to={path}
                             selected={path === pathname}
                             sx={{
@@ -101,13 +101,13 @@ export default ({
                                     paddingInline: 1,
                                 },
                                 '&.Mui-selected, &.MuiListItemButton-root:hover': {
-                                    backgroundColor: 'white',
+                                    backgroundColor: theme.palette.white[100],
                                     borderRadius: 3,
                                     mx: 3,
-                                    color: '#2D2D2D',
+                                    color: theme.palette.black[50],
                                 },
                                 '&.Mui-selected .MuiSvgIcon-root, &.MuiListItemButton-root:hover .MuiSvgIcon-root': {
-                                    color: '#2D2D2D',
+                                    color: theme.palette.black[50],
                                 },
                                 marginBlock: 0.675,
                             }}
