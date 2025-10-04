@@ -1,7 +1,6 @@
 import { Card, CardContent, Typography } from "@mui/material"
 
 export const CardLayout = ({
-    title,
     children,
 }) => {
     return (
@@ -10,9 +9,11 @@ export const CardLayout = ({
                 borderRadius: 4,
                 p: 2,
                 mt: 2,
+                width: '100%',
+                maxWidth: '100vw',
             }}
         >
-                {children}
+            {children}
         </Card>
     )
 }

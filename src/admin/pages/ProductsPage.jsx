@@ -38,26 +38,32 @@ export const ProductsPage = () => {
         >
             <Grid
                 sx={{
-                    display: 'flex',
                     mb: 2,
                 }}
                 alignItems="center"
+                container
+                rowGap={3}
             >
-                <Typography variant="h1" sx={{  }}>Artículos</Typography>
-                <Button
-                    kind="tertiary"
-                    sx={{
-                        // mb: 2,
-                        mx: 5,
-                    }}
-                    startIcon={<AddIcon />}
-                >
-                    Button2
-                </Button>
-                <SearchInput 
-                    placeholder="Buscar..."
-                    onChange={handleSearchTextChange}
-                />
+                <Grid xs={12}>
+                    <Typography variant="h1" sx={{ mr: 5, }}>Artículos</Typography>
+                </Grid>
+                <Grid xs={12}>
+                    <Button
+                        kind="tertiary"
+                        sx={{
+                            mr: 5,
+                        }}
+                        startIcon={<AddIcon />}
+                    >
+                        Button2
+                    </Button>
+                </Grid>
+                <Grid xs={12}>
+                    <SearchInput 
+                        placeholder="Buscar..."
+                        onChange={handleSearchTextChange}
+                    />
+                </Grid>
             </Grid>
             <Table
 

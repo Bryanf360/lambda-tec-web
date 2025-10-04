@@ -90,11 +90,10 @@ export default function CustomizedTables() {
             borderTopLeftRadius: 16,
             borderTopRightRadius: 16,
             boxShadow: 'none',
-            width: '100%',
             overflowX: "auto",
           }}
         >
-          <Table sx={{ minWidth: 800 }} aria-label="customized table">
+          <Table aria-label="customized table">
             <CustomTableHead>
               <TableRow>
                 <StyledTableCell align="center" sx={{ minWidth: 200 }}>

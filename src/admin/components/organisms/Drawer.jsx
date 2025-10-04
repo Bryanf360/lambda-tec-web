@@ -58,6 +58,10 @@ export default ({
         },
     ]
 
+    const handleItemButtonClick = () => {
+        onClose()
+    }
+
     return (
         <Drawer
             sx={{
@@ -74,7 +78,7 @@ export default ({
                     borderBottomRightRadius: 16,
                 }
             }}
-            variant="persistent"
+            // variant="persistent"
             anchor="left"
             open={isOpen}
         >
@@ -111,6 +115,7 @@ export default ({
                                 },
                                 marginBlock: 0.675,
                             }}
+                            onClick={handleItemButtonClick}
                         >
                             <ListItemIcon
                                 sx={{

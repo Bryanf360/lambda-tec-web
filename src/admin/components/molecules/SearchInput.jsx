@@ -1,8 +1,11 @@
-import { Divider, IconButton, InputBase, Paper, useTheme } from "@mui/material";
+import { 
+    IconButton, 
+    InputBase, 
+    Paper, 
+    useTheme,
+} from "@mui/material";
 
-import DirectionsIcon from '@mui/icons-material/Directions';
 import SearchIcon from '@mui/icons-material/Search';
-import MenuIcon from '@mui/icons-material/Menu';
 
 export default function SearchInput({
     placeholder,
@@ -17,7 +20,10 @@ export default function SearchInput({
                 p: '2px 4px',
                 display: 'flex',
                 alignItems: 'center',
-                width: 400,
+                minWidth: {
+                    sx: '100%',
+                    md: 600,
+                },
                 borderRadius: 3.75,
                 backgroundColor: theme.palette.grey[50],
                 boxShadow: 3,
@@ -51,7 +57,6 @@ export default function SearchInput({
                     boxShadow: 3,
                     width: 46,
                     borderRadius: 3.75,
-                    // height: 40,
                 }}
                 aria-label="search"
             >
