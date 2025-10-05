@@ -194,6 +194,9 @@ export default function CustomizedTables() {
             },
             '& .MuiTablePagination-displayedRows': {
               mr: 2,
+            },
+            '& .MuiTablePagination-selectLabel': {
+              paddingLeft: 17.5,
             }
           }}
           labelDisplayedRows={({ from, to, count }) =>
