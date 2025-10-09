@@ -7,9 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Grid, IconButton, TablePagination, Typography } from '@mui/material';
-import { Edit, Delete, Visibility } from "@mui/icons-material";
-import { Chip } from '../../../auth/components';
+import { IconButton, TablePagination, Typography } from '@mui/material';
+
 import { TablePaginationActions } from '../molecules';
 
 const CustomTableHead = styled(TableHead)(({ theme }) => ({
@@ -46,26 +45,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function createData(name, description, type, brand, model, partNumber, unitType, stock, status) {
-    return { name, description, type, brand, model, partNumber, unitType, stock, status };
-}
-
-const rows = [
-    createData('Cable Utp RJ45 Internet', 'Cable para instalación de internet', 'Consumible', 'Tecratronik', 'Interior Blanco', 'PA-121-AZ', 'm-Metros', 30, 'active'),
-    createData('Cable Utp RJ45 Internet', 'Cable para instalación de internet', 'Consumible', 'Tecratronik', 'Interior Blanco', 'PA-121-AZ', 'm-Metros', 30, 'active'),
-    createData('Cable Utp RJ45 Internet', 'Cable para instalación de internet', 'Consumible', 'Tecratronik', 'Interior Blanco', 'PA-121-AZ', 'm-Metros', 30, 'inactive'),
-    createData('Cable Utp RJ45 Internet', 'Cable para instalación de internet', 'Consumible', 'Tecratronik', 'Interior Blanco', 'PA-121-AZ', 'm-Metros', 30, 'inactive'),
-    createData('Cable Utp RJ45 Internet', 'Cable para instalación de internet', 'Consumible', 'Tecratronik', 'Interior Blanco', 'PA-121-AZ', 'm-Metros', 30, 'active'),
-    createData('Cable Utp RJ45 Internet', 'Cable para instalación de internetasdfasdfasdfasdf', 'Consumible', 'Tecratronik', 'Interior Blanco', 'PA-121-AZ', 'm-Metros', 30, 'active'),
-    createData('Cable adicional', 'Otra descripción', 'Pieza', 'XYZ', 'Modelo A', 'PART-999', 'unidad', 10, 'inactive'),
-    createData('Switch', 'Red gigabit', 'Equipo', 'TP-Link', 'TL-SG1005D', 'SW-001', 'unidad', 5, 'active'),
-    createData('Router', 'Con wifi 5G', 'Equipo', 'MikroTik', 'RB3011', 'RT-123', 'unidad', 2, 'active'),
-];
-
 export default function CustomizedTables({
-    onEdit,
-    onDelete,
-    onView,
+    columns = [],
+    data = [],
 }) {
     const theme = useTheme();
 
@@ -84,7 +66,7 @@ export default function CustomizedTables({
     };
 
     // ✅ 3. Cortar filas para paginación
-    const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    const paginatedRows = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     return (
         <>
@@ -100,88 +82,39 @@ export default function CustomizedTables({
                 <Table aria-label="customized table">
                     <CustomTableHead>
                         <TableRow>
-                            <StyledTableCell align="center" sx={{ minWidth: 200 }}>
-                                <Typography variant="tableHead">Nombre</Typography>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" sx={{ minWidth: 200 }}>
-                                <Typography variant="tableHead">Descripción</Typography>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" sx={{ minWidth: 50 }}>
-                                <Typography variant="tableHead">Tipo</Typography>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" sx={{ minWidth: 50 }}>
-                                <Typography variant="tableHead">Marca</Typography>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" sx={{ minWidth: 150 }}>
-                                <Typography variant="tableHead">Modelo</Typography>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" sx={{ minWidth: 100 }}>
-                                <Typography variant="tableHead">Nro de Parte</Typography>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" sx={{ minWidth: 100 }}>
-                                <Typography variant="tableHead">Tipo de Unidad</Typography>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" sx={{ minWidth: 50 }}>
-                                <Typography variant="tableHead">Stock</Typography>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" sx={{ minWidth: 100 }}>
-                                <Typography variant="tableHead">Estado</Typography>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" sx={{ minWidth: 150 }}>
-                                <Typography variant="tableHead">Acciones</Typography>
-                            </StyledTableCell>
+                            {columns.map(col => (
+                                <StyledTableCell 
+                                    align="center" 
+                                    sx={{ minWidth: col.minWidth || 100 }}
+                                    key={col.id}
+                                >
+                                    <Typography variant="tableHead">{col.label}</Typography>
+                                </StyledTableCell>
+                            ))}
                         </TableRow>
                     </CustomTableHead>
                     <TableBody>
-                        {paginatedRows.map((row, index) => (
-                            <StyledTableRow key={index}>
-                                <StyledTableCell align="center" sx={{ minWidth: 200 }}>
-                                    <Typography variant="tableCell">{row.name}</Typography>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Typography variant="tableCell">{row.description}</Typography>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Typography variant="tableCell">{row.type}</Typography>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Typography variant="tableCell">{row.brand}</Typography>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Typography variant="tableCell">{row.model}</Typography>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Typography variant="tableCell">{row.partNumber}</Typography>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Typography variant="tableCell">{row.unitType}</Typography>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Typography variant="tableCell">{row.stock}</Typography>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <Chip status={row.status} />
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                    <IconButton color="tertiary" size="small" onClick={() => onEdit(row)}>
-                                        <Edit />
-                                    </IconButton>
-                                    <IconButton color="error" size="small" onClick={() => onDelete(row)}>
-                                        <Delete />
-                                    </IconButton>
-                                    <IconButton color="primary" size="small" onClick={() => onView(row)}>
-                                        <Visibility />
-                                    </IconButton>
-                                </StyledTableCell>
+                        {paginatedRows.map((row, rowIndex) => (
+                            <StyledTableRow key={rowIndex}>
+                                {columns.map(({ id, align, render }) => (
+                                    <StyledTableCell
+                                        key={id}
+                                        align={align || 'center'}
+                                    >
+                                        {render 
+                                            ? render(row[id], row)
+                                            : <Typography variant="tableCell">{row[id]}</Typography>}
+                                    </StyledTableCell>
+                                ))}
+                                
                             </StyledTableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-
             <TablePagination
                 component="div"
-                count={rows.length}
+                count={data.length}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={rowsPerPage}

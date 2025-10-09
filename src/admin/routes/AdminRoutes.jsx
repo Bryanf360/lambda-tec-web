@@ -4,6 +4,7 @@ import {
     DashboardPage,
     InputsPage, 
     OutputsPage, 
+    ProductDetailsPage, 
     ProductsPage, 
     ReportsPage, 
     UsersPage,
@@ -16,6 +17,7 @@ export const AdminRoutes = () => {
             <Route element={<AdminLayout />}>
                 <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="products" element={<ProductsPage />} />
+                <Route path="product-details/:id" element={<ProductDetailsPage />} />
                 <Route path="inputs" element={<InputsPage />} />
                 <Route path="outputs" element={<OutputsPage />} />
                 <Route path="reports" element={<ReportsPage />} />

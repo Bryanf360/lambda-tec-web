@@ -1,13 +1,15 @@
-import { Grid, TextField, Typography } from "@mui/material";
+import { Grid, IconButton, TextField, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from "react";
+import { Edit, Delete, Visibility } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { AddModal, CardLayout, DeleteModal, FormAutocomplete, Table } from "../components";
-import { Button } from "../../auth/components";
+import { Button, Chip } from "../../auth/components";
 import FormTextField from "../components/atoms/FormInput";
 import { SearchInput } from "../components/molecules";
 import { useProductsStore } from "../hooks";
-import { useDispatch } from "react-redux";
 import { setSelectedProduct } from "../slices/productsSlice";
 
 const types = [
@@ -35,6 +37,53 @@ const unitTypes = [
     { id: 2, value: 'u - Unidades' }
 ]
 
+const data = [
+    {
+        name: 'Cable Utp RJ45',
+        description: 'Cable para instalación de internet',
+        type: 'Consumible',
+        brand: 'Tecratronik',
+        model: 'Interior Blanco',
+        partNumber: 'PA-121-AZ',
+        unitType: 'm-Metros',
+        stock: 30,
+        status: 'active'
+    },
+    {
+        name: 'Router',
+        description: 'WiFi 5G',
+        type: 'Equipo',
+        brand: 'MikroTik',
+        model: 'RB3011',
+        partNumber: 'RT-123',
+        unitType: 'unidad',
+        stock: 5,
+        status: 'inactive'
+    },
+    {
+        name: 'Router',
+        description: 'WiFi 5G',
+        type: 'Equipo',
+        brand: 'MikroTik',
+        model: 'RB3011',
+        partNumber: 'RT-123',
+        unitType: 'unidad',
+        stock: 5,
+        status: 'inactive'
+    },
+    {
+        name: 'Router',
+        description: 'WiFi 5G',
+        type: 'Equipo',
+        brand: 'MikroTik',
+        model: 'RB3011',
+        partNumber: 'RT-123',
+        unitType: 'unidad',
+        stock: 5,
+        status: 'inactive'
+    },
+];
+
 export const ProductsPage = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [value, setValue] = useState(types[0]);
@@ -45,7 +94,47 @@ export const ProductsPage = () => {
     const { selectedProduct } = useProductsStore();
     const dispatch = useDispatch()
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-    
+    const navigate = useNavigate();
+
+    const columns = [
+        { id: 'name', label: 'Nombre', minWidth: 200 },
+        { id: 'description', label: 'Descripción', minWidth: 200 },
+        { id: 'type', label: 'Tipo', minWidth: 50 },
+        { id: 'brand', label: 'Marca', minWidth: 50 },
+        { id: 'model', label: 'Modelo', minWidth: 150 },
+        { id: 'partNumber', label: 'Nro de Parte', minWidth: 100 },
+        { id: 'unitType', label: 'Tipo Unidad', minWidth: 100 },
+        { id: 'stock', label: 'Stock', minWidth: 50 },
+        {
+            id: 'status',
+            label: 'Estado',
+            minWidth: 100,
+            render: (value) => (
+                <Chip
+                    status={value}
+                />
+            )
+        },
+        {
+            id: 'actions',
+            label: 'Acciones',
+            minWidth: 150,
+            render: (_, row) => (
+                <>
+                    <IconButton color="primary" size="small" onClick={() => handleEditButtonClick(row)}>
+                        <Edit />
+                    </IconButton>
+                    <IconButton color="error" size="small" onClick={() => handleDeleteButtonClick(row)}>
+                        <Delete />
+                    </IconButton>
+                    <IconButton color="info" size="small" onClick={() => handleViewButtonClick(row)}>
+                        <Visibility />
+                    </IconButton>
+                </>
+            )
+        }
+    ];
+
 
     const handleSearchTextChange = (event) => {
         // TODO: implement search
@@ -72,11 +161,12 @@ export const ProductsPage = () => {
     }
 
     const handleViewButtonClick = (product) => {
+        navigate('/admin/product-details/1234');
     }
 
     const handleDeleteModalClose = () => {
         setIsDeleteModalOpen(false);
-    }   
+    }
 
     return (
         <CardLayout>
@@ -104,13 +194,15 @@ export const ProductsPage = () => {
                     </Button>
                 </Grid>
                 <Grid xs={12}>
-                    <SearchInput 
+                    <SearchInput
                         placeholder="Buscar..."
                         onChange={handleSearchTextChange}
                     />
                 </Grid>
             </Grid>
-            <Table 
+            <Table
+                data={data}
+                columns={columns}
                 onEdit={handleEditButtonClick}
                 onDelete={handleDeleteButtonClick}
                 onView={handleViewButtonClick}
@@ -156,7 +248,7 @@ export const ProductsPage = () => {
                             getOptionLabel={(option) => option.value}
                             isOptionEqualToValue={(option, val) => option.id === val.id}
                             mb={2}
-                        />handleDeleteModalClose
+                        />
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <FormAutocomplete
