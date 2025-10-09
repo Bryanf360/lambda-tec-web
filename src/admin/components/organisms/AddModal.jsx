@@ -1,9 +1,11 @@
 import { Chip, Dialog, DialogActions, DialogTitle, Grid, Typography, useTheme } from "@mui/material";
 
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import EditIcon from '@mui/icons-material/Edit';
 
 import Modal from "./Modal";
 import { Button } from "../../../auth/components";
+import { useSelector } from "react-redux";
 
 export default function AddModal({
     open,
@@ -11,7 +13,8 @@ export default function AddModal({
     onClose,
     children
 }) {
-    const theme = useTheme()
+    const theme = useTheme();
+    const { selectedProduct } = useSelector(state => state.products)
 
     const chipStyles = {
         pointerEvents: 'none',
@@ -39,14 +42,18 @@ export default function AddModal({
                 container
                 alignItems="center"
             >
-                <AddBoxIcon sx={{ color: theme.palette.green[100] }} />
+                {selectedProduct ? (
+                    <EditIcon sx={{ color: theme.palette.green[100] }} />
+                ) : (
+                    <AddBoxIcon sx={{ color: theme.palette.green[100] }} />
+                )}
                 <DialogTitle
                     sx={{ pl: 1, pr: 1.2, }}
                 >
                     <Typography
                         variant="modalTitle"
                     >
-                        {title}
+                        {selectedProduct ? "Editar" : "Crear"} {title}
                     </Typography>
                 </DialogTitle>
                 <Chip

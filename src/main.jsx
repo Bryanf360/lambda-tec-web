@@ -9,6 +9,9 @@ import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 
 import { BrowserRouter } from 'react-router-dom';
 import { LambdaTecApp } from './LambdaTecApp';
+import { Provider } from 'react-redux';
+
+import store from './store';
 
 const theme = createTheme({
   palette: {
@@ -107,7 +110,9 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <LambdaTecApp />
+        <Provider store={store}>
+          <LambdaTecApp />
+        </Provider>
       </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,

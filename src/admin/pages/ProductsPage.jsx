@@ -6,6 +6,9 @@ import { AddModal, CardLayout, FormAutocomplete, Table } from "../components";
 import { Button } from "../../auth/components";
 import FormTextField from "../components/atoms/FormInput";
 import { SearchInput } from "../components/molecules";
+import { useProductsStore } from "../hooks";
+import { useDispatch } from "react-redux";
+import { setSelectedProduct } from "../slices/productsSlice";
 
 const types = [
     { label: 'Consumible', value: 'consumible' },
@@ -38,18 +41,38 @@ export const ProductsPage = () => {
     const [selectedBrand, setSelectedBrand] = useState(types[0])
     const [selectedModel, setSelectedModel] = useState(models[0]);
     const [selectedPartNumber, setSelectedPartNumber] = useState(partNumbers[0]);
-    const [selectedUnitType, setSelectedUnitType] = useState(unitTypes[0])
+    const [selectedUnitType, setSelectedUnitType] = useState(unitTypes[0]);
+    const { selectedProduct } = useProductsStore();
+    const dispatch = useDispatch()
+    console.log({ selectedProduct })
+    
 
     const handleSearchTextChange = (event) => {
         // TODO: implement search
     }
 
     const handleAddModalClose = () => {
-        setIsOpenModal(false)
+        setIsOpenModal(false);
+        setTimeout(() => {
+            dispatch(setSelectedProduct(null))
+        }, 500)
     }
 
     const handleAddButtonClick = () => {
         setIsOpenModal(true);
+    }
+
+    const handleEditButtonClick = (product) => {
+        setIsOpenModal(true);
+        dispatch(setSelectedProduct(product))
+    }
+
+    const handleDeleteButtonClick = (product) => {
+
+    }
+
+    const handleViewButtonClick = (product) => {
+
     }
 
     return (
@@ -84,9 +107,13 @@ export const ProductsPage = () => {
                     />
                 </Grid>
             </Grid>
-            <Table />
+            <Table 
+                onEdit={handleEditButtonClick}
+                onDelete={handleDeleteButtonClick}
+                onView={handleViewButtonClick}
+            />
             <AddModal
-                title="Crear Artículo"
+                title="Artículo"
                 open={isOpenModal}
                 onClose={handleAddModalClose}
             >
