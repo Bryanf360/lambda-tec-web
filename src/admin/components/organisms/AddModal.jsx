@@ -37,6 +37,8 @@ export default function AddModal({
         <Modal
             open={open}
             onClose={onClose}
+            maxWidth="sm"
+            fullWidth
         >
             <Grid
                 container

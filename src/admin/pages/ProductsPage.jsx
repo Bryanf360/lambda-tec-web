@@ -2,7 +2,7 @@ import { Grid, TextField, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from "react";
 
-import { AddModal, CardLayout, FormAutocomplete, Table } from "../components";
+import { AddModal, CardLayout, DeleteModal, FormAutocomplete, Table } from "../components";
 import { Button } from "../../auth/components";
 import FormTextField from "../components/atoms/FormInput";
 import { SearchInput } from "../components/molecules";
@@ -44,7 +44,7 @@ export const ProductsPage = () => {
     const [selectedUnitType, setSelectedUnitType] = useState(unitTypes[0]);
     const { selectedProduct } = useProductsStore();
     const dispatch = useDispatch()
-    console.log({ selectedProduct })
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     
 
     const handleSearchTextChange = (event) => {
@@ -68,12 +68,15 @@ export const ProductsPage = () => {
     }
 
     const handleDeleteButtonClick = (product) => {
-
+        setIsDeleteModalOpen(true);
     }
 
     const handleViewButtonClick = (product) => {
-
     }
+
+    const handleDeleteModalClose = () => {
+        setIsDeleteModalOpen(false);
+    }   
 
     return (
         <CardLayout>
@@ -153,7 +156,7 @@ export const ProductsPage = () => {
                             getOptionLabel={(option) => option.value}
                             isOptionEqualToValue={(option, val) => option.id === val.id}
                             mb={2}
-                        />
+                        />handleDeleteModalClose
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <FormAutocomplete
@@ -186,6 +189,10 @@ export const ProductsPage = () => {
                     </Grid>
                 </Grid>
             </AddModal>
+            <DeleteModal
+                open={isDeleteModalOpen}
+                onClose={handleDeleteModalClose}
+            />
         </CardLayout>
     )
 }

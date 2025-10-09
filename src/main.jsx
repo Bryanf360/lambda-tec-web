@@ -36,7 +36,9 @@ const theme = createTheme({
       main: '#d4af37',
     },
     error: {
+      light: 'rgba(250, 30, 11, 0.2)',
       main: '#DE1200',
+      dark: '#FA1E0B',
     },
     grey: {
       50: '#f5f5f5',
