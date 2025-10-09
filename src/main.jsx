@@ -38,10 +38,11 @@ const theme = createTheme({
     grey: {
       50: '#f5f5f5',
       100: '#F1F1F1',
-      150: '#E4E4E4',
-      200: '#D1D1D1',
-      250: '#ABABAB',
-      300: '#A6A6A6',
+      200: '#F5F0DF',
+      300: '#E4E4E4',
+      400: '#D1D1D1',
+      500: '#ABABAB',
+      600: '#A6A6A6',
     },
     white: {
       100: '#FFFFFF',
@@ -50,8 +51,12 @@ const theme = createTheme({
       50: '#2D2D2D',
       100: '#000000'
     },
+    green: {
+      100: '#276921',
+    },
     text: {
       primary: '#3A3737',
+      secondary: '#352215',
     }
   },
   typography: {
@@ -86,8 +91,15 @@ const theme = createTheme({
       color: '#000000',
       fontWeight: 500,
       letterSpacing: 0
+    },
+    modalTitle: {
+      fontSize: '1.25rem',
+      color: '#352215',
+      letterSpacing: '-0.011em',
+      fontWeight: 700,
+      opacity: 0.7,
     }
-  },
+  }
 })
 
 createRoot(document.getElementById('root')).render(

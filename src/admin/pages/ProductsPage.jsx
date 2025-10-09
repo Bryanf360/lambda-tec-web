@@ -1,41 +1,59 @@
-import { useState } from "react"
-import { Grid, Typography } from "@mui/material";
+import { Grid, TextField, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import { useState } from "react";
 
-import { CardLayout, Table } from "../components";
+import { AddModal, CardLayout, FormAutocomplete, Table } from "../components";
 import { Button } from "../../auth/components";
+import FormTextField from "../components/atoms/FormInput";
 import { SearchInput } from "../components/molecules";
 
+const types = [
+    { label: 'Consumible', value: 'consumible' },
+    { label: 'Equipo', value: 'equipment' },
+];
+
+const brands = [
+    { id: 1, value: 'Tecatronik' },
+    { id: 2, value: 'Panasonic' },
+];
+
+const models = [
+    { id: 1, value: '1ZAAA' },
+    { id: 2, value: 'PPOSA' }
+]
+
+const partNumbers = [
+    { id: 1, value: 'PA-1ZAAA' },
+    { id: 2, value: 'ZQ-PPOSA' }
+]
+
+const unitTypes = [
+    { id: 1, value: 'm - Metros' },
+    { id: 2, value: 'u - Unidades' }
+]
+
 export const ProductsPage = () => {
-    const [product, setProduct] = useState({
-        name: '',
-        partNumber: '',
-        type: '',
-        unitType: '',
-        brand: '',
-        description: '',
-        model: ''
-    })
-
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
-    }
-
-    const handleInputValueChange = ({ target }, inputName) => {
-        setProduct({
-            ...product,
-            [inputName]: target.value
-        })
-    }
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [value, setValue] = useState(types[0]);
+    const [selectedBrand, setSelectedBrand] = useState(types[0])
+    const [selectedModel, setSelectedModel] = useState(models[0]);
+    const [selectedPartNumber, setSelectedPartNumber] = useState(partNumbers[0]);
+    const [selectedUnitType, setSelectedUnitType] = useState(unitTypes[0])
 
     const handleSearchTextChange = (event) => {
         // TODO: implement search
     }
 
+    const handleAddModalClose = () => {
+        setIsOpenModal(false)
+    }
+
+    const handleAddButtonClick = () => {
+        setIsOpenModal(true);
+    }
+
     return (
-        <CardLayout
-            title="Artículos"
-        >
+        <CardLayout>
             <Grid
                 sx={{
                     mb: 2,
@@ -54,8 +72,9 @@ export const ProductsPage = () => {
                             mr: 5,
                         }}
                         startIcon={<AddIcon />}
+                        onClick={handleAddButtonClick}
                     >
-                        Button2
+                        Añadir
                     </Button>
                 </Grid>
                 <Grid xs={12}>
@@ -65,67 +84,81 @@ export const ProductsPage = () => {
                     />
                 </Grid>
             </Grid>
-            <Table
-
-            />
+            <Table />
+            <AddModal
+                title="Crear Artículo"
+                open={isOpenModal}
+                onClose={handleAddModalClose}
+            >
+                <Grid container spacing={1}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <FormTextField
+                            labelText="Nombre*"
+                            placeholder="Ingrese el nombre"
+                            sx={{ mb: 2, }}
+                        />
+                        <FormAutocomplete
+                            labelText="Tipo*"
+                            options={types}
+                            value={value}
+                            onChange={(event, value) => setValue(value)}
+                            placeholder="Seleccione un tipo"
+                            getOptionLabel={(option) => option.label}
+                            isOptionEqualToValue={(option, val) => option.value === val.value}
+                            mb={2}
+                        />
+                        <FormAutocomplete
+                            labelText="Marca*"
+                            options={brands}
+                            value={selectedBrand}
+                            onChange={(event, value) => setSelectedBrand(value)}
+                            placeholder="Seleccione un tipo"
+                            getOptionLabel={(option) => option.value}
+                            isOptionEqualToValue={(option, val) => option.id === val.id}
+                            mb={2}
+                        />
+                        <FormAutocomplete
+                            labelText="Modelo*"
+                            options={models}
+                            value={selectedModel}
+                            onChange={(event, value) => setSelectedModel(value)}
+                            placeholder="Seleccione un modelo"
+                            getOptionLabel={(option) => option.value}
+                            isOptionEqualToValue={(option, val) => option.id === val.id}
+                            mb={2}
+                        />
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <FormAutocomplete
+                            labelText="Número de Parte*"
+                            options={partNumbers}
+                            value={selectedPartNumber}
+                            onChange={(event, value) => setSelectedPartNumber(value)}
+                            placeholder="Seleccione un número de parte"
+                            getOptionLabel={(option) => option.value}
+                            isOptionEqualToValue={(option, val) => option.id === val.id}
+                            mb={2}
+                        />
+                        <FormAutocomplete
+                            labelText="Tipo de Unidad*"
+                            options={unitTypes}
+                            value={selectedUnitType}
+                            onChange={(event, type) => setSelectedUnitType(type)}
+                            placeholder="Seleccione el tipo de unidad"
+                            getOptionLabel={(option) => option.value}
+                            isOptionEqualToValue={(option, val) => option.id === val.id}
+                            mb={2}
+                        />
+                        <FormTextField
+                            labelText="Descripción"
+                            placeholder="Ingrese la descripción"
+                            multiline
+                            minRows={3}        // 👈 altura mínima
+                            maxRows={6}
+                        />
+                    </Grid>
+                </Grid>
+            </AddModal>
         </CardLayout>
-    )
-
-    return (
-        <div>
-            <form onSubmit={handleFormSubmit}>
-                <label htmlFor="name">Nombre*</label>
-                <input
-                    type="text"
-                    id="name"
-                    value={product.name}
-                    onChange={(e) => handleInputValueChange(e, 'name')}
-                /><br />
-                <label htmlFor="part-number">Número de parte*</label>
-                <input
-                    type="text"
-                    id="part-number"
-                    value={product.partNumber}
-                    onChange={(e) => handleInputValueChange(e, 'partNumber')}
-                /><br />
-                <label htmlFor="type">Tipo*</label>
-                <input
-                    type="text"
-                    id="type"
-                    value={product.type}
-                    onChange={(e) => handleInputValueChange(e, 'type')}
-                /><br />
-                <label htmlFor="unit-type">Tipo de unidad*</label>
-                <input
-                    type="text"
-                    id="unit-type"
-                    value={product.unitType}
-                    onChange={(e) => handleInputValueChange(e, 'unitType')}
-                /><br />
-                <label htmlFor="brand">Marca*</label>
-                <input
-                    type="text"
-                    id="brand"
-                    value={product.brand}
-                    onChange={(e) => handleInputValueChange(e, 'brand')}
-                /><br />
-                <label htmlFor="description">Descripción</label>
-                <input
-                    type="text"
-                    id="description"
-                    value={product.description}
-                    onChange={(e) => handleInputValueChange(e, 'description')}
-                /><br />
-                <label htmlFor="model">Model*</label>
-                <input
-                    type="text"
-                    id="model"
-                    value={product.model}
-                    onChange={(e) => handleInputValueChange(e, 'model')}
-                /><br />
-                <button type="submit">Guardar</button>
-            </form>
-            <pre>{JSON.stringify(product, null, 2)}</pre>
-        </div>
     )
 }

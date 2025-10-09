@@ -47,7 +47,7 @@ export default ({
                         variant="h2" 
                         component="div" 
                         align='center' 
-                        color={hover ? theme.palette.white[100]: theme.palette.grey[300]}
+                        color={hover ? theme.palette.white[100]: theme.palette.grey[600]}
                     >
                         {title} {quantity}
                     </Typography>

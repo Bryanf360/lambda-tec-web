@@ -28,7 +28,7 @@ export const AuthPage = () => {
             container
             justifyContent="center"
             alignItems="center"
-            bgcolor={theme.palette.grey[150]}
+            bgcolor={theme.palette.grey[300]}
         >
             <Formik
                 initialValues={{

@@ -29,7 +29,6 @@ export default ({
 }) => {
     const { color, variant } = kindMap[kind];
 
-
     return (
         <StyledButton
             variant={variant}
