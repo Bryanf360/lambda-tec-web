@@ -39,13 +39,12 @@ export default function ({
                     ...sx,
                 }}
                 IconComponent={ExpandMoreIcon}
-                // renderValue={(selected) => {
-                //     console.log(selected)
-                //     if (selected === 0) {
-                //         return <Typography variant="h2" sx={{ opacity: 0.4, }}>{placeholder}</Typography>
-                //     }
-                //     return options.find(option => option.id === selected)?.value;
-                // }}
+                renderValue={(selected) => {
+                    if (selected === 0) {
+                        return <Typography variant="h2" sx={{ opacity: 0.4, }}>{placeholder}</Typography>
+                    }
+                    return options.find(option => option.id === selected)?.value;
+                }}
 
                 disableUnderline
             >
