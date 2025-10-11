@@ -14,7 +14,6 @@ const containerStyles = {
 }
 
 const iconContainerStyles = {
-    padding: 0,
     textAlign: 'center',
     verticalAlign: 'center',
     alignItems: 'center',

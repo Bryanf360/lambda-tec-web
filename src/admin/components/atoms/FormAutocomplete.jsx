@@ -11,12 +11,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AddIcon from '@mui/icons-material/Add';
 
 import { Button, TextField } from "../../../auth/components";
-
-const StyledTypography = styled(Typography)(({ theme }) => ({
-    opacity: 0.7,
-    fontSize: '0.875rem',
-    fontWeight: 500,
-}))
+import { InputLabel } from "./";
 
 const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
     '& .MuiFilledInput-root': {
@@ -47,19 +42,34 @@ const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
 export default function FormAutocomplete({
     labelText,
     mb,
+    minWidth,
+    width,
+    variant = 'block',
+    marginEnd,
+    marginStart,
+    haveAddButton = true,
+    placeholder = "",
     ...props
 }) {
     const theme = useTheme();
 
     return (
         <>
-            <StyledTypography variant="h2">{labelText}</StyledTypography>
-            <Box 
-                sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    mb, 
+            {labelText && variant === 'block' && (
+                <InputLabel>{labelText}</InputLabel>
+            )}
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    mb,
+                    p: 0,
+                    mr: marginEnd,
+                    ml: marginStart,
                 }}>
+                {labelText && variant === 'inline' && (
+                    <InputLabel sx={{ mr: 1.3, }}>{labelText}</InputLabel>
+                )}
                 <StyledAutocomplete
                     popupIcon={<KeyboardArrowDownIcon sx={{ color: '#1a2b6d' }} />}
                     renderInput={(params) => (
@@ -67,7 +77,7 @@ export default function FormAutocomplete({
                             {...params}
                             hiddenLabel
                             variant="filled"
-                            placeholder="Ingrese el tipo"
+                            placeholder={placeholder}
                             slotProps={{
                                 input: {
                                     ...params.InputProps,
@@ -87,23 +97,25 @@ export default function FormAutocomplete({
                         />
                     )}
                     {...props}
-                    sx={{ flex: 1, ...props.sx }}
+                    sx={{ flex: 1, ...(variant === 'inline' ? { minWidth: 100, width: 200 } : {}), ...props.sx }}
                 />
-                <Button
-                    kind="tertiary" 
-                    startIcon={<AddIcon />} 
-                    sx={{
-                        borderRadius: 2.25,
-                        '&.MuiButtonBase-root': {
-                            padding: 0.5,
-                            minWidth: 28,
-                        },
-                        '& .MuiButton-startIcon': {
-                            margin: 0,
-                        },
-                        ml: 0.5,
-                    }}
-                />
+                {haveAddButton && (
+                    <Button
+                        kind="tertiary"
+                        startIcon={<AddIcon />}
+                        sx={{
+                            borderRadius: 2.25,
+                            '&.MuiButtonBase-root': {
+                                padding: 0.5,
+                                minWidth: 28,
+                            },
+                            '& .MuiButton-startIcon': {
+                                margin: 0,
+                            },
+                            ml: 0.5,
+                        }}
+                    />
+                )}
             </Box>
         </>
     );

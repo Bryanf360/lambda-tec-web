@@ -1,4 +1,5 @@
 import {
+    Box,
     InputAdornment,
     styled,
     TextField,
@@ -25,37 +26,49 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     }
 }))
 
+const inlineStyles = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+}
+
 export default ({
     labelText,
     iconLeft,
+    variant = 'block',
     className,
     ...props
 }) => {
     return (
         <div className={className}>
-            <Typography variant="h2" sx={{ mb: 0.5, }} className="custom-label">{labelText}</Typography>
-            <StyledTextField
-                hiddenLabel
-                variant="filled"
-                slotProps={{
-                    input: {
-                        startAdornment: iconLeft ? (
-                            <InputAdornment position="start">
-                                {iconLeft}
-                            </InputAdornment>
-                        ) : null,
-                        disableUnderline: true
-                    }
-                }}
-                fullWidth
-                sx={{
-                    '& .MuiInputBase-multiline': {
-                        padding: 0,
-                        paddingLeft: 1.5,
-                    },
-                }}
-                {...props}
-            />
+            <Box
+                sx={variant === 'inline' ? inlineStyles : {}}
+            >
+                {labelText && (<Typography variant="h2" sx={variant === 'inline' ? { mb: 0, mr: 1 } : { mb: 0.5, mr: 0 }} className="custom-label">{labelText}</Typography> )}
+                <StyledTextField
+                    hiddenLabel
+                    variant="filled"
+                    slotProps={{
+                        input: {
+                            startAdornment: iconLeft ? (
+                                <InputAdornment position="start">
+                                    {iconLeft}
+                                </InputAdornment>
+                            ) : null,
+                            disableUnderline: true
+                        }
+                    }}
+                    fullWidth
+                    {...props}
+                    sx={{
+                        '& .MuiInputBase-multiline': {
+                            padding: 0,
+                            paddingLeft: 1.5,
+                        },
+                        ...props.sx
+                    }}
+                />
+            </Box>
         </div>
     )
 }

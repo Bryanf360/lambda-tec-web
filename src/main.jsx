@@ -6,10 +6,12 @@ import '@fontsource/roboto/700.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-
 import { BrowserRouter } from 'react-router-dom';
-import { LambdaTecApp } from './LambdaTecApp';
 import { Provider } from 'react-redux';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import { LambdaTecApp } from './LambdaTecApp';
 
 import store from './store';
 
@@ -103,6 +105,19 @@ const theme = createTheme({
       letterSpacing: '-0.011em',
       fontWeight: 700,
       opacity: 0.7,
+    },
+    inputLabel: {
+      fontSize: '0.875rem',
+      fontWeight: 500,
+      letterSpacing: '0.1em',
+      color: '#000000',
+      opacity: 0.5,
+    },
+    selectText: {
+      color: '#000000',
+      letterSpacing: 0,
+      fontSize: '0.75rem',
+      fontWeight: 500,
     }
   }
 })
@@ -113,7 +128,9 @@ createRoot(document.getElementById('root')).render(
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Provider store={store}>
-          <LambdaTecApp />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LambdaTecApp />
+          </LocalizationProvider>
         </Provider>
       </ThemeProvider>
     </BrowserRouter>
