@@ -2,40 +2,20 @@ import { Grid, IconButton, TextField, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from "react";
 import { Edit, Delete, Visibility } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { AddModal, CardLayout, DeleteModal, FormAutocomplete, Table } from "../components";
+import { 
+    AddProductModal, 
+    CardLayout, 
+    DeleteModal, 
+    SearchInput,
+    Table, 
+} from "../components";
 import { Button, Chip } from "../../auth/components";
 import FormTextField from "../components/atoms/FormTextField";
-import { SearchInput } from "../components/molecules";
 import { useProductsStore } from "../hooks";
 import { setSelectedProduct } from "../slices/productsSlice";
-
-const types = [
-    { label: 'Consumible', value: 'consumible' },
-    { label: 'Equipo', value: 'equipment' },
-];
-
-const brands = [
-    { id: 1, value: 'Tecatronik' },
-    { id: 2, value: 'Panasonic' },
-];
-
-const models = [
-    { id: 1, value: '1ZAAA' },
-    { id: 2, value: 'PPOSA' }
-]
-
-const partNumbers = [
-    { id: 1, value: 'PA-1ZAAA' },
-    { id: 2, value: 'ZQ-PPOSA' }
-]
-
-const unitTypes = [
-    { id: 1, value: 'm - Metros' },
-    { id: 2, value: 'u - Unidades' }
-]
 
 const data = [
     {
@@ -85,16 +65,11 @@ const data = [
 ];
 
 export const ProductsPage = () => {
-    const [isOpenModal, setIsOpenModal] = useState(false);
-    const [value, setValue] = useState(types[0]);
-    const [selectedBrand, setSelectedBrand] = useState(types[0])
-    const [selectedModel, setSelectedModel] = useState(models[0]);
-    const [selectedPartNumber, setSelectedPartNumber] = useState(partNumbers[0]);
-    const [selectedUnitType, setSelectedUnitType] = useState(unitTypes[0]);
-    const { selectedProduct } = useProductsStore();
+    const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
     const dispatch = useDispatch()
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const navigate = useNavigate();
+    const { selectedProduct } = useProductsStore();
 
     const columns = [
         { id: 'name', label: 'Nombre', minWidth: 200 },
@@ -140,19 +115,19 @@ export const ProductsPage = () => {
         // TODO: implement search
     }
 
-    const handleAddModalClose = () => {
-        setIsOpenModal(false);
+    const handleAddProductModalClose = () => {
+        setIsAddProductModalOpen(false);
         setTimeout(() => {
             dispatch(setSelectedProduct(null))
         }, 500)
     }
 
     const handleAddButtonClick = () => {
-        setIsOpenModal(true);
+        setIsAddProductModalOpen(true);
     }
 
     const handleEditButtonClick = (product) => {
-        setIsOpenModal(true);
+        setIsAddProductModalOpen(true);
         dispatch(setSelectedProduct(product))
     }
 
@@ -207,84 +182,16 @@ export const ProductsPage = () => {
                 onDelete={handleDeleteButtonClick}
                 onView={handleViewButtonClick}
             />
-            <AddModal
-                title="Artículo"
-                open={isOpenModal}
-                onClose={handleAddModalClose}
-            >
-                <Grid container spacing={1}>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <FormTextField
-                            labelText="Nombre*"
-                            placeholder="Ingrese el nombre"
-                            sx={{ mb: 2, }}
-                        />
-                        <FormAutocomplete
-                            labelText="Tipo*"
-                            options={types}
-                            value={value}
-                            onChange={(event, value) => setValue(value)}
-                            placeholder="Seleccione un tipo"
-                            getOptionLabel={(option) => option.label}
-                            isOptionEqualToValue={(option, val) => option.value === val.value}
-                            mb={2}
-                        />
-                        <FormAutocomplete
-                            labelText="Marca*"
-                            options={brands}
-                            value={selectedBrand}
-                            onChange={(event, value) => setSelectedBrand(value)}
-                            placeholder="Seleccione un tipo"
-                            getOptionLabel={(option) => option.value}
-                            isOptionEqualToValue={(option, val) => option.id === val.id}
-                            mb={2}
-                        />
-                        <FormAutocomplete
-                            labelText="Modelo*"
-                            options={models}
-                            value={selectedModel}
-                            onChange={(event, value) => setSelectedModel(value)}
-                            placeholder="Seleccione un modelo"
-                            getOptionLabel={(option) => option.value}
-                            isOptionEqualToValue={(option, val) => option.id === val.id}
-                            mb={2}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <FormAutocomplete
-                            labelText="Número de Parte*"
-                            options={partNumbers}
-                            value={selectedPartNumber}
-                            onChange={(event, value) => setSelectedPartNumber(value)}
-                            placeholder="Seleccione un número de parte"
-                            getOptionLabel={(option) => option.value}
-                            isOptionEqualToValue={(option, val) => option.id === val.id}
-                            mb={2}
-                        />
-                        <FormAutocomplete
-                            labelText="Tipo de Unidad*"
-                            options={unitTypes}
-                            value={selectedUnitType}
-                            onChange={(event, type) => setSelectedUnitType(type)}
-                            placeholder="Seleccione el tipo de unidad"
-                            getOptionLabel={(option) => option.value}
-                            isOptionEqualToValue={(option, val) => option.id === val.id}
-                            mb={2}
-                        />
-                        <FormTextField
-                            labelText="Descripción"
-                            placeholder="Ingrese la descripción"
-                            multiline
-                            minRows={3}        // 👈 altura mínima
-                            maxRows={6}
-                        />
-                    </Grid>
-                </Grid>
-            </AddModal>
+            <AddProductModal
+                open={isAddProductModalOpen}
+                onClose={handleAddProductModalClose}
+                mode={selectedProduct ? "edit" : "create"}
+            />
             <DeleteModal
                 open={isDeleteModalOpen}
                 onClose={handleDeleteModalClose}
             />
+
         </CardLayout>
     )
 }

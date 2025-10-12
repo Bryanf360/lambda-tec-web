@@ -2,8 +2,8 @@ import { Box, Grid, Typography, useTheme } from "@mui/material";
 
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-import Modal from "./Modal";
 import { Button } from "../../../auth/components";
+import { Modal } from "../atoms";
 
 const containerStyles = {
     display: 'flex',

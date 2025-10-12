@@ -60,3 +60,28 @@ export const inputs = [
         amountToEnter: 30,
     },
 ];
+
+export const types = [
+    { id: 1, name: 'Consumible' },
+    { id: 2, name: 'Equipo' },
+];
+
+export const brands = [
+    { id: 1, name: 'Tecatronik' },
+    { id: 2, name: 'Panasonic' },
+];
+
+export const models = [
+    { id: 1, name: '1ZAAA' },
+    { id: 2, name: 'PPOSA' }
+]
+
+export const partNumbers = [
+    { id: 1, name: 'PA-1ZAAA' },
+    { id: 2, name: 'ZQ-PPOSA' }
+]
+
+export const unitTypes = [
+    { id: 1, name: 'm - Metros' },
+    { id: 2, name: 'u - Unidades' }
+]

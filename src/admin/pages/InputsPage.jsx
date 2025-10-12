@@ -16,15 +16,14 @@ import {
     FormAutocomplete,
     Table,
     DatePicker,
-    AddModal,
     FormTextField,
+    AddProviderModal,
+    AddReasonModal,
 } from "../components"
 import { Button, TextField } from "../../auth/components"
 import {
-    cities,
     inputs,
     providers,
-    provinces,
     reasons,
     statuses,
     warehouses,
@@ -37,10 +36,11 @@ export const InputsPage = () => {
     const [selectedReason, setSelectedReason] = useState(reasons[0])
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouses[0].id)
     const [selectedStatus, setSelectedStatus] = useState(statuses[0].id);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [selectedProvince, setSelectedProvince] = useState(0)
-    const [selectedCity, setSelectedCity] = useState(0)
+    const [isAddProviderModalOpen, setIsAddProviderModalOpen] = useState(false);
+    const [isAddReasonModalOpen, setIsAddReasonModalOpen] = useState(false);
+
     const theme = useTheme();
+    const [isAddReasonModal, setIsAddReasonModal] = useState(false);
 
     const handleWarehouseSelectChange = (event) => {
         setSelectedWarehouse(event.target.value);
@@ -178,20 +178,20 @@ export const InputsPage = () => {
         }
     ];
 
-    const handleAddModalClose = () => {
-        setIsAddModalOpen(false);
+    const handleAddProviderModalClose = () => {
+        setIsAddProviderModalOpen(false);
     }
 
     const handleAddProviderButtonClick = () => {
-        setIsAddModalOpen(true);
+        setIsAddProviderModalOpen(true);
     }
 
-    const handleSelectedProvinceChange = (event) => {
-        setSelectedProvince(event.target.value);
+    const handleAddReasonButtonClick = () => {
+        setIsAddReasonModalOpen(true);
     }
 
-    const handleSelectedCityChange = (event) => {
-        setSelectedCity(event.target.value);
+    const handleAddReasonModalClose = () => {
+        setIsAddReasonModalOpen(false);
     }
 
     return (
@@ -240,6 +240,7 @@ export const InputsPage = () => {
                             placeholder="Buscar..."
                             getOptionLabel={(option) => option.name}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
+                            onAddButtonClick={handleAddReasonButtonClick}
                         />
                     </Grid>
                 </Grid>
@@ -268,81 +269,14 @@ export const InputsPage = () => {
                     Guardar
                 </Button>
             </Box>
-            <AddModal
-                title="Proveedor"
-                open={isAddModalOpen}
-                onClose={handleAddModalClose}
-            >
-                <Grid container spacing={1}>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <FormTextField
-                            labelText="Nombres*"
-                            placeholder="Ingrese los nombres"
-                            sx={{ mb: 2, }}
-                        />
-                        <FormTextField
-                            labelText="Nombres*"
-                            placeholder="Ingrese los nombres"
-                            sx={{ mb: 2, }}
-                        />
-                        <FormTextField
-                            labelText="Ruc*"
-                            placeholder="Ingrese el ruc"
-                            sx={{ mb: 2, }}
-                        />
-                        <FormTextField
-                            labelText="Teléfono Fijo*"
-                            placeholder="Ingrese el teléfono fijo"
-                            sx={{ mb: 2, }}
-                        />
-                        <FormTextField
-                            labelText="Teléfono Móvil*"
-                            placeholder="Ingrese el teléfono móvil"
-                            sx={{ mb: 2, }}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <FormTextField
-                            labelText="Dirección*"
-                            placeholder="Ingrese la dirección"
-                            sx={{ mb: 2, }}
-                        />
-                        <Select
-                            labelText="Provincia*"
-                            options={provinces}
-                            sx={{ mb: 2, }}
-                            variant="form"
-                            value={selectedProvince}
-                            name="province"
-                            onChange={handleSelectedProvinceChange}
-                            placeholder="Seleccione la provincia"
-                            labelId="province-select-label"
-                            id="province-select"
-                            required
-                        />
-                        <Select
-                            labelText="Ciudad*"
-                            options={cities}
-                            sx={{ mb: 2, }}
-                            variant="form"
-                            value={selectedCity}
-                            name="city"
-                            onChange={handleSelectedCityChange}
-                            placeholder="Seleccione la ciudad"
-                            labelId="city-select-label"
-                            id="city-select"
-                            required
-                        />
-                        <FormTextField
-                            labelText="Descripción"
-                            placeholder="Ingrese la descripción"
-                            multiline
-                            minRows={3}        // 👈 altura mínima
-                            maxRows={6}
-                        />
-                    </Grid>
-                </Grid>
-            </AddModal>
+            <AddProviderModal
+                open={isAddProviderModalOpen}
+                onClose={handleAddProviderModalClose}
+            />
+            <AddReasonModal
+                open={isAddReasonModalOpen}
+                onClose={handleAddReasonModalClose}
+            />
         </>
     )
 }
