@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { CardLayout, FormAutocomplete, InputLabel, Select, Table } from "../components"
 import { DatePicker, SearchInput } from "../components/molecules"
-import FormTextField from "../components/atoms/FormInput"
+import FormTextField from "../components/atoms/FormTextField"
 import { Button, TextField } from "../../auth/components"
 
 const providers = [

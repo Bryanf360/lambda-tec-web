@@ -49,6 +49,7 @@ export default function FormAutocomplete({
     marginStart,
     haveAddButton = true,
     placeholder = "",
+    onAddButtonClick,
     ...props
 }) {
     const theme = useTheme();
@@ -114,6 +115,7 @@ export default function FormAutocomplete({
                             },
                             ml: 0.5,
                         }}
+                        onClick={onAddButtonClick}
                     />
                 )}
             </Box>

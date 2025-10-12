@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import { AddModal, CardLayout, DeleteModal, FormAutocomplete, Table } from "../components";
 import { Button, Chip } from "../../auth/components";
-import FormTextField from "../components/atoms/FormInput";
+import FormTextField from "../components/atoms/FormTextField";
 import { SearchInput } from "../components/molecules";
 import { useProductsStore } from "../hooks";
 import { setSelectedProduct } from "../slices/productsSlice";

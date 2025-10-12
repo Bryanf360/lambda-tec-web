@@ -4,9 +4,7 @@ import { TextField } from "../../../auth/components";
 
 const FormTextField = styled(TextField)(({ theme }) => ({
     '& .custom-label': {
-        opacity: 0.7,
-        fontSize: '0.875rem',
-        fontWeight: 500,
+        ...theme.typography.inputFormLabel,
     },
     '& .MuiFilledInput-root': {
         fontSize: '0.875rem',

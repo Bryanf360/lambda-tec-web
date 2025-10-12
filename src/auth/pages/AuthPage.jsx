@@ -2,10 +2,7 @@ import { useState } from "react";
 
 import {
     Box,
-    FormControl,
-    FormHelperText,
     Grid,
-    MenuItem,
     Typography,
     useTheme,
 } from "@mui/material";
@@ -14,9 +11,11 @@ import LockIcon from "@mui/icons-material/Lock";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 
-import { TextField, Select, Button } from "../components";
+import { TextField, Button } from "../components";
 import logo from './../assets/logo.png';
 import { useNavigate } from "react-router-dom";
+import { Select } from "../../core/components";
+import { roles } from "../../data/dummyData";
 
 export const AuthPage = () => {
     const navigate = useNavigate();
@@ -34,7 +33,7 @@ export const AuthPage = () => {
                 initialValues={{
                     email: '',
                     password: '',
-                    role: '',
+                    role: 0,
                 }}
                 onSubmit={(values) => {
                     navigate('/admin/dashboard')
@@ -45,8 +44,8 @@ export const AuthPage = () => {
                         .required("El correo es requerido"),
                     password: Yup.string()
                         .required("La contraseña es requerida"),
-                    role: Yup.string()
-                        .required("El rol es requerido"),
+                    role: Yup.number()
+                        .notOneOf([0], "El rol es requerido"),
                 })}
             >
                 {({ values, errors, touched, handleSubmit, handleChange }) => (
@@ -123,7 +122,7 @@ export const AuthPage = () => {
                             sx={{ my: 1, }}
                         >
                             <Select
-                                textLabel="Rol"
+                                labelText="Rol"
                                 value={values.role}
                                 name="role"
                                 onChange={handleChange}
@@ -133,10 +132,9 @@ export const AuthPage = () => {
                                 required
                                 error={Boolean(touched.role && errors.role)}
                                 errorMessage={errors.role}
-                            >
-                                <MenuItem value="admin">Admin</MenuItem>
-                                <MenuItem value="technical">Técnico</MenuItem>
-                            </Select>
+                                options={roles}
+                                variant="auth"
+                            />
                         </Grid>
                         <Grid
                             size={12}

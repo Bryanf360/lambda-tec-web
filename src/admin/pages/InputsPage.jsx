@@ -1,69 +1,45 @@
 import { useState } from "react"
 
-import { Box, Grid, IconButton, Typography, useTheme } from "@mui/material"
+import {
+    Box,
+    Grid,
+    IconButton,
+    Typography,
+    useTheme,
+} from "@mui/material"
 import dayjs from "dayjs"
-import { BorderRight, Delete } from "@mui/icons-material"
+import { Delete } from "@mui/icons-material"
 import AddIcon from '@mui/icons-material/Add';
 
-import { CardLayout, FormAutocomplete, InputLabel, Select, Table } from "../components"
-import { DatePicker, SearchInput } from "../components/molecules"
-import FormTextField from "../components/atoms/FormInput"
+import {
+    CardLayout,
+    FormAutocomplete,
+    Table,
+    DatePicker,
+    AddModal,
+    FormTextField,
+} from "../components"
 import { Button, TextField } from "../../auth/components"
-
-const providers = [
-    { id: 1, name: 'Jhon Smith' },
-    { id: 2, name: 'Jorge Vedón' },
-    { id: 3, name: 'Andrés Hernández' },
-    { id: 4, name: 'Liseth Vargas' },
-    { id: 5, name: 'Jhon Doe' }
-]
-
-const reasons = [
-    { id: 1, name: 'Compra' },
-    { id: 2, name: 'Ingreso de prueba' }
-]
-
-const warehouses = [
-    { id: 1, value: 'Bodega 1' },
-    { id: 2, value: 'Bodega 2' }
-];
-
-const statuses = [
-    { id: 1, value: 'Usado' },
-    { id: 2, value: 'Nuevo' }
-];
-
-const data = [
-    {
-        number: '1',
-        name: 'Monitor LCD',
-        quantity: 4,
-        unites: 'u - Unidades',
-        warehouse: 'Tecratronik',
-        serialNumber: '1234ASDFQ',
-        assetNumber: 'ASDF1234',
-        status: 'Usado',
-        amountToEnter: 30,
-    },
-    {
-        number: '2',
-        name: 'Cable RJ45',
-        quantity: 30,
-        unites: 'm - Metros',
-        warehouse: 'Tecratronik',
-        serialNumber: 'N/A',
-        assetNumber: 'ASDF1234',
-        status: 'Usado',
-        amountToEnter: 30,
-    },
-];
+import {
+    cities,
+    inputs,
+    providers,
+    provinces,
+    reasons,
+    statuses,
+    warehouses,
+} from "../../data/dummyData";
+import { Select } from "../../core/components";
 
 export const InputsPage = () => {
     const [selectedProvider, setSelectedProvider] = useState(providers[0]);
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [selectedReason, setSelectedReason] = useState(reasons[0])
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouses[0].id)
-    const [selectedStatus, setSelectedStatus] = useState(statuses[0].id)
+    const [selectedStatus, setSelectedStatus] = useState(statuses[0].id);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [selectedProvince, setSelectedProvince] = useState(0)
+    const [selectedCity, setSelectedCity] = useState(0)
     const theme = useTheme();
 
     const handleWarehouseSelectChange = (event) => {
@@ -202,6 +178,22 @@ export const InputsPage = () => {
         }
     ];
 
+    const handleAddModalClose = () => {
+        setIsAddModalOpen(false);
+    }
+
+    const handleAddProviderButtonClick = () => {
+        setIsAddModalOpen(true);
+    }
+
+    const handleSelectedProvinceChange = (event) => {
+        setSelectedProvince(event.target.value);
+    }
+
+    const handleSelectedCityChange = (event) => {
+        setSelectedCity(event.target.value);
+    }
+
     return (
         <>
             <CardLayout>
@@ -219,6 +211,7 @@ export const InputsPage = () => {
                             getOptionLabel={(option) => option.name}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             marginEnd={3}
+                            onAddButtonClick={handleAddProviderButtonClick}
                         />
                     </Grid>
                     <Grid>
@@ -259,11 +252,11 @@ export const InputsPage = () => {
                 </Button>
                 <Table
                     columns={columns}
-                    data={data}
+                    data={inputs}
                 />
             </CardLayout>
             <Box
-                sx={{ 
+                sx={{
                     display: 'flex',
                     justifyContent: 'flex-end',
                     mt: 5,
@@ -275,6 +268,81 @@ export const InputsPage = () => {
                     Guardar
                 </Button>
             </Box>
+            <AddModal
+                title="Proveedor"
+                open={isAddModalOpen}
+                onClose={handleAddModalClose}
+            >
+                <Grid container spacing={1}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <FormTextField
+                            labelText="Nombres*"
+                            placeholder="Ingrese los nombres"
+                            sx={{ mb: 2, }}
+                        />
+                        <FormTextField
+                            labelText="Nombres*"
+                            placeholder="Ingrese los nombres"
+                            sx={{ mb: 2, }}
+                        />
+                        <FormTextField
+                            labelText="Ruc*"
+                            placeholder="Ingrese el ruc"
+                            sx={{ mb: 2, }}
+                        />
+                        <FormTextField
+                            labelText="Teléfono Fijo*"
+                            placeholder="Ingrese el teléfono fijo"
+                            sx={{ mb: 2, }}
+                        />
+                        <FormTextField
+                            labelText="Teléfono Móvil*"
+                            placeholder="Ingrese el teléfono móvil"
+                            sx={{ mb: 2, }}
+                        />
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <FormTextField
+                            labelText="Dirección*"
+                            placeholder="Ingrese la dirección"
+                            sx={{ mb: 2, }}
+                        />
+                        <Select
+                            labelText="Provincia*"
+                            options={provinces}
+                            sx={{ mb: 2, }}
+                            variant="form"
+                            value={selectedProvince}
+                            name="province"
+                            onChange={handleSelectedProvinceChange}
+                            placeholder="Seleccione la provincia"
+                            labelId="province-select-label"
+                            id="province-select"
+                            required
+                        />
+                        <Select
+                            labelText="Ciudad*"
+                            options={cities}
+                            sx={{ mb: 2, }}
+                            variant="form"
+                            value={selectedCity}
+                            name="city"
+                            onChange={handleSelectedCityChange}
+                            placeholder="Seleccione la ciudad"
+                            labelId="city-select-label"
+                            id="city-select"
+                            required
+                        />
+                        <FormTextField
+                            labelText="Descripción"
+                            placeholder="Ingrese la descripción"
+                            multiline
+                            minRows={3}        // 👈 altura mínima
+                            maxRows={6}
+                        />
+                    </Grid>
+                </Grid>
+            </AddModal>
         </>
     )
 }

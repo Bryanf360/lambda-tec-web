@@ -30,8 +30,8 @@ const theme = createTheme({
       main: '#CFA968',
       contrastText: '#FFFFFF',
     },
-    quaternary: { 
-      main: "#3FC353", 
+    quaternary: {
+      main: "#3FC353",
       contrastText: 'rgba(79, 79, 79, 0.5)'
     },
     warning: {
@@ -86,6 +86,7 @@ const theme = createTheme({
       fontSize: '0.75rem',
       fontWeight: 600,
       letterSpacing: '0.1em',
+      lineHeight: 'auto',
     },
     tableHead: {
       fontSize: 12,
@@ -117,6 +118,11 @@ const theme = createTheme({
       color: '#000000',
       letterSpacing: 0,
       fontSize: '0.75rem',
+      fontWeight: 500,
+    },
+    inputFormLabel: {
+      opacity: 0.7,
+      fontSize: '0.875rem',
       fontWeight: 500,
     }
   }

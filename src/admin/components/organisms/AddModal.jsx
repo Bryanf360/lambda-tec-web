@@ -65,13 +65,13 @@ export default function AddModal({
             </Grid>
             {children}
             <DialogActions>
-                <Grid container justifyContent="center">
-                    <Button kind="secondary" onClick={onClose} sx={{ minWidth: 144.5, mb: { xs: 1, sm: 0 }, mr: { md: 1 } }}>
-                        Cancel
-                    </Button>
-                    <Button type="submit" form="subscription-form" sx={{ minWidth: 144.5, }}>
-                        Guardar
-                    </Button>
+                <Grid container justifyContent="end" sx={{ flex: 1, }}>
+                        <Button kind="secondary" fullWidth onClick={onClose} sx={{ minWidth: 144.5, width: { sm: 144.5 }, my: { xs: 1, sm: 0, }, mr: { xs: 0, sm: 1, } }}>
+                            Cancelar
+                        </Button>
+                        <Button type="submit" fullWidth form="subscription-form" sx={{ minWidth: 144.5, width: { sm: 144.5 } }}>
+                            Guardar
+                        </Button>
                 </Grid>
             </DialogActions>
         </Modal>
