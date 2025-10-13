@@ -8,8 +8,9 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 
 export default function SearchInput({
-    placeholder,
-    onChange
+    placeholder = "Buscar...",
+    onChange,
+    sx,
 }) {
     const theme = useTheme();
 
@@ -29,6 +30,7 @@ export default function SearchInput({
                 boxShadow: 3,
                 paddingInlineEnd: 0,
                 paddingBlock: 0,
+                ...sx
             }}
         >
             <IconButton 

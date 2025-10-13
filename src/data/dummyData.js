@@ -61,6 +61,39 @@ export const inputs = [
     },
 ];
 
+export const products = [
+    {
+        id: 1, 
+        code: '1234123',
+        product: 'Cable RJ46',
+        provider: 'Jhon Sneider',
+        description: 'Cable Internet',
+        type: 'Consumible',
+        unity: 'm - Metros',
+        quantity: 2
+    },
+    {
+        id: 3, 
+        code: '1234123',
+        product: '-',
+        provider: 'Jhon Sneider',
+        description: 'Cable Internet',
+        type: 'Consumible',
+        unity: 'm - Metros',
+        quantity: 2
+    },
+    {
+        id: 4, 
+        code: '1234123',
+        product: 'Cable RJ46',
+        provider: 'Consumible',
+        description: 'Cable Internet',
+        type: 'Consumible',
+        unity: 'm - Metros',
+        quantity: 3
+    }
+]
+
 export const types = [
     { id: 1, name: 'Consumible' },
     { id: 2, name: 'Equipo' },

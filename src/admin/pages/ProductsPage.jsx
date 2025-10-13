@@ -191,7 +191,6 @@ export const ProductsPage = () => {
                 open={isDeleteModalOpen}
                 onClose={handleDeleteModalClose}
             />
-
         </CardLayout>
     )
 }

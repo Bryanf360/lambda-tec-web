@@ -1,13 +1,18 @@
-import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
+import { useState } from 'react';
+
+import {
+    Paper,
+    styled,
+    Table,
+    TableBody,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow,
+    Typography,
+    useTheme,
+} from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { IconButton, TablePagination, Typography } from '@mui/material';
 
 import { TablePaginationActions } from '../molecules';
 
@@ -45,15 +50,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-export default function CustomizedTables({
+export default function ({
     columns = [],
     data = [],
+    ...props
 }) {
-    const theme = useTheme();
 
     // ✅ 1. Estados para paginación
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     // ✅ 2. Manejadores
     const handleChangePage = (event, newPage) => {
@@ -78,13 +83,14 @@ export default function CustomizedTables({
                     boxShadow: 'none',
                     overflowX: "auto",
                 }}
+                {...props}
             >
                 <Table aria-label="customized table">
                     <CustomTableHead>
                         <TableRow>
                             {columns.map(col => (
-                                <StyledTableCell 
-                                    align="center" 
+                                <StyledTableCell
+                                    align="center"
                                     sx={{ minWidth: col.minWidth || 100 }}
                                     key={col.id}
                                 >
@@ -101,12 +107,12 @@ export default function CustomizedTables({
                                         key={id}
                                         align={align || 'center'}
                                     >
-                                        {render 
+                                        {render
                                             ? render(row[id], row)
                                             : <Typography variant="tableCell">{row[id]}</Typography>}
                                     </StyledTableCell>
                                 ))}
-                                
+
                             </StyledTableRow>
                         ))}
                     </TableBody>

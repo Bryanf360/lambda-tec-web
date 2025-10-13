@@ -124,6 +124,13 @@ const theme = createTheme({
       opacity: 0.7,
       fontSize: '0.875rem',
       fontWeight: 500,
+    },
+    searchModalTitle: {
+      fontSize: '1.5rem',
+      color: '#352215',
+      fontWeight: 700,
+      letterSpacing: '-0.011em',
+      opacity: 0.7,
     }
   }
 })
