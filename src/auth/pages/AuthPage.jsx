@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
+    Alert,
     Box,
     Grid,
     Typography,
@@ -9,17 +10,25 @@ import {
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from "@mui/icons-material/Lock";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 import { TextField, Button } from "../components";
 import logo from './../assets/logo.png';
-import { useNavigate } from "react-router-dom";
-import { Select } from "../../core/components";
-import { roles } from "../../data/dummyData";
+import { loginValidationSchema } from "../../admin/helpers";
+import { useAuthStore } from "../hooks/useAuthStore";
 
 export const AuthPage = () => {
     const navigate = useNavigate();
     const theme = useTheme();
+    const { errorMessage, status, startLogin } = useAuthStore();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleFormSubmit = (values) => {
+        setIsLoading(true)
+        startLogin(values.email, values.password)
+            .then(() => setIsLoading(false))
+    }
 
     return (
         <Grid
@@ -33,20 +42,10 @@ export const AuthPage = () => {
                 initialValues={{
                     email: '',
                     password: '',
-                    role: 0,
+                    // role: 0,
                 }}
-                onSubmit={(values) => {
-                    navigate('/admin/dashboard')
-                }}
-                validationSchema={Yup.object({
-                    email: Yup.string()
-                        .email("Correo no válido")
-                        .required("El correo es requerido"),
-                    password: Yup.string()
-                        .required("La contraseña es requerida"),
-                    role: Yup.number()
-                        .notOneOf([0], "El rol es requerido"),
-                })}
+                onSubmit={handleFormSubmit}
+                validationSchema={loginValidationSchema}
             >
                 {({ values, errors, touched, handleSubmit, handleChange }) => (
                     <Grid
@@ -99,6 +98,13 @@ export const AuthPage = () => {
                                 onChange={handleChange}
                                 error={Boolean(touched.email && errors.email)}
                                 helperText={touched.email && errors.email}
+                                sx={{
+                                    '& .MuiFilledInput-root input': {
+                                        borderTopLeftRadius: 0,
+                                        borderBottomLeftRadius: 0,
+                                        borderBottomRightRadius: 10,
+                                    },
+                                }}
                             />
                         </Grid>
                         <Grid
@@ -114,10 +120,16 @@ export const AuthPage = () => {
                                 onChange={handleChange}
                                 error={Boolean(touched.password && errors.password)}
                                 helperText={touched.password && errors.password}
+                                sx={{
+                                    '& .MuiFilledInput-root input': {
+                                        borderTopLeftRadius: 0,
+                                        borderBottomLeftRadius: 0,
+                                        borderBottomRightRadius: 10,
+                                    },
+                                }}
                             />
                         </Grid>
-
-                        <Grid
+                        {/* <Grid
                             size={12}
                             sx={{ my: 1, }}
                         >
@@ -135,7 +147,7 @@ export const AuthPage = () => {
                                 options={roles}
                                 variant="auth"
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid
                             size={12}
                             sx={{ mt: 3, }}
@@ -145,14 +157,16 @@ export const AuthPage = () => {
                                 type="submit"
                                 kind="primary"
                                 fullWidth
+                                loading={isLoading}
+                                loadingPosition="end"
                             >
                                 Ingresar
                             </Button>
                         </Grid>
                     </Grid>
                 )}
-
             </Formik>
+            <ToastContainer />
         </Grid>
     )
 }

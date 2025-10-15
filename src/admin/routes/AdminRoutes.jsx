@@ -22,7 +22,7 @@ export const AdminRoutes = () => {
                 <Route path="outputs" element={<OutputsPage />} />
                 <Route path="reports" element={<ReportsPage />} />
                 <Route path="users" element={<UsersPage />} />
-                <Route path="*" element={<Navigate to="/admin/dashboard" />} />
+                <Route path="*" element={<Navigate to="/dashboard" />} />
             </Route>
         </Routes>
     )

@@ -15,6 +15,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from "../../../auth/components";
 import { DrawerHeader } from "../atoms";
 import { Drawer } from "../organisms";
+import { useAuthStore } from "../../../auth/hooks/useAuthStore";
 
 const drawerWidth = 240;
 
@@ -71,6 +72,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 export const AdminLayout = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const navigate = useNavigate();
+    const { startLogout } = useAuthStore();
 
     const handleDrawerOpen = () => {
         setIsDrawerOpen(true);
@@ -81,7 +83,7 @@ export const AdminLayout = () => {
     };
 
     const handleLogoutButtonClick = () => {
-        navigate('/auth/login')
+        startLogout();
     }
 
     return (

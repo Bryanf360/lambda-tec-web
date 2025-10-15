@@ -44,7 +44,7 @@ export default ({
             <Box
                 sx={variant === 'inline' ? inlineStyles : {}}
             >
-                {labelText && (<Typography variant="h2" sx={variant === 'inline' ? { mb: 0, mr: 1 } : { mb: 0.5, mr: 0 }} className="custom-label">{labelText}</Typography> )}
+                {labelText && (<Typography variant="h2" sx={variant === 'inline' ? { mb: 0, mr: 1 } : { mb: 0.5, mr: 0 }} className="custom-label">{labelText}</Typography>)}
                 <StyledTextField
                     hiddenLabel
                     variant="filled"
