@@ -95,8 +95,8 @@ export const products = [
 ]
 
 export const types = [
-    { id: 1, name: 'Consumible' },
-    { id: 2, name: 'Equipo' },
+    { id: 'consumable', name: 'Consumible' },
+    { id: 'equipment', name: 'Equipo' },
 ];
 
 export const brands = [

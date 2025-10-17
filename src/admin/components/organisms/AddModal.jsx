@@ -20,6 +20,7 @@ export default function AddModal({
     onClose,
     children,
     hasCenteredButtons = true,
+    onSubmit,
     ...props
 }) {
     const theme = useTheme();
@@ -78,7 +79,13 @@ export default function AddModal({
                     <Button kind="secondary" fullWidth onClick={onClose} sx={{ minWidth: 144.5, width: { sm: 144.5 }, my: { xs: 1, sm: 0, }, mr: { xs: 0, sm: 1, } }}>
                         Cancelar
                     </Button>
-                    <Button type="submit" fullWidth form="subscription-form" sx={{ minWidth: 144.5, width: { sm: 144.5 } }}>
+                    <Button 
+                        type="submit" 
+                        fullWidth 
+                        form="subscription-form" 
+                        sx={{ minWidth: 144.5, width: { sm: 144.5 } }}
+                        onClick={onSubmit}
+                    >
                         Guardar
                     </Button>
                 </Grid>

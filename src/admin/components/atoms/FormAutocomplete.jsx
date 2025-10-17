@@ -49,6 +49,10 @@ export default function FormAutocomplete({
     haveAddButton = true,
     placeholder = "",
     onAddButtonClick,
+    error,
+    helperText,
+    // onChange,
+    // name,
     ...props
 }) {
     const theme = useTheme();
@@ -61,7 +65,7 @@ export default function FormAutocomplete({
             <Box
                 sx={{
                     display: 'flex',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     mb,
                     p: 0,
                     mr: marginEnd,
@@ -94,8 +98,16 @@ export default function FormAutocomplete({
                                     }
                                 }
                             }}
+                            // name={name}
+                            error={error}
+                            helperText={helperText}
                         />
                     )}
+                    // onChange={(event, value) => {
+                    //     console.log('33333333333')
+                    //     console.log(value)
+                    //     onChange(value);
+                    // }}
                     {...props}
                     sx={{ flex: 1, ...(variant === 'inline' ? { minWidth: 100, width: 200 } : {}), ...props.sx }}
                 />
@@ -113,6 +125,7 @@ export default function FormAutocomplete({
                                 margin: 0,
                             },
                             ml: 0.5,
+                            mt: 0.8,
                         }}
                         onClick={onAddButtonClick}
                     />
