@@ -3,7 +3,7 @@ import { useState } from 'react';
 import {
     Paper,
     styled,
-    Table,
+    Table as MuiTable,
     TableBody,
     TableContainer,
     TableHead,
@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-export default function ({
+export default function Table({
     columns = [],
     data = [],
     ...props
@@ -85,7 +85,7 @@ export default function ({
                 }}
                 {...props}
             >
-                <Table aria-label="customized table">
+                <MuiTable aria-label="customized table">
                     <CustomTableHead>
                         <TableRow>
                             {columns.map(col => (
@@ -116,7 +116,7 @@ export default function ({
                             </StyledTableRow>
                         ))}
                     </TableBody>
-                </Table>
+                </MuiTable>
             </TableContainer>
             <TablePagination
                 component="div"

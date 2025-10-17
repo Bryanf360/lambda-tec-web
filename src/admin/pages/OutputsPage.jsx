@@ -58,7 +58,7 @@ const data = [
     },
 ];
 
-export const OutputsPage = () => {
+export default function OutputsPage() {
     const [selectedProvider, setSelectedProvider] = useState(providers[0]);
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [selectedReason, setSelectedReason] = useState(reasons[0])

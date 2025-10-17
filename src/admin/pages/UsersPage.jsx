@@ -60,7 +60,7 @@ const userList = [
 
 
 
-export const UsersPage = () => {
+export default function UsersPage() {
     const { } = useFetch('https://jsonplaceholder.typicode.com/users');
 
     const StatusChip = ({ status }) => (

@@ -31,7 +31,7 @@ import {
 } from "../../data/dummyData";
 import SearchProductModal from "../components/organisms/SearchProductModal";
 
-export const InputsPage = () => {
+export default function InputsPage() {
     const [selectedProvider, setSelectedProvider] = useState(providers[0]);
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [selectedReason, setSelectedReason] = useState(reasons[0])

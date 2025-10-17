@@ -1,6 +1,6 @@
 import { CardLayout } from "../components"
 
-export const ReportsPage = () => {
+export default function ReportsPage() {
     return (
         <CardLayout
             title="Reportes"

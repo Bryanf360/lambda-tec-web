@@ -10,11 +10,12 @@ import {
 } from '@mui/material'
 
 
-export default ({
+export default function({
     title,
     quantity,
     svg: SvgComponent,
-}) => {
+    onClick
+}) {
     const theme = useTheme();
     const [hover, setHover] = useState(false);
 
@@ -37,6 +38,7 @@ export default ({
                 }
 
             }}
+            onClick={onClick}
         >
             <CardActionArea sx={{ pt: 4, pb: 2, }}>
                 <Box sx={{ justifyContent: 'center', display: 'flex', }}>

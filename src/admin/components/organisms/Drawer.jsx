@@ -23,11 +23,11 @@ import { NavLink, useLocation, useNavigate, useNavigation } from 'react-router-d
 import { DrawerHeader } from '../atoms';
 import { useAuthStore } from '../../../auth/hooks/useAuthStore';
 
-export default ({
+export default function({
     width,
     isOpen,
     onClose,
-}) => {
+}) {
     const theme = useTheme();
     const { pathname } = useLocation();
     const { user } = useAuthStore(state => state.auth);

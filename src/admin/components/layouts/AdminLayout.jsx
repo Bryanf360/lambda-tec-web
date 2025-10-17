@@ -69,7 +69,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 );
 
 
-export const AdminLayout = () => {
+export default function AdminLayout() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const navigate = useNavigate();
     const { startLogout } = useAuthStore();

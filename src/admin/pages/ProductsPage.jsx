@@ -64,7 +64,7 @@ const data = [
     },
 ];
 
-export const ProductsPage = () => {
+export default function ProductsPage() {
     const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
     const dispatch = useDispatch()
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
