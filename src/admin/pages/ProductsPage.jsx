@@ -178,9 +178,9 @@ export default function ProductsPage() {
             <Table
                 data={data}
                 columns={columns}
-                onEdit={handleEditButtonClick}
-                onDelete={handleDeleteButtonClick}
-                onView={handleViewButtonClick}
+                // onEdit={handleEditButtonClick}
+                // onDelete={handleDeleteButtonClick}
+                // onView={handleViewButtonClick}
             />
             <AddProductModal
                 open={isAddProductModalOpen}

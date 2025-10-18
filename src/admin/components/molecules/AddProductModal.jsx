@@ -1,20 +1,19 @@
 import { Grid } from "@mui/material";
 import { AddModal, FormAutocomplete, FormTextField } from "../";
-import { brands, models, partNumbers, types, unitTypes } from "../../../data/dummyData";
+import { models, partNumbers, types, unitTypes } from "../../../data/dummyData";
 import { useState } from "react";
-import { Form, Formik } from "formik";
+import { Form, Formik, useFormikContext } from "formik";
 import { productValidationSchema } from "../../helpers/validationsSchemes";
+import { useBrandsStore } from "../../hooks";
 
 export default function AddProductModal({
     open,
     onClose,
     mode,
 }) {
-    const [selectedType, setSelectedType] = useState(types[0]);
-    const [selectedBrand, setSelectedBrand] = useState(types[0])
-    const [selectedModel, setSelectedModel] = useState(models[0]);
-    const [selectedPartNumber, setSelectedPartNumber] = useState(partNumbers[0]);
-    const [selectedUnitType, setSelectedUnitType] = useState(unitTypes[0]);
+    // TODO: get brand of custom hook
+    const { brands } = useBrandsStore();
+    
     const initialValues = {
         type: null,
         name: '',
@@ -29,10 +28,10 @@ export default function AddProductModal({
         // fk_unit_type: 1,
         // status: 'active'
     }
-    console.log('selectedType: ', selectedType);
 
-    const handleFormSubmit = (values) => {
+    const handleFormSubmit = (values, { resetForm }) => {
         console.log(values)
+        resetForm();
     }
 
     return (
