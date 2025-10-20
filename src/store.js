@@ -5,6 +5,7 @@ import {
     productsReducer, 
     dashboardReducer, 
     brandsReducer,
+    modelsReducer,
 } from './admin/slices'
 
 export default configureStore({
@@ -13,5 +14,6 @@ export default configureStore({
         products: productsReducer,
         dashboard: dashboardReducer,
         brands: brandsReducer,
+        models: modelsReducer,
     }
 })

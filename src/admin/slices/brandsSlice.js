@@ -8,7 +8,6 @@ export const brandsSlice = createSlice({
     },
     reducers: {
         loadingBrands: (state, { payload } ) => {
-            console.log({ payload })
             state.brands = payload;
             state.isLoading = false;
         },

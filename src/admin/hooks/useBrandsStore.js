@@ -7,7 +7,7 @@ import { loadingBrands } from "../slices/brandsSlice";
 
 const useBrandsStore = () => {
     // TODO: access to the store
-    const { brands } = useSelector(state => state.brands)
+    const { isLoading, brands } = useSelector(state => state.brands)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -25,6 +25,7 @@ const useBrandsStore = () => {
     }
 
     return {
+        isLoading,
         brands,
     }
 }
