@@ -3,16 +3,12 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import lambdaTecApi from "../../core/api/lambdaTecApi";
-import { loadingUnitTypes } from "../slices/unitTypesSlice";
+import { addUnitType, loadingUnitTypes, setIsLoading } from "../slices/unitTypesSlice";
 
 const useUnitTypesStore = () => {
     // TODO: access to the store
     const { isLoading, unitTypes } = useSelector(state => state.unitTypes)
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        startLoadingUnitTypes();
-    }, [])
 
     const startLoadingUnitTypes = async () => {
         try {
@@ -24,9 +20,25 @@ const useUnitTypesStore = () => {
         }
     }
 
+    const startSavingUnitType = async (unitType) => {
+            try {
+                dispatch(setIsLoading(true));
+                const { data } = await lambdaTecApi.post('/unit-types', unitType);
+                dispatch(addUnitType(data.data));
+                return data.message;
+            } catch (error) {
+                console.log('error: ', error);
+                throw error?.response?.data?.message;
+            } finally {
+                dispatch(setIsLoading(false));
+            }
+        }
+
     return {
         isLoading,
         unitTypes,
+        startLoadingUnitTypes,
+        startSavingUnitType,
     }
 }
 

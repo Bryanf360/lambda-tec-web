@@ -2,6 +2,7 @@ export { default as AddBrandModal } from './AddBrandModal'
 export { default as AddProductModal } from './AddProductModal'
 export { default as AddProviderModal } from './AddProviderModal';
 export { default as AddReasonModal } from './AddReasonModal';
+export { default as AddUnitTypeModal } from './AddUnitTypeModal'
 export { default as DashboardCard } from './DashboardCard';
 export { default as DatePicker } from './DatePicker';
 export { default as SearchInput } from './SearchInput';

@@ -38,3 +38,10 @@ export const brandValidationSchema = Yup.object({
     name: Yup.string()
         .required('El nombre es requerido'),
 })
+
+export const unitTypeValidationSchema = Yup.object({
+    name: Yup.string()
+        .required('El nombre es requerido'),
+    simbol: Yup.string()
+        .required('El símbolo es requerido'),
+})

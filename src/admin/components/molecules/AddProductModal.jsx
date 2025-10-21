@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import { AddBrandModal, AddModal, FormAutocomplete, FormTextField } from "../";
+import { AddBrandModal, AddModal, AddUnitTypeModal, FormAutocomplete, FormTextField } from "../";
 import { models, partNumbers, types, unitTypes } from "../../../data/dummyData";
 import { useEffect, useState } from "react";
 import { Form, Formik, useFormikContext } from "formik";
@@ -13,8 +13,9 @@ export default function AddProductModal({
     mode,
 }) {
     const { isLoading: isLoadingBrands, brands, startLoadingBrands } = useBrandsStore();
-    const { isLoading: isLoadingUnitTypes, unitTypes } = useUnitTypesStore();
+    const { isLoading: isLoadingUnitTypes, unitTypes, startLoadingUnitTypes } = useUnitTypesStore();
     const [isAddBrandModalOpen, setIsAddBrandModalOpen] = useState(false)
+    const [isAddUnitTypeModalOpen, setIsAddUnitTypeModalOpen] = useState(false)
     // const { values: { brand } } = useFormikContext();
     // console.log({ brand })
 
@@ -36,6 +37,7 @@ export default function AddProductModal({
 
     useEffect(() => {
         startLoadingBrands();
+        startLoadingUnitTypes();
     }, [])
     
     const handleFormSubmit = (values, { resetForm }) => {
@@ -48,6 +50,14 @@ export default function AddProductModal({
 
     const handleAddBrandModalClose = () => {
         setIsAddBrandModalOpen(false)
+    }
+
+    const handleAddUnitTypeButtonClick = () => {
+        setIsAddUnitTypeModalOpen(true)
+    }
+
+    const handleAddUnitTypeModalClose = () => {
+        setIsAddUnitTypeModalOpen(false)
     }
 
     return (
@@ -185,6 +195,7 @@ export default function AddProductModal({
                                         onChange={(event, value) => setFieldValue('unitType', value)}
                                         error={touched.unitType && Boolean(errors.unitType)}
                                         helperText={touched.unitType && errors.unitType}
+                                        onAddButtonClick={handleAddUnitTypeButtonClick}
                                     />
                                     <FormTextField
                                         labelText="Descripción"
@@ -205,6 +216,10 @@ export default function AddProductModal({
             <AddBrandModal
                 open={isAddBrandModalOpen}
                 onClose={handleAddBrandModalClose}
+            />
+            <AddUnitTypeModal
+                open={isAddUnitTypeModalOpen}
+                onClose={handleAddUnitTypeModalClose}
             />
         </>
     )
