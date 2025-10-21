@@ -1,3 +1,4 @@
+export { default as AddBrandModal } from './AddBrandModal'
 export { default as AddProductModal } from './AddProductModal'
 export { default as AddProviderModal } from './AddProviderModal';
 export { default as AddReasonModal } from './AddReasonModal';

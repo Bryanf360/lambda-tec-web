@@ -6,6 +6,8 @@ import {
     dashboardReducer, 
     brandsReducer,
     modelsReducer,
+    unitTypesReducer,
+    partNumbersReducer,
 } from './admin/slices'
 
 export default configureStore({
@@ -15,5 +17,7 @@ export default configureStore({
         dashboard: dashboardReducer,
         brands: brandsReducer,
         models: modelsReducer,
+        unitTypes: unitTypesReducer,
+        partNumbers: partNumbersReducer,
     }
 })

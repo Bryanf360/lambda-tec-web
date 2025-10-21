@@ -33,3 +33,8 @@ export const productValidationSchema = Yup.object({
     // role: Yup.number()
     //     .notOneOf([0], "El rol es requerido")
 })
+
+export const brandValidationSchema = Yup.object({
+    name: Yup.string()
+        .required('El nombre es requerido'),
+})

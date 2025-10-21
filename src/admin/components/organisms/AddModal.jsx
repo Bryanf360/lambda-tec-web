@@ -21,6 +21,8 @@ export default function AddModal({
     children,
     hasCenteredButtons = true,
     onSubmit,
+    showDate = true,
+    isLoading = false,
     ...props
 }) {
     const theme = useTheme();
@@ -68,10 +70,12 @@ export default function AddModal({
                         {mode === "create" ? "Crear" : "Editar"} {title}
                     </Typography>
                 </DialogTitle>
-                <Chip
-                    label="Registro 08-04-2024"
-                    sx={chipStyles}
-                />
+                {showDate && (
+                    <Chip
+                        label="Registro 08-04-2024"
+                        sx={chipStyles}
+                    />
+                )}
             </Grid>
             {children}
             <DialogActions sx={{ padding: 0, }}>
@@ -85,6 +89,8 @@ export default function AddModal({
                         form="subscription-form" 
                         sx={{ minWidth: 144.5, width: { sm: 144.5 } }}
                         onClick={onSubmit}
+                        loading={isLoading}
+                        loadingPosition="end"
                     >
                         Guardar
                     </Button>

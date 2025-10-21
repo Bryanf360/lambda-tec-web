@@ -16,6 +16,7 @@ import { Button } from "../../../auth/components";
 import { DrawerHeader } from "../atoms";
 import { Drawer } from "../organisms";
 import { useAuthStore } from "../../../auth/hooks/useAuthStore";
+import { ToastContainer } from "react-toastify";
 
 const drawerWidth = 240;
 
@@ -141,6 +142,7 @@ export default function AdminLayout() {
                     <DrawerHeader />
                     <Outlet />
                 </Main>
+                <ToastContainer />
             </Box>
         </>
     )

@@ -11,10 +11,17 @@ export const brandsSlice = createSlice({
             state.brands = payload;
             state.isLoading = false;
         },
+        addBrand: (state, { payload }) => {
+            state.isLoading = false;
+            state.brands.push(payload);
+        },
+        setIsLoading: (state, { payload }) => {
+            state.isLoading = payload;
+        }
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { loadingBrands } = brandsSlice.actions
+export const { loadingBrands, addBrand, setIsLoading } = brandsSlice.actions
 
 export default brandsSlice.reducer
