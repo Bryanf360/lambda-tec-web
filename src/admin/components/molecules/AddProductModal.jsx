@@ -1,23 +1,27 @@
-import { Grid } from "@mui/material";
-import { AddBrandModal, AddModal, AddUnitTypeModal, FormAutocomplete, FormTextField } from "../";
-import { models, partNumbers, types, unitTypes } from "../../../data/dummyData";
-import { useEffect, useState } from "react";
-import { Form, Formik, useFormikContext } from "formik";
-import { productValidationSchema } from "../../helpers/validationsSchemes";
-import { useBrandsStore, useModelsStore, useUnitTypesStore } from "../../hooks";
-import usePartNumbersStore from "../../hooks/usePartNumbersStore";
+import { Grid } from '@mui/material';
+import {
+    AddBrandModal,
+    AddModal,
+    AddModelModal,
+    AddPartNumberModal,
+    AddUnitTypeModal,
+    FormAutocomplete,
+    FormTextField,
+} from '../';
+import { types } from '../../../data/dummyData';
+import { useEffect, useState } from 'react';
+import { Form, Formik } from 'formik';
+import { productValidationSchema } from '../../helpers/validationsSchemes';
+import { useBrandsStore, useBrandWatcher, useModelsStore, useUnitTypesStore } from '../../hooks';
+import usePartNumbersStore from '../../hooks/usePartNumbersStore';
 
-export default function AddProductModal({
-    open,
-    onClose,
-    mode,
-}) {
+export default function AddProductModal({ open, onClose, mode }) {
     const { isLoading: isLoadingBrands, brands, startLoadingBrands } = useBrandsStore();
     const { isLoading: isLoadingUnitTypes, unitTypes, startLoadingUnitTypes } = useUnitTypesStore();
-    const [isAddBrandModalOpen, setIsAddBrandModalOpen] = useState(false)
-    const [isAddUnitTypeModalOpen, setIsAddUnitTypeModalOpen] = useState(false)
-    // const { values: { brand } } = useFormikContext();
-    // console.log({ brand })
+    const [isAddBrandModalOpen, setIsAddBrandModalOpen] = useState(false);
+    const [isAddUnitTypeModalOpen, setIsAddUnitTypeModalOpen] = useState(false);
+    const [isAddModelModalOpen, setIsAddModelModalOpen] = useState(false);
+    const [isAddPartNumberModalOpen, setIsAddPartNumberModalOpen] = useState(false);
 
     const initialValues = {
         type: null,
@@ -33,32 +37,48 @@ export default function AddProductModal({
         // fk_part_number_id: 1,
         // fk_unit_type: 1,
         // status: 'active'
-    }
+    };
 
     useEffect(() => {
         startLoadingBrands();
         startLoadingUnitTypes();
-    }, [])
-    
+    }, []);
+
     const handleFormSubmit = (values, { resetForm }) => {
         resetForm();
-    }
+    };
 
     const handleAddBrandButtonClick = () => {
-        setIsAddBrandModalOpen(true)
-    }
+        setIsAddBrandModalOpen(true);
+    };
 
     const handleAddBrandModalClose = () => {
-        setIsAddBrandModalOpen(false)
-    }
+        setIsAddBrandModalOpen(false);
+    };
 
     const handleAddUnitTypeButtonClick = () => {
-        setIsAddUnitTypeModalOpen(true)
-    }
+        setIsAddUnitTypeModalOpen(true);
+    };
 
     const handleAddUnitTypeModalClose = () => {
-        setIsAddUnitTypeModalOpen(false)
-    }
+        setIsAddUnitTypeModalOpen(false);
+    };
+
+    const handleAddModelButtonClick = () => {
+        setIsAddModelModalOpen(true);
+    };
+
+    const handleAddModelModalClose = () => {
+        setIsAddModelModalOpen(false);
+    };
+
+    const handleAddPartNumberButtonClick = () => {
+        setIsAddPartNumberModalOpen(true);
+    };
+
+    const handleAddPartNumberModalClose = () => {
+        setIsAddPartNumberModalOpen(false);
+    };
 
     return (
         <>
@@ -67,9 +87,25 @@ export default function AddProductModal({
                 onSubmit={handleFormSubmit}
                 validationSchema={productValidationSchema}
             >
-                {({ values, errors, touched, handleSubmit, handleChange, setFieldValue, resetForm }) => {
-                    const { isLoading: isLoadingModels, models } = useModelsStore(values.brand?.id);
-                    const { isLoading: isLoadingPartNumbers, partNumbers } = usePartNumbersStore(values.model?.id);
+                {({
+                    values,
+                    errors,
+                    touched,
+                    handleSubmit,
+                    handleChange,
+                    setFieldValue,
+                    resetForm,
+                    setValues,
+                }) => {
+                    useBrandWatcher(values.brand?.id);
+                    const {
+                        isLoading: isLoadingModels,
+                        models,
+                        setSelectedModel,
+                    } = useModelsStore();
+                    const { isLoading: isLoadingPartNumbers, partNumbers } = usePartNumbersStore(
+                        values.model?.id
+                    );
 
                     return (
                         <AddModal
@@ -83,11 +119,7 @@ export default function AddProductModal({
                             mode={mode}
                             onSubmit={handleSubmit}
                         >
-                            <Grid
-                                container
-                                spacing={1}
-                                component={Form}
-                            >
+                            <Grid container spacing={1} component={Form}>
                                 <Grid size={{ xs: 12, sm: 6 }}>
                                     <FormTextField
                                         labelText="Nombre*"
@@ -96,7 +128,7 @@ export default function AddProductModal({
                                         name="name"
                                         onChange={handleChange}
                                         error={touched.name && Boolean(errors.name)}
-                                        helperText={touched.namehandleAddBrandButtonClick && errors.name}
+                                        helperText={touched.name && errors.name}
                                         sx={{
                                             mb: 2,
                                             '& .MuiFilledInput-root input': {
@@ -127,11 +159,19 @@ export default function AddProductModal({
                                         isOptionEqualToValue={(option, val) => option.id === val.id}
                                         mb={2}
                                         name="brand"
-                                        noOptionsText={isLoadingBrands ? "Cargando" : 'No se encontraron marcas'}
+                                        noOptionsText={
+                                            isLoadingBrands
+                                                ? 'Cargando'
+                                                : 'No se encontraron marcas'
+                                        }
                                         value={values.brand}
                                         onChange={(event, value) => {
-                                            setFieldValue('brand', value);
-                                            setFieldValue('model', null)
+                                            setValues((prev) => ({
+                                                ...prev,
+                                                brand: value,
+                                                model: null,
+                                            }));
+                                            setSelectedModel(null);
                                         }}
                                         error={touched.brand && Boolean(errors.brand)}
                                         helperText={touched.brand && errors.brand}
@@ -147,16 +187,21 @@ export default function AddProductModal({
                                         name="model"
                                         noOptionsText={
                                             !values.brand
-                                                ? "Selecciona una marca primero"
+                                                ? 'Selecciona una marca primero'
                                                 : isLoadingModels
-                                                    ? "Cargando modelos..."
-                                                    : "No se encontraron modelos"
+                                                ? 'Cargando modelos...'
+                                                : 'No se encontraron modelos'
                                         }
                                         value={values.model}
                                         onChange={(event, value) => {
-                                            setFieldValue('model', value);
-                                            setFieldValue('partNumber', null);
+                                            setValues((prev) => ({
+                                                ...prev,
+                                                model: value,
+                                                partNumber: null,
+                                            }));
+                                            setSelectedModel(value);
                                         }}
+                                        onAddButtonClick={handleAddModelButtonClick}
                                         error={touched.model && Boolean(errors.model)}
                                         helperText={touched.model && errors.model}
                                     />
@@ -168,17 +213,20 @@ export default function AddProductModal({
                                         placeholder="Seleccione un número de parte"
                                         noOptionsText={
                                             !values.model
-                                                ? "Selecciona un modelo primero"
+                                                ? 'Selecciona un modelo primero'
                                                 : isLoadingPartNumbers
-                                                    ? "Cargando números de parte..."
-                                                    : "No se encontraron números de parte"
+                                                ? 'Cargando números de parte...'
+                                                : 'No se encontraron números de parte'
                                         }
                                         getOptionLabel={(option) => option.name}
                                         isOptionEqualToValue={(option, val) => option.id === val.id}
                                         mb={2}
                                         name="partNumber"
                                         value={values.partNumber}
-                                        onChange={(event, value) => setFieldValue('partNumber', value)}
+                                        onChange={(event, value) =>
+                                            setFieldValue('partNumber', value)
+                                        }
+                                        onAddButtonClick={handleAddPartNumberButtonClick}
                                         error={touched.partNumber && Boolean(errors.partNumber)}
                                         helperText={touched.partNumber && errors.partNumber}
                                     />
@@ -186,13 +234,21 @@ export default function AddProductModal({
                                         labelText="Tipo de Unidad*"
                                         options={unitTypes}
                                         placeholder="Seleccione tipo unidad"
-                                        noOptionsText={isLoadingUnitTypes ? "Cargando" : 'No se encontraron tipos de unidades'}
-                                        getOptionLabel={(option) => `${option.simbol} - ${option.name}`}
+                                        noOptionsText={
+                                            isLoadingUnitTypes
+                                                ? 'Cargando'
+                                                : 'No se encontraron tipos de unidades'
+                                        }
+                                        getOptionLabel={(option) =>
+                                            `${option.simbol} - ${option.name}`
+                                        }
                                         isOptionEqualToValue={(option, val) => option.id === val.id}
                                         mb={2}
                                         name="unitType"
                                         value={values.unitType}
-                                        onChange={(event, value) => setFieldValue('unitType', value)}
+                                        onChange={(event, value) =>
+                                            setFieldValue('unitType', value)
+                                        }
                                         error={touched.unitType && Boolean(errors.unitType)}
                                         helperText={touched.unitType && errors.unitType}
                                         onAddButtonClick={handleAddUnitTypeButtonClick}
@@ -210,17 +266,16 @@ export default function AddProductModal({
                                 </Grid>
                             </Grid>
                         </AddModal>
-                    )
+                    );
                 }}
             </Formik>
-            <AddBrandModal
-                open={isAddBrandModalOpen}
-                onClose={handleAddBrandModalClose}
+            <AddBrandModal open={isAddBrandModalOpen} onClose={handleAddBrandModalClose} />
+            <AddModelModal open={isAddModelModalOpen} onClose={handleAddModelModalClose} />
+            <AddPartNumberModal
+                open={isAddPartNumberModalOpen}
+                onClose={handleAddPartNumberModalClose}
             />
-            <AddUnitTypeModal
-                open={isAddUnitTypeModalOpen}
-                onClose={handleAddUnitTypeModalClose}
-            />
+            <AddUnitTypeModal open={isAddUnitTypeModalOpen} onClose={handleAddUnitTypeModalClose} />
         </>
-    )
+    );
 }
