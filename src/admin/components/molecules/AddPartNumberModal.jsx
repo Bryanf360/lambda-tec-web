@@ -3,12 +3,9 @@ import { Box } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 
-import { FormAutocomplete, FormTextField } from '../atoms';
-import { AddModal } from '../organisms';
+import { FormAutocomplete, FormTextField, AddModal, AddBrandModal, AddModelModal } from '../';
 import { partNumberValidationSchema } from '../../helpers';
-import { useBrandsStore, useBrandWatcher, useModelsStore } from '../../hooks';
-import usePartNumbersStore from '../../hooks/usePartNumbersStore';
-import { AddBrandModal, AddModelModal } from './';
+import { useBrandsStore, useBrandWatcher, useModelsStore, usePartNumbersStore } from '../../hooks';
 
 export default function AddPartNumberModal({ open, onClose }) {
     const { isLoading, startSavingPartNumber } = usePartNumbersStore();

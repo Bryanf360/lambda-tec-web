@@ -12,8 +12,15 @@ import { types } from '../../../data/dummyData';
 import { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
 import { productValidationSchema } from '../../helpers/validationsSchemes';
-import { useBrandsStore, useBrandWatcher, useModelsStore, useUnitTypesStore } from '../../hooks';
+import {
+    useBrandsStore,
+    useBrandWatcher,
+    useModelsStore,
+    useProductsStore,
+    useUnitTypesStore,
+} from '../../hooks';
 import usePartNumbersStore from '../../hooks/usePartNumbersStore';
+import { toast } from 'react-toastify';
 
 export default function AddProductModal({ open, onClose, mode }) {
     const { isLoading: isLoadingBrands, brands, startLoadingBrands } = useBrandsStore();
@@ -22,6 +29,7 @@ export default function AddProductModal({ open, onClose, mode }) {
     const [isAddUnitTypeModalOpen, setIsAddUnitTypeModalOpen] = useState(false);
     const [isAddModelModalOpen, setIsAddModelModalOpen] = useState(false);
     const [isAddPartNumberModalOpen, setIsAddPartNumberModalOpen] = useState(false);
+    const { startSavingProduct } = useProductsStore();
 
     const initialValues = {
         type: null,
@@ -44,8 +52,26 @@ export default function AddProductModal({ open, onClose, mode }) {
         startLoadingUnitTypes();
     }, []);
 
-    const handleFormSubmit = (values, { resetForm }) => {
-        resetForm();
+    const handleFormSubmit = async (values, { resetForm }) => {
+        const product = {
+            type: values.type.id,
+            name: values.name,
+            description: values.description,
+            brandId: values.brand.id,
+            modelId: values.model.id,
+            partNumberId: values.partNumber.id,
+            unitTypeId: values.unitType.id,
+            status: 'active',
+        };
+        try {
+            console.log(product);
+            const message = await startSavingProduct(product);
+            toast.success(message);
+            resetForm();
+            onClose();
+        } catch (error) {
+            toast.error(error || 'Error interno del servidor');
+        }
     };
 
     const handleAddBrandButtonClick = () => {
