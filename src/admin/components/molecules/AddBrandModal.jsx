@@ -1,19 +1,16 @@
-import { Form, Formik } from "formik"
-import { FormTextField } from "../atoms"
-import { AddModal } from "../organisms"
-import { brandValidationSchema } from "../../helpers"
-import { useBrandsStore } from "../../hooks"
-import { Box } from "@mui/material"
-import { toast } from "react-toastify"
+import { Form, Formik } from 'formik';
+import { FormTextField } from '../atoms';
+import { AddModal } from '../organisms';
+import { brandValidationSchema } from '../../helpers';
+import { useBrandsStore } from '../../hooks';
+import { Box } from '@mui/material';
+import { toast } from 'react-toastify';
 
-export default function AddBrandModal({
-    open,
-    onClose,
-}) {
+export default function AddBrandModal({ open, onClose }) {
     const { isLoading, startSavingBrand } = useBrandsStore();
     const initialValues = {
         name: '',
-    }
+    };
 
     const handleFormSubmit = async (values, { resetForm }) => {
         try {
@@ -21,10 +18,10 @@ export default function AddBrandModal({
             toast.success(message);
             resetForm();
             onClose();
-        } catch(error) {
-            toast.error(error || 'Error interno del servidor')
+        } catch (error) {
+            toast.error(error || 'Error interno del servidor');
         }
-    }
+    };
 
     return (
         <Formik
@@ -33,7 +30,6 @@ export default function AddBrandModal({
             validationSchema={brandValidationSchema}
         >
             {({ values, errors, touched, handleChange, handleSubmit, resetForm }) => {
-
                 return (
                     <AddModal
                         title="Marca"
@@ -67,8 +63,8 @@ export default function AddBrandModal({
                             />
                         </Box>
                     </AddModal>
-                )
+                );
             }}
         </Formik>
-    )
+    );
 }

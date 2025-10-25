@@ -4,4 +4,5 @@ export { default as useDashboardStore } from './useDashboardStore';
 export { default as useModelsStore } from './useModelsStore';
 export { default as usePartNumbersStore } from './usePartNumbersStore';
 export { default as useProductsStore } from './useProductsStore';
+export { default as useReasonsStore } from './useReasonsStore';
 export { default as useUnitTypesStore } from './useUnitTypesStore';

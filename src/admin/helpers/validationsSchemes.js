@@ -38,3 +38,7 @@ export const partNumberValidationSchema = Yup.object({
     model: Yup.object().nullable().required('El modelo es requerido'),
     name: Yup.string().required('El nombre es requerido'),
 });
+
+export const reasonValidationSchema = Yup.object({
+    name: Yup.string().required('El nombre es requerido'),
+});

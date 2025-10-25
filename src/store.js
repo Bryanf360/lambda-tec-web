@@ -1,14 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
 
-import { 
-    authReducer, 
-    productsReducer, 
-    dashboardReducer, 
+import {
+    authReducer,
+    productsReducer,
+    dashboardReducer,
     brandsReducer,
     modelsReducer,
     unitTypesReducer,
     partNumbersReducer,
-} from './admin/slices'
+    reasonsReducer,
+} from './admin/slices';
 
 export default configureStore({
     reducer: {
@@ -19,5 +20,6 @@ export default configureStore({
         models: modelsReducer,
         unitTypes: unitTypesReducer,
         partNumbers: partNumbersReducer,
-    }
-})
+        reasons: reasonsReducer,
+    },
+});
