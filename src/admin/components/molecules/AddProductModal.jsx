@@ -39,12 +39,6 @@ export default function AddProductModal({ open, onClose, mode }) {
         partNumber: null,
         unitType: null,
         description: '',
-        // description: '',
-        // fk_brand_id: 1,
-        // fk_model_id: 1,
-        // fk_part_number_id: 1,
-        // fk_unit_type: 1,
-        // status: 'active'
     };
 
     useEffect(() => {

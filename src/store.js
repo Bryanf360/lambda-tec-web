@@ -9,6 +9,7 @@ import {
     unitTypesReducer,
     partNumbersReducer,
     reasonsReducer,
+    provincesReducer,
 } from './admin/slices';
 
 export default configureStore({
@@ -21,5 +22,6 @@ export default configureStore({
         unitTypes: unitTypesReducer,
         partNumbers: partNumbersReducer,
         reasons: reasonsReducer,
+        provinces: provincesReducer,
     },
 });

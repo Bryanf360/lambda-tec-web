@@ -42,3 +42,14 @@ export const partNumberValidationSchema = Yup.object({
 export const reasonValidationSchema = Yup.object({
     name: Yup.string().required('El nombre es requerido'),
 });
+
+export const providerValidationSchema = Yup.object({
+    names: Yup.string().required('Los nombres son requeridos'),
+    lastnames: Yup.string().required('Los apellidos son requeridos'),
+    ruc: Yup.string().required('El ruc es requerido'),
+    landline: Yup.string().required('El teléfono fijo es requerido'),
+    mobilePhone: Yup.object().nullable().required('La teléfono móvil es requerido'),
+    address: Yup.object().nullable().required('La dirección es requerida'),
+    province: Yup.object().nullable().required('La provincia es requerida'),
+    city: Yup.object().nullable().required('La ciudad es requerida'),
+});

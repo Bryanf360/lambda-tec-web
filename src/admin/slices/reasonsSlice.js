@@ -13,7 +13,7 @@ export const reasonsSlice = createSlice({
         },
         addReason: (state, { payload }) => {
             state.isLoading = false;
-            state.reasons.push(payload);
+            state.reasons.unshift(payload);
         },
         setIsLoading: (state, { payload }) => {
             state.isLoading = payload;
