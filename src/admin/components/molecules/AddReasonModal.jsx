@@ -5,6 +5,7 @@ import { reasonValidationSchema } from '../../helpers';
 import { Box } from '@mui/material';
 import { useReasonsStore } from '../../hooks';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 export default function AddReasonModal({ open, onClose }) {
     const { isLoading, startSavingReason } = useReasonsStore();

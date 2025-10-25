@@ -11,9 +11,9 @@ const useReasonsStore = () => {
     const { isLoading, reasons } = useSelector((state) => state.reasons);
     const dispatch = useDispatch();
 
-    const startLoadingReasons = async () => {
+    const startLoadingReasonsByType = async (type) => {
         try {
-            const { data } = await lambdaTecApi.get('/reasons');
+            const { data } = await lambdaTecApi.get(`/reasons/type/${type}`);
             dispatch(loadingReasons(data.data));
         } catch (error) {
             console.log('error: ', error);
@@ -38,7 +38,7 @@ const useReasonsStore = () => {
     return {
         isLoading,
         reasons,
-        startLoadingReasons,
+        startLoadingReasonsByType,
         startSavingReason,
     };
 };

@@ -1,14 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from 'react';
 
-import {
-    Box,
-    Grid,
-    IconButton,
-    Typography,
-    useTheme,
-} from "@mui/material"
-import dayjs from "dayjs"
-import { Delete } from "@mui/icons-material"
+import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import dayjs from 'dayjs';
+import { Delete } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 
 import {
@@ -20,55 +14,56 @@ import {
     AddProviderModal,
     AddReasonModal,
     InputsTable,
-} from "../components"
-import { Button, TextField } from "../../auth/components"
-import {
-    inputs,
-    providers,
-    reasons,
-    statuses,
-    warehouses,
-} from "../../data/dummyData";
-import SearchProductModal from "../components/organisms/SearchProductModal";
+} from '../components';
+import { Button, TextField } from '../../auth/components';
+import { inputs, providers, reasons, statuses, warehouses } from '../../data/dummyData';
+import SearchProductModal from '../components/organisms/SearchProductModal';
+import { useReasonsStore } from '../hooks';
 
 export default function InputsPage() {
     const [selectedProvider, setSelectedProvider] = useState(providers[0]);
     const [selectedDate, setSelectedDate] = useState(dayjs());
-    const [selectedReason, setSelectedReason] = useState(reasons[0])
     const [isAddProviderModalOpen, setIsAddProviderModalOpen] = useState(false);
     const [isAddReasonModalOpen, setIsAddReasonModalOpen] = useState(false);
-    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
     const theme = useTheme();
+    const { isLoading: isLoadingReasons, reasons, startLoadingReasonsByType } = useReasonsStore();
+
+    useEffect(() => {
+        startLoadingReasonsByType('input');
+    }, []);
 
     const handleAddProviderModalClose = () => {
         setIsAddProviderModalOpen(false);
-    }
+    };
 
     const handleAddProviderButtonClick = () => {
         setIsAddProviderModalOpen(true);
-    }
+    };
 
     const handleAddReasonButtonClick = () => {
         setIsAddReasonModalOpen(true);
-    }
+    };
 
     const handleAddReasonModalClose = () => {
         setIsAddReasonModalOpen(false);
-    }
+    };
 
     const handleSearchButtonClick = () => {
         setIsSearchModalOpen(true);
-    }
+    };
 
     const handleSearchModalClose = () => {
         setIsSearchModalOpen(false);
-    }
+    };
 
     return (
         <>
             <CardLayout>
                 <Grid xs={12}>
-                    <Typography variant="h1" sx={{ mr: 5, mb: 2, }}>Ingresos</Typography>
+                    <Typography variant="h1" sx={{ mr: 5, mb: 2 }}>
+                        Ingresos
+                    </Typography>
                 </Grid>
                 <Grid container spacing={1}>
                     <Grid>
@@ -98,7 +93,7 @@ export default function InputsPage() {
                             placeholder="1201"
                             disabled
                             variant="inline"
-                            sx={{ miWidth: 84, width: 120, mr: 2, }}
+                            sx={{ miWidth: 84, width: 120, mr: 2 }}
                         />
                     </Grid>
                     <Grid>
@@ -106,7 +101,13 @@ export default function InputsPage() {
                             variant="inline"
                             labelText="Motivo*"
                             options={reasons}
-                            onChange={(_, value) => setSelectedReason(value)}
+                            onChange={(_, value) => {
+                                console.log(value);
+                                // setSelectedReason(value)
+                            }}
+                            noOptionsText={
+                                isLoadingReasons ? 'Cargando' : 'No se encontraron reasons'
+                            }
                             placeholder="Buscar..."
                             getOptionLabel={(option) => option.name}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -117,14 +118,12 @@ export default function InputsPage() {
                 <Button
                     kind="tertiary"
                     startIcon={<AddIcon />}
-                    sx={{ my: 2, }}
+                    sx={{ my: 2 }}
                     onClick={handleSearchButtonClick}
                 >
                     Buscar Producto
                 </Button>
-                <InputsTable
-
-                />
+                <InputsTable />
             </CardLayout>
             <Box
                 sx={{
@@ -133,24 +132,11 @@ export default function InputsPage() {
                     mt: 5,
                 }}
             >
-                <Button
-                    sx={{ minWidth: 144.5, }}
-                >
-                    Guardar
-                </Button>
+                <Button sx={{ minWidth: 144.5 }}>Guardar</Button>
             </Box>
-            <AddProviderModal
-                open={isAddProviderModalOpen}
-                onClose={handleAddProviderModalClose}
-            />
-            <AddReasonModal
-                open={isAddReasonModalOpen}
-                onClose={handleAddReasonModalClose}
-            />
-            <SearchProductModal
-                open={isSearchModalOpen}
-                onClose={handleSearchModalClose}
-            />
+            <AddProviderModal open={isAddProviderModalOpen} onClose={handleAddProviderModalClose} />
+            <AddReasonModal open={isAddReasonModalOpen} onClose={handleAddReasonModalClose} />
+            <SearchProductModal open={isSearchModalOpen} onClose={handleSearchModalClose} />
         </>
-    )
+    );
 }
