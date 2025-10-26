@@ -1,5 +1,6 @@
 export { default as useBrandsStore } from './useBrandsStore';
 export { default as useBrandWatcher } from './useBrandWatcher';
+export { default as useCitiesStore } from './useCitiesStore';
 export { default as useDashboardStore } from './useDashboardStore';
 export { default as useModelsStore } from './useModelsStore';
 export { default as usePartNumbersStore } from './usePartNumbersStore';

@@ -1,5 +1,6 @@
 export { default as authReducer } from './authSlice';
 export { default as brandsReducer } from './brandsSlice';
+export { default as citiesReducer } from './citiesSlice';
 export { default as dashboardReducer } from './dashboardSlice';
 export { default as modelsReducer } from './modelsSlice';
 export { default as partNumbersReducer } from './partNumbersSlice';

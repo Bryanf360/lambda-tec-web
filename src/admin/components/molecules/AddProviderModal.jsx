@@ -2,10 +2,8 @@ import { useState } from 'react';
 
 import { Grid } from '@mui/material';
 
-import { AddModal, FormTextField } from '../';
-import { Select } from '../../../core/components';
-import { cities } from '../../../data/dummyData';
-import { useProvincesStore } from '../../hooks';
+import { AddModal, FormAutocomplete, FormTextField } from '../';
+import { useCitiesStore, useProvincesStore } from '../../hooks';
 import { Form, Formik } from 'formik';
 import { providerValidationSchema } from '../../helpers';
 
@@ -50,6 +48,8 @@ export default function AddProviderModal({ open, onClose }) {
                 resetForm,
                 setValues,
             }) => {
+                const { isLoading: isLoadingCities, cities } = useCitiesStore(values.province?.id);
+
                 return (
                     <AddModal
                         title="Proveedor"
@@ -125,7 +125,7 @@ export default function AddProviderModal({ open, onClose }) {
                                     helperText={touched.address && errors.address}
                                     sx={{ mb: 2 }}
                                 />
-                                <Select
+                                {/* <Select
                                     labelText="Provincia*"
                                     options={provinces}
                                     sx={{ mb: 2 }}
@@ -148,8 +148,57 @@ export default function AddProviderModal({ open, onClose }) {
                                     required
                                     error={touched.province && Boolean(errors.province)}
                                     errorMessage={touched.province && errors.province}
+                                /> */}
+                                <FormAutocomplete
+                                    labelText="Provincia*"
+                                    options={provinces}
+                                    placeholder="Seleccione una provincia"
+                                    getOptionLabel={(option) => option.name}
+                                    isOptionEqualToValue={(option, val) => option.id === val.id}
+                                    mb={2}
+                                    name="province"
+                                    noOptionsText={
+                                        isLoadingProvinces
+                                            ? 'Cargando'
+                                            : 'No se encontraron provincias'
+                                    }
+                                    value={values.province}
+                                    onChange={(event, value) => {
+                                        console.log('value: ', value);
+                                        setValues((prev) => ({
+                                            ...prev,
+                                            province: value,
+                                            city: null,
+                                        }));
+                                    }}
+                                    error={touched.province && Boolean(errors.province)}
+                                    helperText={touched.province && errors.province}
+                                    haveAddButton={false}
                                 />
-                                <Select
+                                <FormAutocomplete
+                                    labelText="Ciudad*"
+                                    options={cities}
+                                    placeholder="Seleccione una ciudad"
+                                    getOptionLabel={(option) => option.name}
+                                    isOptionEqualToValue={(option, val) => option.id === val.id}
+                                    mb={2}
+                                    name="city"
+                                    noOptionsText={
+                                        !values.province
+                                            ? 'Selecciona una provincia primero'
+                                            : isLoadingCities
+                                            ? 'Cargando ciudades...'
+                                            : 'No se encontraron ciudades'
+                                    }
+                                    value={values.city}
+                                    onChange={(event, value) => {
+                                        setFieldValue('city', value);
+                                    }}
+                                    error={touched.city && Boolean(errors.city)}
+                                    helperText={touched.city && errors.city}
+                                    haveAddButton={false}
+                                />
+                                {/* <Select
                                     labelText="Ciudad*"
                                     options={cities}
                                     sx={{ mb: 2 }}
@@ -161,7 +210,7 @@ export default function AddProviderModal({ open, onClose }) {
                                     labelId="city-select-label"
                                     id="city-select"
                                     required
-                                />
+                                /> */}
                                 <FormTextField
                                     labelText="Descripción"
                                     placeholder="Ingrese la descripción"

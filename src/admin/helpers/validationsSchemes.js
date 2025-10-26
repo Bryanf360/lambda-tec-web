@@ -49,7 +49,7 @@ export const providerValidationSchema = Yup.object({
     ruc: Yup.string().required('El ruc es requerido'),
     landline: Yup.string().required('El teléfono fijo es requerido'),
     mobilePhone: Yup.object().nullable().required('La teléfono móvil es requerido'),
-    address: Yup.object().nullable().required('La dirección es requerida'),
+    address: Yup.string().required('La dirección es requerida'),
     province: Yup.object().nullable().required('La provincia es requerida'),
     city: Yup.object().nullable().required('La ciudad es requerida'),
 });

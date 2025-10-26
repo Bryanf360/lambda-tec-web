@@ -10,6 +10,7 @@ import {
     partNumbersReducer,
     reasonsReducer,
     provincesReducer,
+    citiesReducer,
 } from './admin/slices';
 
 export default configureStore({
@@ -23,5 +24,6 @@ export default configureStore({
         partNumbers: partNumbersReducer,
         reasons: reasonsReducer,
         provinces: provincesReducer,
+        cities: citiesReducer,
     },
 });
