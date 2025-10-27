@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { isValidRuc } from './validations';
 
 export const loginValidationSchema = Yup.object({
     email: Yup.string().email('El correo no es válido').required('El correo es requerido'),
@@ -46,9 +47,17 @@ export const reasonValidationSchema = Yup.object({
 export const providerValidationSchema = Yup.object({
     names: Yup.string().required('Los nombres son requeridos'),
     lastnames: Yup.string().required('Los apellidos son requeridos'),
-    ruc: Yup.string().required('El ruc es requerido'),
-    landline: Yup.string().required('El teléfono fijo es requerido'),
-    mobilePhone: Yup.object().nullable().required('La teléfono móvil es requerido'),
+    ruc: Yup.string()
+        .required('El ruc es requerido')
+        .test('ec-ruc', 'El RUC no es válido', isValidRuc),
+    landline: Yup.string()
+        .required('El teléfono fijo es requerido')
+        .min(9, 'El teléfono no es válido')
+        .max(9, 'El teléfono no es válido'),
+    mobilePhone: Yup.string()
+        .required('La teléfono móvil es requerido')
+        .min(10, 'El teléfono no es válido')
+        .max(10, 'El teléfono no es válido'),
     address: Yup.string().required('La dirección es requerida'),
     province: Yup.object().nullable().required('La provincia es requerida'),
     city: Yup.object().nullable().required('La ciudad es requerida'),

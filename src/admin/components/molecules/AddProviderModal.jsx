@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 
-import { AddModal, FormAutocomplete, FormTextField } from '../';
-import { useCitiesStore, useProvincesStore } from '../../hooks';
 import { Form, Formik } from 'formik';
+import { toast } from 'react-toastify';
+
+import { AddModal, FormAutocomplete, FormTextField } from '../';
+import { useCitiesStore, useProvidersStore, useProvincesStore } from '../../hooks';
 import { providerValidationSchema } from '../../helpers';
 
 export default function AddProviderModal({ open, onClose }) {
-    const [selectedProvince, setSelectedProvince] = useState(0);
-    const [selectedCity, setSelectedCity] = useState(0);
     const { isLoading: isLoadingProvinces, provinces } = useProvincesStore();
+    const { saveProvider, isLoading } = useProvidersStore();
     const initialValues = {
         names: '',
         lastnames: '',
@@ -23,13 +24,27 @@ export default function AddProviderModal({ open, onClose }) {
         description: '',
     };
 
-    const handleSelectedCityChange = (event) => {
-        setSelectedCity(event.target.value);
-    };
-
     const handleFormSubmit = async (values, { resetForm }) => {
-        console.log(values);
-        resetForm();
+        const provider = {
+            type: 'supplier',
+            names: values.names,
+            lastnames: values.lastnames,
+            ruc: values.ruc,
+            provinceId: values.province.id,
+            cityId: values.city.id,
+            address: values.address,
+            landline: values.landline,
+            mobilePhone: values.mobilePhone,
+            description: values.description,
+        };
+        try {
+            const message = await saveProvider(provider);
+            toast.success(message);
+            resetForm();
+            onClose();
+        } catch (error) {
+            toast.error(error || 'Error interno del servidor');
+        }
     };
 
     return (
@@ -60,6 +75,7 @@ export default function AddProviderModal({ open, onClose }) {
                         }}
                         hasCenteredButtons={false}
                         onSubmit={handleSubmit}
+                        isLoading={isLoading}
                     >
                         <Grid container spacing={1} component={Form}>
                             <Grid size={{ xs: 12, sm: 6 }}>
@@ -88,7 +104,12 @@ export default function AddProviderModal({ open, onClose }) {
                                     placeholder="Ingrese el ruc"
                                     value={values.ruc}
                                     name="ruc"
-                                    onChange={handleChange}
+                                    onChange={(e) => {
+                                        const onlyNums = e.target.value.replace(/\D/g, '');
+                                        handleChange({
+                                            target: { name: 'ruc', value: onlyNums },
+                                        });
+                                    }}
                                     error={touched.ruc && Boolean(errors.ruc)}
                                     helperText={touched.ruc && errors.ruc}
                                     sx={{ mb: 2 }}
@@ -98,20 +119,32 @@ export default function AddProviderModal({ open, onClose }) {
                                     placeholder="Ingrese el teléfono fijo"
                                     value={values.landline}
                                     name="landline"
-                                    onChange={handleChange}
+                                    onChange={(e) => {
+                                        const onlyNums = e.target.value.replace(/\D/g, '');
+                                        handleChange({
+                                            target: { name: 'landline', value: onlyNums },
+                                        });
+                                    }}
                                     error={touched.landline && Boolean(errors.landline)}
                                     helperText={touched.landline && errors.landline}
                                     sx={{ mb: 2 }}
+                                    inputProps={{ inputMode: 'numeric' }}
                                 />
                                 <FormTextField
                                     labelText="Teléfono Móvil*"
                                     placeholder="Ingrese el teléfono móvil"
                                     value={values.mobilePhone}
                                     name="mobilePhone"
-                                    onChange={handleChange}
+                                    onChange={(e) => {
+                                        const onlyNums = e.target.value.replace(/\D/g, '');
+                                        handleChange({
+                                            target: { name: 'mobilePhone', value: onlyNums },
+                                        });
+                                    }}
                                     error={touched.mobilePhone && Boolean(errors.mobilePhone)}
                                     helperText={touched.mobilePhone && errors.mobilePhone}
                                     sx={{ mb: 2 }}
+                                    inputProps={{ inputMode: 'numeric' }}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 6 }}>
