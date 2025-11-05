@@ -1,21 +1,14 @@
-import { Grid, IconButton, TextField, Typography } from "@mui/material";
+import { Grid, IconButton, TextField, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from "react";
-import { Edit, Delete, Visibility } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Edit, Delete, Visibility } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { 
-    AddProductModal, 
-    CardLayout, 
-    DeleteModal, 
-    SearchInput,
-    Table, 
-} from "../components";
-import { Button, Chip } from "../../auth/components";
-import FormTextField from "../components/atoms/FormTextField";
-import { useProductsStore } from "../hooks";
-import { setSelectedProduct } from "../slices/productsSlice";
+import { AddProductModal, CardLayout, DeleteModal, SearchInput, Table } from '../components';
+import { Button, Chip } from '../../auth/components';
+import FormTextField from '../components/atoms/FormTextField';
+import { useProductsStore } from '../hooks';
 
 const data = [
     {
@@ -27,7 +20,7 @@ const data = [
         partNumber: 'PA-121-AZ',
         unitType: 'm-Metros',
         stock: 30,
-        status: 'active'
+        status: 'active',
     },
     {
         name: 'Router',
@@ -38,7 +31,7 @@ const data = [
         partNumber: 'RT-123',
         unitType: 'unidad',
         stock: 5,
-        status: 'inactive'
+        status: 'inactive',
     },
     {
         name: 'Router',
@@ -49,7 +42,7 @@ const data = [
         partNumber: 'RT-123',
         unitType: 'unidad',
         stock: 5,
-        status: 'inactive'
+        status: 'inactive',
     },
     {
         name: 'Router',
@@ -60,16 +53,16 @@ const data = [
         partNumber: 'RT-123',
         unitType: 'unidad',
         stock: 5,
-        status: 'inactive'
+        status: 'inactive',
     },
 ];
 
 export default function ProductsPage() {
     const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
-    const dispatch = useDispatch()
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+    const dispatch = useDispatch();
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
-    const { selectedProduct } = useProductsStore();
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     const columns = [
         { id: 'name', label: 'Nombre', minWidth: 200 },
@@ -84,11 +77,7 @@ export default function ProductsPage() {
             id: 'status',
             label: 'Estado',
             minWidth: 100,
-            render: (value) => (
-                <Chip
-                    status={value}
-                />
-            )
+            render: (value) => <Chip status={value} />,
         },
         {
             id: 'actions',
@@ -96,52 +85,63 @@ export default function ProductsPage() {
             minWidth: 150,
             render: (_, row) => (
                 <>
-                    <IconButton color="primary" size="small" onClick={() => handleEditButtonClick(row)}>
+                    <IconButton
+                        color="primary"
+                        size="small"
+                        onClick={() => handleEditButtonClick(row)}
+                    >
                         <Edit />
                     </IconButton>
-                    <IconButton color="error" size="small" onClick={() => handleDeleteButtonClick(row)}>
+                    <IconButton
+                        color="error"
+                        size="small"
+                        onClick={() => handleDeleteButtonClick(row)}
+                    >
                         <Delete />
                     </IconButton>
-                    <IconButton color="info" size="small" onClick={() => handleViewButtonClick(row)}>
+                    <IconButton
+                        color="info"
+                        size="small"
+                        onClick={() => handleViewButtonClick(row)}
+                    >
                         <Visibility />
                     </IconButton>
                 </>
-            )
-        }
+            ),
+        },
     ];
-
 
     const handleSearchTextChange = (event) => {
         // TODO: implement search
-    }
+    };
 
     const handleAddProductModalClose = () => {
         setIsAddProductModalOpen(false);
         setTimeout(() => {
-            dispatch(setSelectedProduct(null))
-        }, 500)
-    }
+            setSelectedProduct(null);
+        }, 500);
+    };
 
     const handleAddButtonClick = () => {
         setIsAddProductModalOpen(true);
-    }
+    };
 
     const handleEditButtonClick = (product) => {
         setIsAddProductModalOpen(true);
-        dispatch(setSelectedProduct(product))
-    }
+        setSelectedProduct(product);
+    };
 
     const handleDeleteButtonClick = (product) => {
         setIsDeleteModalOpen(true);
-    }
+    };
 
     const handleViewButtonClick = (product) => {
         navigate('/admin/product-details/1234');
-    }
+    };
 
     const handleDeleteModalClose = () => {
         setIsDeleteModalOpen(false);
-    }
+    };
 
     return (
         <CardLayout>
@@ -154,7 +154,9 @@ export default function ProductsPage() {
                 rowGap={3}
             >
                 <Grid xs={12}>
-                    <Typography variant="h1" sx={{ mr: 5, }}>Artículos</Typography>
+                    <Typography variant="h1" sx={{ mr: 5 }}>
+                        Artículos
+                    </Typography>
                 </Grid>
                 <Grid xs={12}>
                     <Button
@@ -169,10 +171,7 @@ export default function ProductsPage() {
                     </Button>
                 </Grid>
                 <Grid xs={12}>
-                    <SearchInput
-                        placeholder="Buscar..."
-                        onChange={handleSearchTextChange}
-                    />
+                    <SearchInput placeholder="Buscar..." onChange={handleSearchTextChange} />
                 </Grid>
             </Grid>
             <Table
@@ -185,12 +184,9 @@ export default function ProductsPage() {
             <AddProductModal
                 open={isAddProductModalOpen}
                 onClose={handleAddProductModalClose}
-                mode={selectedProduct ? "edit" : "create"}
+                mode={selectedProduct ? 'edit' : 'create'}
             />
-            <DeleteModal
-                open={isDeleteModalOpen}
-                onClose={handleDeleteModalClose}
-            />
+            <DeleteModal open={isDeleteModalOpen} onClose={handleDeleteModalClose} />
         </CardLayout>
-    )
+    );
 }

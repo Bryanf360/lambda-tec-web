@@ -1,20 +1,81 @@
 import { useDispatch, useSelector } from 'react-redux';
+
+import { toast } from 'react-toastify';
+
 import lambdaTecApi from '../../core/api/lambdaTecApi';
-import { addProduct, setIsLoading } from '../slices/productsSlice';
+import {
+    addProduct,
+    deleteProduct,
+    setIsLoading,
+    setProducts,
+    updateProduct,
+} from '../slices/productsSlice';
 
 const useProductsStore = () => {
-    const { isLoading, products, selectedProduct } = useSelector((state) => state.products);
+    const { isLoading, meta, products } = useSelector((state) => state.products);
     const dispatch = useDispatch();
 
-    const startSavingProduct = async (product) => {
+    const startLoadingProducts = async ({ page = 1, limit = 10, search = '' }) => {
+        dispatch(setIsLoading(true));
         try {
-            dispatch(setIsLoading(true));
+            const { data } = await lambdaTecApi.get('/products', {
+                params: { page, limit, search },
+            });
+            dispatch(setProducts({ data: data.data, meta: data.meta }));
+            // toast.success(data.message || 'Productos cargados correctamente');
+        } catch (error) {
+            const msg = error.response?.data?.message || 'Error al obtener los productos';
+            toast.error(msg);
+        } finally {
+            dispatch(setIsLoading(false));
+        }
+    };
+
+    const startSavingProduct = async (product) => {
+        dispatch(setIsLoading(true));
+        try {
+            if (product.id) {
+                const { data } = await lambdaTecApi.put('/products', product);
+                dispatch(updateProduct(data.data));
+                toast.success(data.message || 'Producto actualizado correctamente');
+                return true;
+            }
             const { data } = await lambdaTecApi.post('/products', product);
             dispatch(addProduct(data.data));
-            return data.message;
+            toast.success(data.message || 'Producto creado correctamente');
+            return true;
         } catch (error) {
-            console.log('error: ', error);
-            throw error?.response?.data?.message;
+            const msg = error.response?.data?.message || 'Error al guardar el producto';
+            toast.error(msg);
+            return false;
+        } finally {
+            dispatch(setIsLoading(false));
+        }
+    };
+
+    // const startSavingProduct = async (product) => {
+    //     try {
+    //         dispatch(setIsLoading(true));
+    //         const { data } = await lambdaTecApi.post('/products', product);
+    //         dispatch(addProduct(data.data));
+    //         return data.message;
+    //     } catch (error) {
+    //         console.log('error: ', error);
+    //         throw error?.response?.data?.message;
+    //     } finally {
+    //         dispatch(setIsLoading(false));
+    //     }
+    // };
+
+    const startDeletingProduct = async (id) => {
+        dispatch(setIsLoading(true));
+        try {
+            const { data } = await lambdaTecApi.delete(`/products/${id}`);
+            dispatch(deleteProduct(id));
+            toast.success(data.message || 'Producto eliminado correctamente');
+        } catch (error) {
+            const msg = error.response?.data?.message || 'Error al eliminar el producto';
+            toast.error(msg);
         } finally {
             dispatch(setIsLoading(false));
         }
@@ -22,10 +83,12 @@ const useProductsStore = () => {
 
     return {
         isLoading,
+        meta,
         products,
-        selectedProduct,
 
+        startLoadingProducts,
         startSavingProduct,
+        startDeletingProduct,
     };
 };
 

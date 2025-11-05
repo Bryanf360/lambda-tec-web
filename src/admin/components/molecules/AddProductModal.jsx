@@ -57,15 +57,20 @@ export default function AddProductModal({ open, onClose, mode }) {
             unitTypeId: values.unitType.id,
             status: 'active',
         };
-        try {
-            console.log(product);
-            const message = await startSavingProduct(product);
-            toast.success(message);
+        const isOk = await startSavingProduct(product);
+        if (isOk) {
             resetForm();
             onClose();
-        } catch (error) {
-            toast.error(error || 'Error interno del servidor');
         }
+        // try {
+        //     console.log(product);
+        //     const message = await startSavingProduct(product);
+        //     toast.success(message);
+        //     resetForm();
+        //     onClose();
+        // } catch (error) {
+        //     toast.error(error || 'Error interno del servidor');
+        // }
     };
 
     const handleAddBrandButtonClick = () => {

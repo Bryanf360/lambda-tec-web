@@ -3,17 +3,30 @@ import { createSlice } from '@reduxjs/toolkit';
 export const productsSlice = createSlice({
     name: 'products',
     initialState: {
-        selectedProduct: null,
-        isLoading: true,
+        isLoading: false,
+        meta: {
+            page: 1,
+            limit: 5,
+            total: 0,
+        },
         products: [],
     },
     reducers: {
-        setSelectedProduct: (state, action) => {
-            state.selectedProduct = action.payload;
+        setProducts: (state, { payload }) => {
+            state.products = payload.data;
+            state.meta = payload.meta;
         },
         addProduct: (state, { payload }) => {
-            state.isLoading = false;
             state.products.unshift(payload);
+            state.meta.total += 1;
+        },
+        updateProduct: (state, { payload }) => {
+            const index = state.products.findIndex((client) => client.id === payload.id);
+            if (index !== -1) state.products[index] = payload;
+        },
+        deleteProduct: (state, { payload }) => {
+            state.products = state.products.filter((client) => client.id !== payload);
+            state.meta.total -= 1;
         },
         setIsLoading: (state, { payload }) => {
             state.isLoading = payload;
@@ -22,6 +35,7 @@ export const productsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setSelectedProduct, addProduct, setIsLoading } = productsSlice.actions;
+export const { setProducts, addProduct, updateProduct, deleteProduct, setIsLoading } =
+    productsSlice.actions;
 
 export default productsSlice.reducer;

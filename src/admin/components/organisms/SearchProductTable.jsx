@@ -1,13 +1,30 @@
-import { CheckBox, ShoppingCartCheckout } from "@mui/icons-material";
-import { TextField } from "../../../auth/components";
-import Table from "./Table";
-import { products } from "../../../data/dummyData";
-import { IconButton, useTheme } from "@mui/material";
+import { ShoppingCartCheckout } from '@mui/icons-material';
+import { Checkbox, IconButton, Typography, useTheme } from '@mui/material';
+import { useEffect, useState } from 'react';
+
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { TextField } from '../../../auth/components';
+import Table from './Table';
+import { products } from '../../../data/dummyData';
+import { useProductsStore } from '../../hooks';
+import { setSelectedProducts } from '../../slices/inputsSlice';
 
 export default function SearchProductTable({
+    isLoading,
+    data,
+    total,
+    page,
+    limit,
+    onPageChange,
+    onRowsPerPageChange,
     ...props
 }) {
+    const [selectedProductInputs, setSelectedProductInputs] = useState({});
+    const selectedProducts = useSelector((state) => state.inputs.selectedProducts);
     const theme = useTheme();
+    const dispatch = useDispatch();
 
     const textFieldStyles = {
         '& .MuiFilledInput-input': {
@@ -15,17 +32,33 @@ export default function SearchProductTable({
             paddingBlock: 1,
             border: '1px solid rgba(0, 0, 0, 0.2)',
             borderRadius: 2.5,
-            ...theme.typography.selectText
-        }
-    }
+            ...theme.typography.selectText,
+        },
+    };
 
     const columns = [
-        { id: 'code', label: 'Código', minWidth: 100 },
-        { id: 'product', label: 'Producto', minWidth: 150 },
-        { id: 'provider', label: 'Proveedor', minWidth: 100 },
-        { id: 'description', label: 'Descripción', minWidth: 100 },
-        { id: 'type', label: 'Tipo', minWidth: 50 },
-        { id: 'unity', label: 'Unidad', minWidth: 100 },
+        // { id: 'code', label: 'Código', minWidth: 100 },
+        { id: 'name', label: 'Producto', minWidth: 200 },
+        // { id: 'provider', label: 'Proveedor', minWidth: 100 },
+        { id: 'description', label: 'Descripción', minWidth: 300 },
+        {
+            id: 'type',
+            label: 'Tipo',
+            minWidth: 75,
+            render: (_, row) => (
+                <Typography variant="tableCell">
+                    {row['type'] === 'equipment' ? 'Equipo' : 'Consumible'}
+                </Typography>
+            ),
+        },
+        {
+            id: 'unit_type',
+            label: 'Unidad',
+            minWidth: 100,
+            render: (_, row) => (
+                <Typography variant="tableCell">{`${row['unit_type']['simbol']} - ${row['unit_type']['name']}`}</Typography>
+            ),
+        },
         {
             id: 'quantity',
             label: 'Cantidad',
@@ -45,10 +78,16 @@ export default function SearchProductTable({
                         '& .MuiInputBase-input': {
                             textAlign: 'center',
                         },
-                        ...textFieldStyles
+                        ...textFieldStyles,
                     }}
+                    value={
+                        selectedProductInputs[row.id]?.quantity ??
+                        selectedProducts[row.id]?.quantity ??
+                        ''
+                    }
+                    onChange={(e) => handleQuantityInputChange(row.id, e.target.value)}
                 />
-            )
+            ),
         },
         {
             id: 'singleWarehouse',
@@ -60,29 +99,35 @@ export default function SearchProductTable({
                 // }
 
                 return (
-                    <CheckBox
+                    <Checkbox
                         sx={{
-                            color: "primary.main"
+                            color: 'primary.main',
                         }}
+                        checked={
+                            selectedProductInputs[row.id]?.singleWarehouse ??
+                            selectedProducts[row.id]?.singleWarehouse ??
+                            false
+                        }
+                        onChange={(e) => handleWarehouseCheckboxChange(row.id, e.target.checked)}
                     />
-                )
-            }
+                );
+            },
         },
-        {
-            id: 'assetNumber',
-            label: 'Nro de Parte',
-            minWidth: 125,
-            render: (_, row) => (
-                <TextField
-                    sx={{
-                        '& .MuiInputBase-input': {
-                            textAlign: 'center',
-                        },
-                        ...textFieldStyles
-                    }}
-                />
-            )
-        },
+        // {
+        //     id: 'assetNumber',
+        //     label: 'Nro de Parte',
+        //     minWidth: 125,
+        //     render: (_, row) => (
+        //         <TextField
+        //             sx={{
+        //                 '& .MuiInputBase-input': {
+        //                     textAlign: 'center',
+        //                 },
+        //                 ...textFieldStyles,
+        //             }}
+        //         />
+        //     ),
+        // },
         {
             id: 'actions',
             label: 'Acciones',
@@ -92,27 +137,78 @@ export default function SearchProductTable({
                     {/* <IconButton color="primary" size="small" onClick={() => handleEditButtonClick(row)}>
                     <Edit />
                 </IconButton> */}
-                    <IconButton color="error" size="small" onClick={handleShoppingCartButtonClick}>
-                        <ShoppingCartCheckout sx={{ color: "primary.main" }} />
+                    <IconButton
+                        color="error"
+                        size="small"
+                        onClick={() => handleShoppingCartButtonClick(row)}
+                    >
+                        <ShoppingCartCheckout sx={{ color: 'primary.main' }} />
                     </IconButton>
                     {/* <IconButton color="info" size="small" onClick={() => handleViewButtonClick(row)}>
                     <Visibility />
                 </IconButton> */}
                 </>
-            )
-        }
+            ),
+        },
     ];
 
-    const handleShoppingCartButtonClick = () => {
+    const handleQuantityInputChange = (id, value) => {
+        const onlyNumsValue = value.replace(/\D/g, '');
+        if (onlyNumsValue >= 0) {
+            setSelectedProductInputs((prev) => ({
+                ...prev,
+                [id]: { ...prev[id], quantity: Number(onlyNumsValue) },
+            }));
+        }
+    };
 
-    }
-    
+    const handleWarehouseCheckboxChange = (id, value) => {
+        setSelectedProductInputs((prev) => ({
+            ...prev,
+            [id]: { ...prev[id], singleWarehouse: value },
+        }));
+    };
+
+    const handleShoppingCartButtonClick = (row) => {
+        const productLocalData = selectedProductInputs[row.id];
+        const productStoreData = selectedProducts[row.id];
+
+        const quantity = Number(productLocalData?.quantity ?? productStoreData?.quantity ?? 0);
+        const singleWarehouse =
+            productLocalData?.singleWarehouse ?? productLocalData?.singleWarehouse ?? false;
+
+        if (!quantity || quantity <= 0) {
+            toast.error('Debes ingresar una cantidad');
+            return;
+        }
+
+        // ✅ Aquí sí sincronizas con Redux (tu store global)
+        dispatch(
+            setSelectedProducts({
+                ...row,
+                quantity,
+                singleWarehouse,
+            })
+        );
+
+        toast.success(
+            `${quantity} ${quantity === 1 ? 'unidad' : 'unidades'} de ${row.name} ${
+                quantity === 1 ? 'agregada' : 'agregados'
+            }`
+        );
+    };
+
     return (
         <Table
+            isLoading={isLoading}
+            page={page}
+            rowsPerPage={limit}
+            total={total}
             columns={columns}
-            data={products}
+            data={data}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowsPerPageChange}
             {...props}
         />
-  )
+    );
 }
-

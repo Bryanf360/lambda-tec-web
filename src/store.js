@@ -12,6 +12,7 @@ import {
     provincesReducer,
     citiesReducer,
     providersReducer,
+    inputsReducer,
 } from './admin/slices';
 
 export default configureStore({
@@ -27,5 +28,6 @@ export default configureStore({
         provinces: provincesReducer,
         cities: citiesReducer,
         providers: providersReducer,
+        inputs: inputsReducer,
     },
 });
