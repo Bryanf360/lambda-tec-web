@@ -10,6 +10,7 @@ import Table from './Table';
 import { products } from '../../../data/dummyData';
 import { useProductsStore } from '../../hooks';
 import { setSelectedProducts } from '../../slices/inputsSlice';
+import { getAddedMessage } from '../../helpers';
 
 export default function SearchProductTable({
     isLoading,
@@ -191,11 +192,7 @@ export default function SearchProductTable({
             })
         );
 
-        toast.success(
-            `${quantity} ${quantity === 1 ? 'unidad' : 'unidades'} de ${row.name} ${
-                quantity === 1 ? 'agregada' : 'agregados'
-            }`
-        );
+        toast.success(getAddedMessage(quantity, row.unit_type.name, row.name));
     };
 
     return (
