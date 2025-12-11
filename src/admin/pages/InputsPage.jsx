@@ -68,7 +68,7 @@ export const InputsPage = () => {
         <>
             <CardLayout>
                 <Grid xs={12}>
-                    <Typography variant="h1" sx={{ mr: 5, mb: 2, }}>Ingresos</Typography>
+                    <Typography variant="h1" sx={{ mr: 5, mb: 2, }}>Recepción de Articulos</Typography>
                 </Grid>
                 <Grid container spacing={1}>
                     <Grid>

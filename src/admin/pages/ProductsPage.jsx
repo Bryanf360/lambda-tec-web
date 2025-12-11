@@ -154,7 +154,7 @@ export const ProductsPage = () => {
                 rowGap={3}
             >
                 <Grid xs={12}>
-                    <Typography variant="h1" sx={{ mr: 5, }}>Artículos</Typography>
+                    <Typography variant="h1" sx={{ mr: 5, }}>Inventario General</Typography>
                 </Grid>
                 <Grid xs={12}>
                     <Button
