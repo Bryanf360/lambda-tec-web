@@ -124,7 +124,7 @@ export default function InputsTable({
             label: 'Nro de Serie',
             minWidth: 150,
             render: (_, row) => {
-                if (row.serialNumber === 'N/A') {
+                if (row.isConsumable) {
                     return <Typography variant="selectText">N/A</Typography>;
                 }
 
@@ -141,31 +141,43 @@ export default function InputsTable({
             id: 'assetNumber',
             label: 'Nro de Activo',
             minWidth: 150,
-            render: (_, row) => (
-                <TextField
-                    placeholder="Ingrese n°"
-                    sx={textFieldStyles}
-                    onChange={(e) => updateRow(row.rowId, 'assetNumber', e.target.value)}
-                />
-            ),
+            render: (_, row) => {
+                if (row.isConsumable) {
+                    return <Typography variant="selectText">N/A</Typography>;
+                }
+
+                return (
+                    <TextField
+                        placeholder="Ingrese n°"
+                        sx={textFieldStyles}
+                        onChange={(e) => updateRow(row.rowId, 'assetNumber', e.target.value)}
+                    />
+                );
+            },
         },
         {
             id: 'status',
             label: 'Estado',
             minWidth: 150,
-            render: (_, row) => (
-                <Select
-                    // label="label"
-                    placeholder="--"
-                    value={row.status}
-                    // onChange={(e) => handleStatusSelectChange(row)}
-                    onChange={(e) => {
-                        updateRow(row.rowId, 'status', e.target.value);
-                    }}
-                    options={statuses}
-                    name="status"
-                />
-            ),
+            render: (_, row) => {
+                if (row.isConsumable) {
+                    return <Typography variant="selectText">N/A</Typography>;
+                }
+
+                return (
+                    <Select
+                        // label="label"
+                        placeholder="--"
+                        value={row.status}
+                        // onChange={(e) => handleStatusSelectChange(row)}
+                        onChange={(e) => {
+                            updateRow(row.rowId, 'status', e.target.value);
+                        }}
+                        options={statuses}
+                        name="status"
+                    />
+                );
+            },
         },
         {
             id: 'amountToEnter',
