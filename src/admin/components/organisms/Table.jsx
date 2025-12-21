@@ -78,9 +78,9 @@ export default function Table({
                 <MuiTable aria-label="customized table">
                     <CustomTableHead>
                         <TableRow>
-                            <StyledTableCell align="center" sx={{ minWidth: 75 }}>
+                            {/* <StyledTableCell align="center" sx={{ minWidth: 75 }}>
                                 <Typography variant="tableHead">Nro</Typography>
-                            </StyledTableCell>
+                            </StyledTableCell> */}
 
                             {columns.map((col) => (
                                 <StyledTableCell
@@ -108,11 +108,11 @@ export default function Table({
                         ) : data.length > 0 ? (
                             data.map((row, rowIndex) => (
                                 <StyledTableRow key={rowIndex}>
-                                    <StyledTableCell align={'center'}>
+                                    {/* <StyledTableCell align={'center'}>
                                         <Typography variant="tableCell">
                                             {page * limit + rowIndex + 1}
                                         </Typography>
-                                    </StyledTableCell>
+                                    </StyledTableCell> */}
                                     {columns.map(({ id, align, render, field }) => (
                                         <StyledTableCell key={id} align={align || 'center'}>
                                             {render ? (

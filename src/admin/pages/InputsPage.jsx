@@ -16,9 +16,9 @@ import {
     InputsTable,
 } from '../components';
 import { Button, TextField } from '../../auth/components';
-import { inputs, providers, reasons, statuses, warehouses } from '../../data/dummyData';
 import SearchProductModal from '../components/organisms/SearchProductModal';
-import { useProvidersStore, useReasonsStore } from '../hooks';
+import { useInputsStore, useProvidersStore, useReasonsStore, useRows } from '../hooks';
+import { toast } from 'react-toastify';
 
 export default function InputsPage() {
     const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -28,6 +28,14 @@ export default function InputsPage() {
     const { providers, isLoading: isLoadingProviders, getProviders } = useProvidersStore();
     const theme = useTheme();
     const { isLoading: isLoadingReasons, reasons, startLoadingReasonsByType } = useReasonsStore();
+    const { selectedProducts } = useInputsStore();
+    const { rows, updateRow, deleteRow, errors, validate } = useRows(selectedProducts);
+    const [page, setPage] = useState(0);
+    const [limit, setLimit] = useState(5);
+    const start = page * limit;
+    const end = start + limit;
+    console.log('rows: ', rows);
+    const visibleRows = rows.slice(start, end);
 
     useEffect(() => {
         startLoadingReasonsByType('input');
@@ -56,6 +64,25 @@ export default function InputsPage() {
 
     const handleSearchModalClose = () => {
         setIsSearchModalOpen(false);
+    };
+
+    const handleSaveButtonClick = () => {
+        const firstError = validate();
+        if (firstError) {
+            toast.error(firstError.message);
+            return;
+        }
+
+        // ...guardar
+    };
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setLimit(parseInt(event.target.value, 10));
+        setPage(0);
     };
 
     return (
@@ -130,7 +157,16 @@ export default function InputsPage() {
                 >
                     Buscar Producto
                 </Button>
-                <InputsTable />
+                <InputsTable
+                    data={visibleRows}
+                    updateRow={updateRow}
+                    deleteRow={deleteRow}
+                    page={page}
+                    limit={limit}
+                    total={rows.length}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </CardLayout>
             <Box
                 sx={{
@@ -139,7 +175,9 @@ export default function InputsPage() {
                     mt: 5,
                 }}
             >
-                <Button sx={{ minWidth: 144.5 }}>Guardar</Button>
+                <Button sx={{ minWidth: 144.5 }} onClick={handleSaveButtonClick}>
+                    Guardar
+                </Button>
             </Box>
             <AddProviderModal open={isAddProviderModalOpen} onClose={handleAddProviderModalClose} />
             <AddReasonModal open={isAddReasonModalOpen} onClose={handleAddReasonModalClose} />

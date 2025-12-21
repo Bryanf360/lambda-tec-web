@@ -101,11 +101,11 @@ export default function ({
                     }}
                     IconComponent={ExpandMoreIcon}
                     renderValue={(selected) => {
-                        if (selected === 0 || selected === null) {
+                        if (selected === 0 || selected === null || selected === '') {
                             return (
                                 <Typography
                                     variant={
-                                        variant === 'auth' ? 'h2' : variant === 'form' ? 'h4' : 'h5'
+                                        variant === 'auth' ? 'h2' : variant === 'form' ? 'h4' : ''
                                     }
                                     sx={{
                                         opacity: 0.4,

@@ -9,4 +9,5 @@ export { default as useProductsStore } from './useProductsStore';
 export { default as useProvidersStore } from './useProvidersStore';
 export { default as useProvincesStore } from './useProvincesStore';
 export { default as useReasonsStore } from './useReasonsStore';
+export { default as useRows } from './useRows';
 export { default as useUnitTypesStore } from './useUnitTypesStore';
