@@ -11,6 +11,7 @@ import { DeleteModal } from '../atoms';
 import { useRows } from '../../hooks';
 import { decreaseQuantity } from '../../slices/inputsSlice';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 export default function InputsTable({
     data = [],
@@ -200,7 +201,16 @@ export default function InputsTable({
                             },
                             ...textFieldStyles,
                         }}
-                        onChange={(e) => updateRow(row.rowId, 'amountToEnter', e.target.value)}
+                        onChange={(e) => {
+                            const validatedValue = e.target.value.replace(/[^0-9]/g, '');
+                            e.target.value = validatedValue;
+                            if (validatedValue > row.quantity) {
+                                return toast.error(
+                                    'La cantidad a ingresar no debe ser mayor a la cantidad escogida'
+                                );
+                            }
+                            updateRow(row.rowId, 'amountToEnter', validatedValue);
+                        }}
                     />
                 ) : (
                     'N/A'
