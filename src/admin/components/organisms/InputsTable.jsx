@@ -27,7 +27,6 @@ export default function InputsTable({
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouses[0].id);
     const [selectedStatus, setSelectedStatus] = useState(statuses[0].id);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    console.log(total);
     const dispatch = useDispatch();
 
     const theme = useTheme();
@@ -132,7 +131,11 @@ export default function InputsTable({
                     <TextField
                         placeholder="Ingrese n°"
                         sx={textFieldStyles}
-                        onChange={(e) => updateRow(row.rowId, 'serialNumber', e.target.value)}
+                        onChange={(e) => {
+                            const validatedValue = e.target.value.replace(/[^A-Za-z0-9-]/g, '');
+                            e.target.value = validatedValue;
+                            updateRow(row.rowId, 'serialNumber', validatedValue);
+                        }}
                     />
                 );
             },
@@ -150,7 +153,11 @@ export default function InputsTable({
                     <TextField
                         placeholder="Ingrese n°"
                         sx={textFieldStyles}
-                        onChange={(e) => updateRow(row.rowId, 'assetNumber', e.target.value)}
+                        onChange={(e) => {
+                            const validatedValue = e.target.value.replace(/[^A-Za-z0-9-]/g, '');
+                            e.target.value = validatedValue;
+                            updateRow(row.rowId, 'assetNumber', validatedValue);
+                        }}
                     />
                 );
             },

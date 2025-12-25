@@ -98,7 +98,6 @@ function useRows(selectedProducts) {
     const [rows, setRows] = useState([]);
     const [errors, setErrors] = useState([]);
     const productOrderRef = useRef({});
-    console.log(rows);
 
     // sincroniza al cambiar los productos seleccionados
     useEffect(() => {
@@ -133,7 +132,6 @@ function useRows(selectedProducts) {
     };
 
     const validate = () => {
-        console.log(rows);
         const validationErrors = validateRows(rows);
         // console.log(validationErrors);
         setErrors(validationErrors);
