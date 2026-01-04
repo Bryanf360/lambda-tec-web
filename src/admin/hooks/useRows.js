@@ -87,7 +87,35 @@ function syncRows(selectedProducts, currentRows, productOrderRef) {
         }
     });
 
+    const validProductIds = Object.keys(selectedProducts).map(Number);
+    rows = rows.filter((row) => validProductIds.includes(row.productId));
+
     return rows;
+}
+
+function syncProductOrder(selectedProducts, productOrderRef) {
+    const newOrder = {};
+    let index = 1;
+
+    Object.values(selectedProducts).forEach((product) => {
+        newOrder[product.id] = index++;
+    });
+
+    productOrderRef.current = newOrder;
+}
+
+function reindexRows(rows, productOrderRef) {
+    return rows.map((row, idx, arr) => {
+        const sameProductRows = arr.filter((r) => r.productId === row.productId);
+        const newIndex = sameProductRows.findIndex((r) => r.rowId === row.rowId) + 1;
+
+        return {
+            ...row,
+            productIndex: productOrderRef.current[row.productId],
+            index: newIndex,
+            rowId: `${row.productId}-${newIndex}`,
+        };
+    });
 }
 
 // ----------------------------------------------------------
@@ -101,7 +129,12 @@ function useRows(selectedProducts) {
 
     // sincroniza al cambiar los productos seleccionados
     useEffect(() => {
-        setRows((prev) => syncRows(selectedProducts, prev, productOrderRef));
+        syncProductOrder(selectedProducts, productOrderRef);
+
+        setRows((prev) => {
+            const synced = syncRows(selectedProducts, prev, productOrderRef);
+            return reindexRows(synced, productOrderRef);
+        });
     }, [selectedProducts]);
 
     // actualizar una propiedad de una fila

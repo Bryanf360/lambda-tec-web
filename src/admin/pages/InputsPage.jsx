@@ -34,7 +34,6 @@ export default function InputsPage() {
     const [limit, setLimit] = useState(5);
     const start = page * limit;
     const end = start + limit;
-    console.log('rows: ', rows);
     const visibleRows = rows.slice(start, end);
 
     useEffect(() => {

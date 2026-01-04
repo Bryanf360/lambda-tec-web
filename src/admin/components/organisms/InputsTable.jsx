@@ -9,7 +9,7 @@ import { TextField } from '../../../auth/components';
 import { inputs, statuses, warehouses } from '../../../data/dummyData';
 import { DeleteModal } from '../atoms';
 import { useRows } from '../../hooks';
-import { decreaseQuantity } from '../../slices/inputsSlice';
+import { decreaseQuantity, deleteSelectedProduct } from '../../slices/inputsSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -240,6 +240,19 @@ export default function InputsTable({
                         color="error"
                         size="small"
                         onClick={() => {
+                            // console.log('row: ', row);
+                            /*
+                            if (row.index === 1) {
+                                const isSure = confirm(
+                                    '¿Estás seguro de que deseas quitar este producto?'
+                                );
+                                if (isSure) {
+                                    // Aquí va la lógica para borrar
+                                    dispatch(deleteSelectedProduct(row.productId));
+                                }
+                                return;
+                            }
+                                */
                             dispatch(decreaseQuantity(row.productId));
                             deleteRow(row.rowId);
                         }}
