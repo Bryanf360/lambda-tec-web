@@ -4,6 +4,7 @@ export const inputsSlice = createSlice({
     name: 'inputs',
     initialState: {
         selectedProducts: {},
+        isLoading: false,
     },
     reducers: {
         setSelectedProducts: (state, action) => {
@@ -36,10 +37,14 @@ export const inputsSlice = createSlice({
             const productId = payload;
             delete state.selectedProducts[productId];
         },
+        setIsLoading: (state, { payload }) => {
+            state.isLoading = payload;
+        },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { setSelectedProducts, decreaseQuantity, deleteSelectedProduct } = inputsSlice.actions;
+export const { setSelectedProducts, decreaseQuantity, deleteSelectedProduct, setIsLoading } =
+    inputsSlice.actions;
 
 export default inputsSlice.reducer;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { Delete } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
@@ -28,13 +28,20 @@ export default function InputsPage() {
     const { providers, isLoading: isLoadingProviders, getProviders } = useProvidersStore();
     const theme = useTheme();
     const { isLoading: isLoadingReasons, reasons, startLoadingReasonsByType } = useReasonsStore();
-    const { selectedProducts } = useInputsStore();
+    const { startSavingInputs, selectedProducts, isLoading } = useInputsStore();
     const { rows, updateRow, deleteRow, errors, validate } = useRows(selectedProducts);
     const [page, setPage] = useState(0);
     const [limit, setLimit] = useState(5);
     const start = page * limit;
     const end = start + limit;
     const visibleRows = rows.slice(start, end);
+    const [movement, setMovement] = useState({
+        providerId: null,
+        reasonId: null,
+        date: dayjs(),
+        code: '',
+    });
+    console.log('visibleRows: ', visibleRows);
 
     useEffect(() => {
         startLoadingReasonsByType('input');
@@ -65,14 +72,40 @@ export default function InputsPage() {
         setIsSearchModalOpen(false);
     };
 
-    const handleSaveButtonClick = () => {
+    const handleSaveButtonClick = async () => {
         const firstError = validate();
         if (firstError) {
             toast.error(firstError.message);
             return;
         }
 
-        // ...guardar
+        const details = visibleRows.map((row) => ({
+            productId: row.productId,
+            quantity: 1,
+            warehouseId: row.warehouse,
+            instances: [
+                {
+                    serialNumber: row.serialNumber,
+                    assetNumber: row.assetNumber,
+                    status: row.status === 1 ? 'used' : 'new',
+                },
+            ],
+        }));
+
+        const movementToCreate = {
+            type: 'input',
+            ...movement,
+            groupCode: 'GRP-20240502-005',
+            date: '2026-01-09T15:30:00.000Z',
+            details,
+        };
+
+        try {
+            const message = await startSavingInputs(movementToCreate);
+            toast.success(message);
+        } catch (error) {
+            toast.error(error || 'Error interno del servidor');
+        }
     };
 
     const handleChangePage = (event, newPage) => {
@@ -82,6 +115,13 @@ export default function InputsPage() {
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value, 10));
         setPage(0);
+    };
+
+    const handleMovementChange = (field, value) => {
+        setMovement((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
     };
 
     return (
@@ -102,6 +142,9 @@ export default function InputsPage() {
                             // onChange={(_, value) => {
                             //     setFieldValue('brand', value);
                             // }}
+                            onChange={(_, provider) =>
+                                handleMovementChange('providerId', provider?.id)
+                            }
                             noOptionsText={
                                 isLoadingReasons ? 'Cargando' : 'No se encontraron proveedores'
                             }
@@ -115,8 +158,8 @@ export default function InputsPage() {
                     <Grid>
                         <DatePicker
                             labelText="Fecha"
-                            value={selectedDate}
-                            onChange={(newValue) => setSelectedDate(newValue)}
+                            value={movement.date}
+                            onChange={(newValue) => handleMovementChange('date', newValue)}
                             marginEnd={3}
                         />
                     </Grid>
@@ -124,9 +167,10 @@ export default function InputsPage() {
                         <FormTextField
                             labelText="Nro"
                             placeholder="1201"
-                            disabled
+                            // disabled
                             variant="inline"
                             sx={{ miWidth: 84, width: 120, mr: 2 }}
+                            onChange={(e) => handleMovementChange('code', e.target.value)}
                         />
                     </Grid>
                     <Grid>
@@ -135,8 +179,7 @@ export default function InputsPage() {
                             labelText="Motivo*"
                             options={reasons}
                             onChange={(_, value) => {
-                                console.log(value);
-                                // setSelectedReason(value)
+                                handleMovementChange('reasonId', value?.id);
                             }}
                             noOptionsText={
                                 isLoadingReasons ? 'Cargando' : 'No se encontraron reasons'
@@ -174,8 +217,13 @@ export default function InputsPage() {
                     mt: 5,
                 }}
             >
-                <Button sx={{ minWidth: 144.5 }} onClick={handleSaveButtonClick}>
-                    Guardar
+                <Button
+                    sx={{ minWidth: 144.5 }}
+                    onClick={handleSaveButtonClick}
+                    disabled={isLoading}
+                    startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : null}
+                >
+                    {isLoading ? '' : 'Guardar'}
                 </Button>
             </Box>
             <AddProviderModal open={isAddProviderModalOpen} onClose={handleAddProviderModalClose} />

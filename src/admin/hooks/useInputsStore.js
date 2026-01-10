@@ -1,11 +1,28 @@
 import { useDispatch, useSelector } from 'react-redux';
+import lambdaTecApi from '../../core/api/lambdaTecApi';
+import { setIsLoading } from '../slices/inputsSlice';
 
 const useInputsStore = () => {
     const dispatch = useDispatch();
     const { selectedProducts } = useSelector((state) => state.inputs);
 
+    // TODO: create method to save inputs
+    const startSavingInputs = async (inputs) => {
+        try {
+            dispatch(setIsLoading(true));
+            const { data } = await lambdaTecApi.post('/inputs', inputs);
+            return data.message;
+        } catch (error) {
+            console.log('error: ', error);
+            throw error?.response?.data?.message;
+        } finally {
+            dispatch(setIsLoading(false));
+        }
+    };
+
     return {
         selectedProducts,
+        startSavingInputs,
     };
 };
 
