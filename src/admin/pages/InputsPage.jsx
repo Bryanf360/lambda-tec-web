@@ -113,7 +113,6 @@ export default function InputsPage() {
             providerId: null,
             reasonId: null,
             date: dayjs(),
-            code: '',
         });
         resetRows();
         setProviderInput('');

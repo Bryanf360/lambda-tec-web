@@ -175,7 +175,7 @@ function useRows(selectedProducts) {
     // reset (por si cierras el modal)
     const resetRows = () => {
         setRows([]);
-        setErrors({});
+        setErrors([]);
         productOrderRef.current = {}; // reiniciar numeración
     };
 
