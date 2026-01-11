@@ -31,18 +31,12 @@ export default function InputsPage() {
     const { isLoading: isLoadingReasons, reasons, startLoadingReasonsByType } = useReasonsStore();
     const { startSavingInputs, selectedProducts, isLoading } = useInputsStore();
     const { rows, updateRow, deleteRow, errors, validate } = useRows(selectedProducts);
-    const [page, setPage] = useState(0);
-    const [limit, setLimit] = useState(5);
-    const start = page * limit;
-    const end = start + limit;
-    const visibleRows = rows.slice(start, end);
     const [movement, setMovement] = useState({
         providerId: null,
         reasonId: null,
         date: dayjs(),
         code: '',
     });
-    console.log('visibleRows: ', visibleRows);
 
     useEffect(() => {
         startLoadingReasonsByType('input');
@@ -103,21 +97,13 @@ export default function InputsPage() {
             date: '2026-01-09T15:30:00.000Z',
             details,
         };
+        console.log('movementToCreate: ', movementToCreate);
         try {
             const message = await startSavingInputs(movementToCreate);
             toast.success(message);
         } catch (error) {
             toast.error(error || 'Error interno del servidor');
         }
-    };
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setLimit(parseInt(event.target.value, 10));
-        setPage(0);
     };
 
     const handleMovementChange = (field, value) => {
@@ -202,16 +188,7 @@ export default function InputsPage() {
                 >
                     Buscar Producto
                 </Button>
-                <InputsTable
-                    data={visibleRows}
-                    updateRow={updateRow}
-                    deleteRow={deleteRow}
-                    page={page}
-                    limit={limit}
-                    total={rows.length}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                <InputsTable data={rows} updateRow={updateRow} deleteRow={deleteRow} />
             </CardLayout>
             <Box
                 sx={{

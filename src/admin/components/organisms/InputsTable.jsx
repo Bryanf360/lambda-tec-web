@@ -18,11 +18,6 @@ export default function InputsTable({
     updateRow,
     deleteRow,
     isLoading = false,
-    total,
-    page,
-    limit,
-    onPageChange,
-    onRowsPerPageChange,
     ...props
 }) {
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouses[0].id);
@@ -273,11 +268,7 @@ export default function InputsTable({
                 isLoading={false}
                 columns={columns}
                 data={data}
-                page={page}
-                rowsPerPage={limit}
-                total={total}
-                onPageChange={onPageChange}
-                onRowsPerPageChange={onRowsPerPageChange}
+                havePagination={false}
                 {...props}
             />
             <DeleteModal open={isDeleteModalOpen} onClose={handleDeleteModalClose} />

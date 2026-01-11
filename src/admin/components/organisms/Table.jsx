@@ -59,6 +59,7 @@ export default function Table({
     total = 10,
     columns = [],
     data = [],
+    havePagination = true,
     onPageChange,
     onRowsPerPageChange,
     ...props
@@ -136,41 +137,43 @@ export default function Table({
                     </TableBody>
                 </MuiTable>
             </TableContainer>
-            <TablePagination
-                component="div"
-                count={total}
-                page={page}
-                onPageChange={onPageChange}
-                rowsPerPage={limit}
-                onRowsPerPageChange={onRowsPerPageChange}
-                labelRowsPerPage="Filas por página"
-                rowsPerPageOptions={[5, 10, 25]}
-                ActionsComponent={TablePaginationActions} // <- nuestro componente custom
-                sx={{
-                    '& .MuiTablePagination-toolbar': {
-                        justifyContent: 'center', // centrar los botones
-                    },
-                    '& .MuiTablePagination-input': {
-                        mr: 1,
-                    },
-                    '& .MuiTablePagination-displayedRows': {
-                        mr: 2,
-                    },
-                    '& .MuiTablePagination-selectLabel': {
-                        paddingLeft: 17.5,
-                    },
-                    '.MuiTablePagination-toolbar': {
-                        display: 'flex',
-                        justifyContent: 'flex-end', // ✅ reparte uniformemente
-                        alignItems: 'center',
-                        flexWrap: 'wrap',
-                        pb: 1,
-                    },
-                }}
-                labelDisplayedRows={
-                    ({ from, to, count }) => `${from} - ${to} de ${count}` // aquí cambias el texto
-                }
-            />
+            {havePagination && (
+                <TablePagination
+                    component="div"
+                    count={total}
+                    page={page}
+                    onPageChange={onPageChange}
+                    rowsPerPage={limit}
+                    onRowsPerPageChange={onRowsPerPageChange}
+                    labelRowsPerPage="Filas por página"
+                    rowsPerPageOptions={[5, 10, 25]}
+                    ActionsComponent={TablePaginationActions} // <- nuestro componente custom
+                    sx={{
+                        '& .MuiTablePagination-toolbar': {
+                            justifyContent: 'center', // centrar los botones
+                        },
+                        '& .MuiTablePagination-input': {
+                            mr: 1,
+                        },
+                        '& .MuiTablePagination-displayedRows': {
+                            mr: 2,
+                        },
+                        '& .MuiTablePagination-selectLabel': {
+                            paddingLeft: 17.5,
+                        },
+                        '.MuiTablePagination-toolbar': {
+                            display: 'flex',
+                            justifyContent: 'flex-end', // ✅ reparte uniformemente
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                            pb: 1,
+                        },
+                    }}
+                    labelDisplayedRows={
+                        ({ from, to, count }) => `${from} - ${to} de ${count}` // aquí cambias el texto
+                    }
+                />
+            )}
         </>
     );
 }

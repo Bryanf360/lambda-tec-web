@@ -31,7 +31,7 @@ export const transformRowsToDetails = (rows) => {
         detail.instances.push({
             serialNumber: row.serialNumber,
             assetNumber: row.assetNumber,
-            status: row.status,
+            status: row.status === 1 ? 'used' : 'new',
         });
     }
     return [...consumableDetails, ...Array.from(equipmentMap.values())];
