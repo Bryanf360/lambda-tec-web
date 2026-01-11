@@ -128,7 +128,7 @@ export default function InputsPage() {
             <CardLayout>
                 <Grid xs={12}>
                     <Typography variant="h1" sx={{ mr: 5, mb: 2 }}>
-                        Ingresos
+                        Recepción de artículos
                     </Typography>
                 </Grid>
                 <Grid container spacing={1}>
