@@ -130,7 +130,7 @@ export default function Table({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} align="center">
-                                    No se encontraron resultados
+                                    {!havePagination ? '' : 'No se encontraron resultados'}
                                 </TableCell>
                             </TableRow>
                         )}
