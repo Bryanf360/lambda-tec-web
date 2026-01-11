@@ -206,6 +206,8 @@ export default function InputsTable({
                             }
                             updateRow(row.rowId, 'amountToEnter', validatedValue);
                         }}
+                        value={row.quantity}
+                        disabled
                     />
                 ) : (
                     'N/A'
@@ -248,6 +250,10 @@ export default function InputsTable({
                                 return;
                             }
                                 */
+                            if (row.isConsumable) {
+                                dispatch(deleteSelectedProduct(row.productId));
+                                return;
+                            }
                             dispatch(decreaseQuantity(row.productId));
                             deleteRow(row.rowId);
                         }}

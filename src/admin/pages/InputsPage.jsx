@@ -31,7 +31,7 @@ export default function InputsPage() {
     const { isLoading: isLoadingReasons, reasons, startLoadingReasonsByType } = useReasonsStore();
     const { startSavingInputs, selectedProducts, isLoading } = useInputsStore();
     const { rows, updateRow, deleteRow, errors, validate } = useRows(selectedProducts);
-    const [movement, setMovement] = useState({
+    const [movementHeader, setMovementHeader] = useState({
         providerId: null,
         reasonId: null,
         date: dayjs(),
@@ -68,36 +68,24 @@ export default function InputsPage() {
     };
 
     const handleSaveButtonClick = async () => {
+        const error = validateMovementHeader();
+        if (error) {
+            toast.error(error);
+            return;
+        }
         const firstError = validate();
         if (firstError) {
             toast.error(firstError.message);
             return;
         }
-
-        /* create a detail movement product on the same warehouse
-        const details = visibleRows.map((row) => ({
-            productId: row.productId,
-            quantity: 1,
-            warehouseId: row.warehouse,
-            instances: [
-                {
-                    serialNumber: row.serialNumber,
-                    assetNumber: row.assetNumber,
-                    status: row.status === 1 ? 'used' : 'new',
-                },
-            ],
-        }));
-        */
-
+        if (rows.length === 0) return toast.error('Debe ingresar productos');
         const details = transformRowsToDetails(rows);
         const movementToCreate = {
             type: 'input',
-            ...movement,
-            groupCode: 'GRP-20240502-005',
+            ...movementHeader,
             date: '2026-01-09T15:30:00.000Z',
             details,
         };
-        console.log('movementToCreate: ', movementToCreate);
         try {
             const message = await startSavingInputs(movementToCreate);
             toast.success(message);
@@ -106,8 +94,14 @@ export default function InputsPage() {
         }
     };
 
+    const validateMovementHeader = () => {
+        if (!movementHeader.providerId) return 'Seleccione proveedor';
+        if (!movementHeader.reasonId) return 'Seleccione razon';
+        return null;
+    };
+
     const handleMovementChange = (field, value) => {
-        setMovement((prev) => ({
+        setMovementHeader((prev) => ({
             ...prev,
             [field]: value,
         }));
@@ -147,12 +141,14 @@ export default function InputsPage() {
                     <Grid>
                         <DatePicker
                             labelText="Fecha"
-                            value={movement.date}
+                            value={movementHeader.date}
                             onChange={(newValue) => handleMovementChange('date', newValue)}
                             marginEnd={3}
+                            maxDate={dayjs()}
                         />
                     </Grid>
-                    <Grid>
+                    {/* TODO: validar si lo necesitamos o no */}
+                    {/* <Grid>
                         <FormTextField
                             labelText="Nro"
                             placeholder="1201"
@@ -161,7 +157,7 @@ export default function InputsPage() {
                             sx={{ miWidth: 84, width: 120, mr: 2 }}
                             onChange={(e) => handleMovementChange('code', e.target.value)}
                         />
-                    </Grid>
+                    </Grid> */}
                     <Grid>
                         <FormAutocomplete
                             variant="inline"
