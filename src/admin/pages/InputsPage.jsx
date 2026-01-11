@@ -19,6 +19,7 @@ import { Button, TextField } from '../../auth/components';
 import SearchProductModal from '../components/organisms/SearchProductModal';
 import { useInputsStore, useProvidersStore, useReasonsStore, useRows } from '../hooks';
 import { toast } from 'react-toastify';
+import { transformRowsToDetails } from '../helpers';
 
 export default function InputsPage() {
     const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -79,6 +80,7 @@ export default function InputsPage() {
             return;
         }
 
+        /* create a detail movement product on the same warehouse
         const details = visibleRows.map((row) => ({
             productId: row.productId,
             quantity: 1,
@@ -91,7 +93,9 @@ export default function InputsPage() {
                 },
             ],
         }));
+        */
 
+        const details = transformRowsToDetails(rows);
         const movementToCreate = {
             type: 'input',
             ...movement,
@@ -99,7 +103,6 @@ export default function InputsPage() {
             date: '2026-01-09T15:30:00.000Z',
             details,
         };
-
         try {
             const message = await startSavingInputs(movementToCreate);
             toast.success(message);
