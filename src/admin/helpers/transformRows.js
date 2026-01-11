@@ -1,11 +1,23 @@
 export const transformRowsToDetails = (rows) => {
-    const map = new Map();
+    const equipmentMap = new Map();
+    const consumableDetails = [];
 
     for (const row of rows) {
+        // 🟢 CONSUMIBLE
+        if (row.isConsumable) {
+            consumableDetails.push({
+                productId: row.productId,
+                warehouseId: Number(row.warehouse),
+                quantity: Number(row.amountToEnter),
+            });
+            continue;
+        }
+
+        // 🔵 EQUIPO
         const key = `${row.productId}-${row.warehouse}`;
 
-        if (!map.has(key)) {
-            map.set(key, {
+        if (!equipmentMap.has(key)) {
+            equipmentMap.set(key, {
                 productId: row.productId,
                 warehouseId: Number(row.warehouse),
                 quantity: 0,
@@ -13,16 +25,14 @@ export const transformRowsToDetails = (rows) => {
             });
         }
 
-        const detail = map.get(key);
-
+        const detail = equipmentMap.get(key);
         detail.quantity += 1;
 
         detail.instances.push({
             serialNumber: row.serialNumber,
             assetNumber: row.assetNumber,
-            status: row.status === 1 ? 'used' : 'new',
+            status: row.status,
         });
     }
-
-    return Array.from(map.values());
+    return [...consumableDetails, ...Array.from(equipmentMap.values())];
 };
