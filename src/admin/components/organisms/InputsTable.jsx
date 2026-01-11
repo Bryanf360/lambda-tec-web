@@ -111,6 +111,7 @@ export default function InputsTable({
                     }}
                     options={warehouses}
                     name="warehouse"
+                    disabled={row.singleWarehouse && row.index !== 1}
                 />
             ),
         },

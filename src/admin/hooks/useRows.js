@@ -72,6 +72,8 @@ function syncRows(selectedProducts, currentRows, productOrderRef) {
 
                     isConsumable: product.unit_type.simbol !== 'u',
                     amountToEnter: product.unit_type.simbol !== 'u' ? product.quantity : null,
+
+                    singleWarehouse: product.singleWarehouse,
                 });
             }
         }
@@ -139,9 +141,22 @@ function useRows(selectedProducts) {
 
     // actualizar una propiedad de una fila
     const updateRow = (rowId, field, value) => {
-        setRows((prev) =>
-            prev.map((row) => (row.rowId === rowId ? { ...row, [field]: value } : row))
-        );
+        setRows((prev) => {
+            const updated = prev.map((row) =>
+                row.rowId === rowId ? { ...row, [field]: value } : row
+            );
+
+            const changedRow = updated.find((r) => r.rowId === rowId);
+
+            // 🔥 PROPAGAR BODEGA A TODAS LAS FILAS DEL PRODUCTO
+            if (field === 'warehouse' && changedRow?.singleWarehouse && changedRow.index === 1) {
+                return updated.map((row) =>
+                    row.productId === changedRow.productId ? { ...row, warehouse: value } : row
+                );
+            }
+
+            return updated;
+        });
 
         setErrors((prev) =>
             prev.filter((err) => {

@@ -20,6 +20,8 @@ import SearchProductModal from '../components/organisms/SearchProductModal';
 import { useInputsStore, useProvidersStore, useReasonsStore, useRows } from '../hooks';
 import { toast } from 'react-toastify';
 import { transformRowsToDetails } from '../helpers';
+import { useDispatch } from 'react-redux';
+import { resetSelectedProducts } from '../slices/inputsSlice';
 
 export default function InputsPage() {
     const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -30,13 +32,19 @@ export default function InputsPage() {
     const theme = useTheme();
     const { isLoading: isLoadingReasons, reasons, startLoadingReasonsByType } = useReasonsStore();
     const { startSavingInputs, selectedProducts, isLoading } = useInputsStore();
-    const { rows, updateRow, deleteRow, errors, validate } = useRows(selectedProducts);
+    const { rows, updateRow, deleteRow, errors, validate, resetRows } = useRows(selectedProducts);
     const [movementHeader, setMovementHeader] = useState({
         providerId: null,
         reasonId: null,
         date: dayjs(),
-        code: '',
     });
+    const [providerInput, setProviderInput] = useState('');
+    const [reasonInput, setReasonInput] = useState('');
+    const dispatch = useDispatch();
+
+    const selectedProvider =
+        providers.find((provider) => provider.id === movementHeader.providerId) || null;
+    const selectedReason = reasons.find((reason) => reason.id === movementHeader.reasonId) || null;
 
     useEffect(() => {
         startLoadingReasonsByType('input');
@@ -83,12 +91,12 @@ export default function InputsPage() {
         const movementToCreate = {
             type: 'input',
             ...movementHeader,
-            date: '2026-01-09T15:30:00.000Z',
             details,
         };
         try {
             const message = await startSavingInputs(movementToCreate);
             toast.success(message);
+            resetMovement();
         } catch (error) {
             toast.error(error || 'Error interno del servidor');
         }
@@ -98,6 +106,19 @@ export default function InputsPage() {
         if (!movementHeader.providerId) return 'Seleccione proveedor';
         if (!movementHeader.reasonId) return 'Seleccione razon';
         return null;
+    };
+
+    const resetMovement = () => {
+        setMovementHeader({
+            providerId: null,
+            reasonId: null,
+            date: dayjs(),
+            code: '',
+        });
+        resetRows();
+        setProviderInput('');
+        setReasonInput('');
+        dispatch(resetSelectedProducts());
     };
 
     const handleMovementChange = (field, value) => {
@@ -131,11 +152,16 @@ export default function InputsPage() {
                             noOptionsText={
                                 isLoadingReasons ? 'Cargando' : 'No se encontraron proveedores'
                             }
+                            inputValue={providerInput}
+                            onInputChange={(_, newInputValue) => {
+                                setProviderInput(newInputValue);
+                            }}
                             placeholder="Buscar..."
                             getOptionLabel={(option) => `${option.names} ${option.lastnames}`}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             marginEnd={3}
                             onAddButtonClick={handleAddProviderButtonClick}
+                            value={selectedProvider}
                         />
                     </Grid>
                     <Grid>
@@ -173,6 +199,11 @@ export default function InputsPage() {
                             getOptionLabel={(option) => option.name}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             onAddButtonClick={handleAddReasonButtonClick}
+                            onInputChange={(_, newInputValue) => {
+                                setReasonInput(newInputValue);
+                            }}
+                            value={selectedReason}
+                            inputValue={reasonInput}
                         />
                     </Grid>
                 </Grid>
