@@ -103,8 +103,8 @@ export default function InputsPage() {
     };
 
     const validateMovementHeader = () => {
-        if (!movementHeader.providerId) return 'Seleccione proveedor';
-        if (!movementHeader.reasonId) return 'Seleccione razon';
+        if (!movementHeader.providerId) return 'Debe seleccionar un proveedor antes de guardar';
+        if (!movementHeader.reasonId) return 'Debe seleccionar un motivo antes de guardar';
         return null;
     };
 
