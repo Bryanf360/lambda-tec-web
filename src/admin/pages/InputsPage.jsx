@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 
-import { Box, CircularProgress, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
-import { Delete } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
 import {
     CardLayout,
     FormAutocomplete,
-    Table,
     DatePicker,
-    FormTextField,
     AddProviderModal,
     AddReasonModal,
     InputsTable,
@@ -18,13 +17,10 @@ import {
 import { Button, TextField } from '../../auth/components';
 import SearchProductModal from '../components/organisms/SearchProductModal';
 import { useInputsStore, useProvidersStore, useReasonsStore, useRows } from '../hooks';
-import { toast } from 'react-toastify';
 import { transformRowsToDetails } from '../helpers';
-import { useDispatch } from 'react-redux';
 import { resetSelectedProducts } from '../slices/inputsSlice';
 
 export default function InputsPage() {
-    const [selectedDate, setSelectedDate] = useState(dayjs());
     const [isAddProviderModalOpen, setIsAddProviderModalOpen] = useState(false);
     const [isAddReasonModalOpen, setIsAddReasonModalOpen] = useState(false);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -141,10 +137,6 @@ export default function InputsPage() {
                             variant="inline"
                             labelText="Proveedor*"
                             options={providers}
-                            // onChange={(_, value) => setSelectedProvider(value)}
-                            // onChange={(_, value) => {
-                            //     setFieldValue('brand', value);
-                            // }}
                             onChange={(_, provider) =>
                                 handleMovementChange('providerId', provider?.id)
                             }
