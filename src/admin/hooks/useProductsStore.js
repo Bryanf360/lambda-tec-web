@@ -6,13 +6,14 @@ import lambdaTecApi from '../../core/api/lambdaTecApi';
 import {
     addProduct,
     deleteProduct,
+    setIsDeleting,
     setIsLoading,
     setProducts,
     updateProduct,
 } from '../slices/productsSlice';
 
 const useProductsStore = () => {
-    const { isLoading, meta, products } = useSelector((state) => state.products);
+    const { isLoading, meta, products, isDeleting } = useSelector((state) => state.products);
     const dispatch = useDispatch();
 
     const startLoadingProducts = async ({ page = 1, limit = 10, search = '' }) => {
@@ -84,21 +85,24 @@ const useProductsStore = () => {
     // };
 
     const startDeletingProduct = async (id) => {
-        dispatch(setIsLoading(true));
+        dispatch(setIsDeleting(true));
         try {
             const { data } = await lambdaTecApi.delete(`/products/${id}`);
             dispatch(deleteProduct(id));
             toast.success(data.message || 'Producto eliminado correctamente');
+            return true;
         } catch (error) {
             const msg = error.response?.data?.message || 'Error al eliminar el producto';
             toast.error(msg);
+            return false;
         } finally {
-            dispatch(setIsLoading(false));
+            dispatch(setIsDeleting(false));
         }
     };
 
     return {
         isLoading,
+        isDeleting,
         meta,
         products,
 

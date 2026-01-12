@@ -4,6 +4,7 @@ export const productsSlice = createSlice({
     name: 'products',
     initialState: {
         isLoading: false,
+        isDeleting: false,
         meta: {
             page: 1,
             limit: 5,
@@ -25,17 +26,26 @@ export const productsSlice = createSlice({
             if (index !== -1) state.products[index] = payload;
         },
         deleteProduct: (state, { payload }) => {
-            state.products = state.products.filter((client) => client.id !== payload);
+            state.products = state.products.filter((product) => product.id !== payload);
             state.meta.total -= 1;
         },
         setIsLoading: (state, { payload }) => {
             state.isLoading = payload;
         },
+        setIsDeleting: (state, { payload }) => {
+            state.isDeleting = payload;
+        },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { setProducts, addProduct, updateProduct, deleteProduct, setIsLoading } =
-    productsSlice.actions;
+export const {
+    setProducts,
+    addProduct,
+    updateProduct,
+    deleteProduct,
+    setIsLoading,
+    setIsDeleting,
+} = productsSlice.actions;
 
 export default productsSlice.reducer;

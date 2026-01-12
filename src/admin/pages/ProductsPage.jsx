@@ -63,7 +63,14 @@ export default function ProductsPage() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const { isLoading, meta, products, startLoadingProductsWithStock } = useProductsStore();
+    const {
+        isLoading,
+        isDeleting,
+        meta,
+        products,
+        startLoadingProductsWithStock,
+        startDeletingProduct,
+    } = useProductsStore();
     const [page, setPage] = useState(meta.page - 1);
     const [limit, setLimit] = useState(meta.limit);
     const [search, setSearch] = useState('');
@@ -195,6 +202,7 @@ export default function ProductsPage() {
 
     const handleDeleteButtonClick = (product) => {
         setIsDeleteModalOpen(true);
+        setSelectedProduct(product);
     };
 
     const handleViewButtonClick = (product) => {
@@ -203,6 +211,11 @@ export default function ProductsPage() {
 
     const handleDeleteModalClose = () => {
         setIsDeleteModalOpen(false);
+    };
+
+    const handleProductDelete = async () => {
+        const isOk = await startDeletingProduct(selectedProduct.id);
+        if (isOk) setIsDeleteModalOpen(false);
     };
 
     return (
@@ -252,7 +265,12 @@ export default function ProductsPage() {
                 mode={selectedProduct ? 'edit' : 'create'}
                 product={selectedProduct}
             />
-            <DeleteModal open={isDeleteModalOpen} onClose={handleDeleteModalClose} />
+            <DeleteModal
+                open={isDeleteModalOpen}
+                onClose={handleDeleteModalClose}
+                onDelete={handleProductDelete}
+                isDeleting={isDeleting}
+            />
         </CardLayout>
     );
 }
