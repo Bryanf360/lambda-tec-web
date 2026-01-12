@@ -57,7 +57,7 @@ const useProductsStore = () => {
                 return true;
             }
             const { data } = await lambdaTecApi.post('/products', product);
-            dispatch(addProduct(data.data));
+            dispatch(addProduct({ ...data.data, stock: 0 }));
             toast.success(data.message || 'Producto creado correctamente');
             return true;
         } catch (error) {
