@@ -250,6 +250,7 @@ export default function ProductsPage() {
                 open={isAddProductModalOpen}
                 onClose={handleAddProductModalClose}
                 mode={selectedProduct ? 'edit' : 'create'}
+                product={selectedProduct}
             />
             <DeleteModal open={isDeleteModalOpen} onClose={handleDeleteModalClose} />
         </CardLayout>

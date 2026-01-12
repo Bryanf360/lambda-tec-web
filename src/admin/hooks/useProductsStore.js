@@ -51,13 +51,13 @@ const useProductsStore = () => {
         dispatch(setIsLoading(true));
         try {
             if (product.id) {
-                const { data } = await lambdaTecApi.put('/products', product);
-                dispatch(updateProduct(data.data));
+                const { data } = await lambdaTecApi.put(`/products/${product.id}`, product);
+                dispatch(updateProduct({ ...data.data, stock: product.stock }));
                 toast.success(data.message || 'Producto actualizado correctamente');
                 return true;
             }
             const { data } = await lambdaTecApi.post('/products', product);
-            dispatch(addProduct({ ...data.data, stock: 0 }));
+            dispatch(addProduct({ ...data.data, stock: product.stock }));
             toast.success(data.message || 'Producto creado correctamente');
             return true;
         } catch (error) {

@@ -22,7 +22,7 @@ import {
 import usePartNumbersStore from '../../hooks/usePartNumbersStore';
 import { toast } from 'react-toastify';
 
-export default function AddProductModal({ open, onClose, mode }) {
+export default function AddProductModal({ open, onClose, mode, product }) {
     const { isLoading: isLoadingBrands, brands, startLoadingBrands } = useBrandsStore();
     const { isLoading: isLoadingUnitTypes, unitTypes, startLoadingUnitTypes } = useUnitTypesStore();
     const [isAddBrandModalOpen, setIsAddBrandModalOpen] = useState(false);
@@ -32,13 +32,13 @@ export default function AddProductModal({ open, onClose, mode }) {
     const { startSavingProduct } = useProductsStore();
 
     const initialValues = {
-        type: null,
-        name: '',
-        brand: null,
-        model: null,
-        partNumber: null,
-        unitType: null,
-        description: '',
+        type: types.find((type) => type.id === product?.type),
+        name: product?.name ?? '',
+        brand: product?.brand ?? null,
+        model: product?.model ?? null,
+        partNumber: product?.part_number ?? null,
+        unitType: product?.unit_type ?? null,
+        description: product?.description ?? '',
     };
 
     useEffect(() => {
@@ -47,7 +47,8 @@ export default function AddProductModal({ open, onClose, mode }) {
     }, []);
 
     const handleFormSubmit = async (values, { resetForm }) => {
-        const product = {
+        const productToSave = {
+            id: product?.id ?? null,
             type: values.type.id,
             name: values.name,
             description: values.description,
@@ -56,8 +57,9 @@ export default function AddProductModal({ open, onClose, mode }) {
             partNumberId: values.partNumber.id,
             unitTypeId: values.unitType.id,
             status: 'active',
+            stock: product?.stock ?? 0,
         };
-        const isOk = await startSavingProduct(product);
+        const isOk = await startSavingProduct(productToSave);
         if (isOk) {
             resetForm();
             onClose();
@@ -111,6 +113,7 @@ export default function AddProductModal({ open, onClose, mode }) {
                 initialValues={initialValues}
                 onSubmit={handleFormSubmit}
                 validationSchema={productValidationSchema}
+                enableReinitialize
             >
                 {({
                     values,
