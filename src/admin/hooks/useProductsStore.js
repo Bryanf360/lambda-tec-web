@@ -31,6 +31,22 @@ const useProductsStore = () => {
         }
     };
 
+    const startLoadingProductsWithStock = async ({ page = 1, limit = 10, search = '' }) => {
+        dispatch(setIsLoading(true));
+        try {
+            const { data } = await lambdaTecApi.get('/products/stocks', {
+                params: { page, limit, search },
+            });
+            dispatch(setProducts({ data: data.data, meta: data.meta }));
+            // toast.success(data.message || 'Productos cargados correctamente');
+        } catch (error) {
+            const msg = error.response?.data?.message || 'Error al obtener los productos';
+            toast.error(msg);
+        } finally {
+            dispatch(setIsLoading(false));
+        }
+    };
+
     const startSavingProduct = async (product) => {
         dispatch(setIsLoading(true));
         try {
@@ -89,6 +105,7 @@ const useProductsStore = () => {
         startLoadingProducts,
         startSavingProduct,
         startDeletingProduct,
+        startLoadingProductsWithStock,
     };
 };
 

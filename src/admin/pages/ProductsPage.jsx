@@ -1,6 +1,6 @@
 import { Grid, IconButton, TextField, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Edit, Delete, Visibility } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -63,21 +63,60 @@ export default function ProductsPage() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const { isLoading, meta, products, startLoadingProductsWithStock } = useProductsStore();
+    console.log('products: ', products);
 
     const columns = [
         { id: 'name', label: 'Nombre', minWidth: 200 },
         { id: 'description', label: 'Descripción', minWidth: 200 },
-        { id: 'type', label: 'Tipo', minWidth: 50 },
-        { id: 'brand', label: 'Marca', minWidth: 50 },
-        { id: 'model', label: 'Modelo', minWidth: 150 },
-        { id: 'partNumber', label: 'Nro de Parte', minWidth: 100 },
-        { id: 'unitType', label: 'Tipo Unidad', minWidth: 100 },
+        {
+            id: 'type',
+            label: 'Tipo',
+            minWidth: 50,
+            render: (_, row) => (
+                <Typography variant="tableCell">
+                    {row['type'] === 'equipment' ? 'Equipo' : 'Consumible'}
+                </Typography>
+            ),
+        },
+        {
+            id: 'brand',
+            label: 'Marca',
+            minWidth: 50,
+            render: (_, row) => (
+                <Typography variant="tableCell">{`${row['brand']['name']}`}</Typography>
+            ),
+        },
+        {
+            id: 'model',
+            label: 'Modelo',
+            minWidth: 150,
+            render: (_, row) => (
+                <Typography variant="tableCell">{`${row['model']['name']}`}</Typography>
+            ),
+        },
+        {
+            id: 'partNumber',
+            label: 'Nro de Parte',
+            minWidth: 100,
+            render: (_, row) => (
+                <Typography variant="tableCell">{`${row['part_number']['name']}`}</Typography>
+            ),
+        },
+        {
+            id: 'unitType',
+            label: 'Tipo Unidad',
+            minWidth: 100,
+            render: (_, row) => (
+                <Typography variant="tableCell">{`${row['unit_type']['simbol']} - ${row['unit_type']['name']}`}</Typography>
+            ),
+        },
         { id: 'stock', label: 'Stock', minWidth: 50 },
         {
             id: 'status',
             label: 'Estado',
             minWidth: 100,
-            render: (value) => <Chip status={value} />,
+            render: (_, row) => <Chip status={row.status} />,
         },
         {
             id: 'actions',
@@ -110,6 +149,10 @@ export default function ProductsPage() {
             ),
         },
     ];
+
+    useEffect(() => {
+        startLoadingProductsWithStock({});
+    }, []);
 
     const handleSearchTextChange = (event) => {
         // TODO: implement search
@@ -175,8 +218,9 @@ export default function ProductsPage() {
                 </Grid>
             </Grid>
             <Table
-                data={data}
+                data={products}
                 columns={columns}
+                isLoading={isLoading}
                 // onEdit={handleEditButtonClick}
                 // onDelete={handleDeleteButtonClick}
                 // onView={handleViewButtonClick}
