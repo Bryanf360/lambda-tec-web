@@ -31,7 +31,7 @@ const useProductsStore = () => {
         }
     };
 
-    const startLoadingProductsWithStock = async ({ page = 1, limit = 10, search = '' }) => {
+    const startLoadingProductsWithStock = async ({ page = 1, limit = 5, search = '' }) => {
         dispatch(setIsLoading(true));
         try {
             const { data } = await lambdaTecApi.get('/products/stocks', {

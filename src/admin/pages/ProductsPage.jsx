@@ -114,12 +114,15 @@ export default function ProductsPage() {
             ),
         },
         { id: 'stock', label: 'Stock', minWidth: 50 },
+        /*
+        TODO: validate how to work the status
         {
             id: 'status',
             label: 'Estado',
             minWidth: 100,
             render: (_, row) => <Chip status={row.status} />,
         },
+        */
         {
             id: 'actions',
             label: 'Acciones',
@@ -230,7 +233,7 @@ export default function ProductsPage() {
                     </Button>
                 </Grid>
                 <Grid xs={12}>
-                    <SearchInput placeholder="Buscar..." onChange={handleSearch} />
+                    <SearchInput placeholder="Buscar..." onSearch={handleSearch} />
                 </Grid>
             </Grid>
             <Table
