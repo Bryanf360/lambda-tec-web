@@ -215,7 +215,10 @@ export default function ProductsPage() {
 
     const handleProductDelete = async () => {
         const isOk = await startDeletingProduct(selectedProduct.id);
-        if (isOk) setIsDeleteModalOpen(false);
+        if (isOk) {
+            setIsDeleteModalOpen(false);
+            startLoadingProductsWithStock({ page: page + 1 });
+        }
     };
 
     return (
@@ -230,7 +233,7 @@ export default function ProductsPage() {
             >
                 <Grid xs={12}>
                     <Typography variant="h1" sx={{ mr: 5 }}>
-                        Artículos
+                        Inventario General
                     </Typography>
                 </Grid>
                 <Grid xs={12}>
@@ -254,7 +257,8 @@ export default function ProductsPage() {
                 columns={columns}
                 isLoading={isLoading}
                 page={page}
-                rowsPerPage={limit}
+                // TODO: review if is a neccessary
+                // rowsPerPage={limit}
                 total={meta.total}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}

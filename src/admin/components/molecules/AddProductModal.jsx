@@ -29,7 +29,8 @@ export default function AddProductModal({ open, onClose, mode, product }) {
     const [isAddUnitTypeModalOpen, setIsAddUnitTypeModalOpen] = useState(false);
     const [isAddModelModalOpen, setIsAddModelModalOpen] = useState(false);
     const [isAddPartNumberModalOpen, setIsAddPartNumberModalOpen] = useState(false);
-    const { startSavingProduct } = useProductsStore();
+    const { isSaving, isUpdating, startLoadingProductsWithStock, startSavingProduct } =
+        useProductsStore();
 
     const initialValues = {
         type: types.find((type) => type.id === product?.type),
@@ -64,15 +65,10 @@ export default function AddProductModal({ open, onClose, mode, product }) {
             resetForm();
             onClose();
         }
-        // try {
-        //     console.log(product);
-        //     const message = await startSavingProduct(product);
-        //     toast.success(message);
-        //     resetForm();
-        //     onClose();
-        // } catch (error) {
-        //     toast.error(error || 'Error interno del servidor');
-        // }
+        if (isOk && !product?.id) {
+            console.log('@@@@@@');
+            startLoadingProductsWithStock({ page: 1 });
+        }
     };
 
     const handleAddBrandButtonClick = () => {
@@ -146,6 +142,7 @@ export default function AddProductModal({ open, onClose, mode, product }) {
                             hasCenteredButtons={false}
                             mode={mode}
                             onSubmit={handleSubmit}
+                            isLoading={mode === 'edit' ? isUpdating : isSaving}
                         >
                             <Grid container spacing={1} component={Form}>
                                 <Grid size={{ xs: 12, sm: 6 }}>

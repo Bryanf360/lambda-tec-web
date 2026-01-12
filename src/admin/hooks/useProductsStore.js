@@ -8,12 +8,16 @@ import {
     deleteProduct,
     setIsDeleting,
     setIsLoading,
+    setIsSaving,
+    setIsUpdating,
     setProducts,
     updateProduct,
 } from '../slices/productsSlice';
 
 const useProductsStore = () => {
-    const { isLoading, meta, products, isDeleting } = useSelector((state) => state.products);
+    const { isLoading, meta, products, isDeleting, isUpdating } = useSelector(
+        (state) => state.products
+    );
     const dispatch = useDispatch();
 
     const startLoadingProducts = async ({ page = 1, limit = 10, search = '' }) => {
@@ -49,16 +53,17 @@ const useProductsStore = () => {
     };
 
     const startSavingProduct = async (product) => {
-        dispatch(setIsLoading(true));
         try {
             if (product.id) {
+                dispatch(setIsUpdating(true));
                 const { data } = await lambdaTecApi.put(`/products/${product.id}`, product);
                 dispatch(updateProduct({ ...data.data, stock: product.stock }));
                 toast.success(data.message || 'Producto actualizado correctamente');
                 return true;
             }
+            dispatch(setIsSaving(true));
             const { data } = await lambdaTecApi.post('/products', product);
-            dispatch(addProduct({ ...data.data, stock: product.stock }));
+            // dispatch(addProduct({ ...data.data, stock: product.stock }));
             toast.success(data.message || 'Producto creado correctamente');
             return true;
         } catch (error) {
@@ -66,7 +71,8 @@ const useProductsStore = () => {
             toast.error(msg);
             return false;
         } finally {
-            dispatch(setIsLoading(false));
+            dispatch(setIsSaving(false));
+            dispatch(setIsUpdating(false));
         }
     };
 
@@ -88,7 +94,7 @@ const useProductsStore = () => {
         dispatch(setIsDeleting(true));
         try {
             const { data } = await lambdaTecApi.delete(`/products/${id}`);
-            dispatch(deleteProduct(id));
+            // dispatch(deleteProduct(id));
             toast.success(data.message || 'Producto eliminado correctamente');
             return true;
         } catch (error) {
@@ -103,6 +109,7 @@ const useProductsStore = () => {
     return {
         isLoading,
         isDeleting,
+        isUpdating,
         meta,
         products,
 

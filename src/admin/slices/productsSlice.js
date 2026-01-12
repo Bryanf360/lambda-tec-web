@@ -5,6 +5,8 @@ export const productsSlice = createSlice({
     initialState: {
         isLoading: false,
         isDeleting: false,
+        isUpdating: false,
+        isSaving: false,
         meta: {
             page: 1,
             limit: 5,
@@ -35,6 +37,12 @@ export const productsSlice = createSlice({
         setIsDeleting: (state, { payload }) => {
             state.isDeleting = payload;
         },
+        setIsUpdating: (state, { payload }) => {
+            state.isUpdating = payload;
+        },
+        setIsSaving: (state, { payload }) => {
+            state.isSaving = payload;
+        },
     },
 });
 
@@ -46,6 +54,8 @@ export const {
     deleteProduct,
     setIsLoading,
     setIsDeleting,
+    setIsUpdating,
+    setIsSaving,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
