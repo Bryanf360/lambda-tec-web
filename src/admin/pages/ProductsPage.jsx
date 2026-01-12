@@ -64,7 +64,9 @@ export default function ProductsPage() {
     const navigate = useNavigate();
     const [selectedProduct, setSelectedProduct] = useState(null);
     const { isLoading, meta, products, startLoadingProductsWithStock } = useProductsStore();
-    console.log('products: ', products);
+    const [page, setPage] = useState(meta.page - 1);
+    const [limit, setLimit] = useState(meta.limit);
+    const [search, setSearch] = useState('');
 
     const columns = [
         { id: 'name', label: 'Nombre', minWidth: 200 },
@@ -151,11 +153,25 @@ export default function ProductsPage() {
     ];
 
     useEffect(() => {
-        startLoadingProductsWithStock({});
-    }, []);
+        const delay = setTimeout(() => {
+            startLoadingProductsWithStock({ page: page + 1, limit, search });
+        }, 400);
+        return () => clearTimeout(delay);
+    }, [page, limit, search]);
 
-    const handleSearchTextChange = (event) => {
-        // TODO: implement search
+    const handleChangePage = (event, newPage) => {
+        // TODO: test pagination to reset to 5
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setLimit(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const handleSearch = (searchTerm) => {
+        setSearch(searchTerm);
+        setPage(0);
     };
 
     const handleAddProductModalClose = () => {
@@ -214,16 +230,18 @@ export default function ProductsPage() {
                     </Button>
                 </Grid>
                 <Grid xs={12}>
-                    <SearchInput placeholder="Buscar..." onChange={handleSearchTextChange} />
+                    <SearchInput placeholder="Buscar..." onChange={handleSearch} />
                 </Grid>
             </Grid>
             <Table
                 data={products}
                 columns={columns}
                 isLoading={isLoading}
-                // onEdit={handleEditButtonClick}
-                // onDelete={handleDeleteButtonClick}
-                // onView={handleViewButtonClick}
+                page={page}
+                rowsPerPage={limit}
+                total={meta.total}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
             />
             <AddProductModal
                 open={isAddProductModalOpen}
