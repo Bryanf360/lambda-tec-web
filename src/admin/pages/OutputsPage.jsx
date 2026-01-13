@@ -5,7 +5,14 @@ import dayjs from 'dayjs';
 import { BorderRight, Delete } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 
-import { CardLayout, FormAutocomplete, InputLabel, Select, Table } from '../components';
+import {
+    CardLayout,
+    FormAutocomplete,
+    InputLabel,
+    SearchProductWithStockModal,
+    Select,
+    Table,
+} from '../components';
 import { DatePicker, SearchInput } from '../components/molecules';
 import FormTextField from '../components/atoms/FormTextField';
 import { Button, TextField } from '../../auth/components';
@@ -67,6 +74,7 @@ export default function OutputsPage() {
     const [selectedStatus, setSelectedStatus] = useState(statuses[0].id);
     const { clients, isLoading: isLoadingClients, getClients } = useClientsStore();
     const { isLoading: isLoadingReasons, reasons, startLoadingReasonsByType } = useReasonsStore();
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
     const theme = useTheme();
 
@@ -81,6 +89,14 @@ export default function OutputsPage() {
 
     const handleStatusSelectChange = (event) => {
         setSelectedStatus(event.target.value);
+    };
+
+    const handleSearchButtonClick = () => {
+        setIsSearchModalOpen(true);
+    };
+
+    const handleSearchModalClose = () => {
+        setIsSearchModalOpen(false);
     };
 
     const textFieldStyles = {
@@ -265,10 +281,15 @@ export default function OutputsPage() {
                         />
                     </Grid>
                 </Grid>
-                <Button kind="tertiary" startIcon={<AddIcon />} sx={{ my: 2 }}>
+                <Button
+                    kind="tertiary"
+                    startIcon={<AddIcon />}
+                    sx={{ my: 2 }}
+                    onClick={handleSearchButtonClick}
+                >
                     Buscar Producto
                 </Button>
-                <Table columns={columns} data={data} />
+                <Table columns={columns} data={data} isLoading={false} />
             </CardLayout>
             <Box
                 sx={{
@@ -279,6 +300,10 @@ export default function OutputsPage() {
             >
                 <Button sx={{ minWidth: 144.5 }}>Guardar</Button>
             </Box>
+            <SearchProductWithStockModal
+                open={isSearchModalOpen}
+                onClose={handleSearchModalClose}
+            />
         </>
     );
 }
