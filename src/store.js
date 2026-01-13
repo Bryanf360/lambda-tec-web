@@ -13,21 +13,23 @@ import {
     citiesReducer,
     providersReducer,
     inputsReducer,
+    clientsReducer,
 } from './admin/slices';
 
 export default configureStore({
     reducer: {
         auth: authReducer,
-        products: productsReducer,
-        dashboard: dashboardReducer,
         brands: brandsReducer,
-        models: modelsReducer,
-        unitTypes: unitTypesReducer,
-        partNumbers: partNumbersReducer,
-        reasons: reasonsReducer,
-        provinces: provincesReducer,
         cities: citiesReducer,
-        providers: providersReducer,
+        clients: clientsReducer,
+        dashboard: dashboardReducer,
         inputs: inputsReducer,
+        models: modelsReducer,
+        partNumbers: partNumbersReducer,
+        products: productsReducer,
+        providers: providersReducer,
+        provinces: provincesReducer,
+        reasons: reasonsReducer,
+        unitTypes: unitTypesReducer,
     },
 });

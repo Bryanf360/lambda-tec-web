@@ -1,36 +1,37 @@
-import { useState } from "react"
+import { useEffect, useState } from 'react';
 
-import { Box, Grid, IconButton, Typography, useTheme } from "@mui/material"
-import dayjs from "dayjs"
-import { BorderRight, Delete } from "@mui/icons-material"
+import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import dayjs from 'dayjs';
+import { BorderRight, Delete } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 
-import { CardLayout, FormAutocomplete, InputLabel, Select, Table } from "../components"
-import { DatePicker, SearchInput } from "../components/molecules"
-import FormTextField from "../components/atoms/FormTextField"
-import { Button, TextField } from "../../auth/components"
+import { CardLayout, FormAutocomplete, InputLabel, Select, Table } from '../components';
+import { DatePicker, SearchInput } from '../components/molecules';
+import FormTextField from '../components/atoms/FormTextField';
+import { Button, TextField } from '../../auth/components';
+import { useClientsStore } from '../hooks';
 
 const providers = [
     { id: 1, name: 'Jhon Smith' },
     { id: 2, name: 'Jorge Vedón' },
     { id: 3, name: 'Andrés Hernández' },
     { id: 4, name: 'Liseth Vargas' },
-    { id: 5, name: 'Jhon Doe' }
-]
+    { id: 5, name: 'Jhon Doe' },
+];
 
 const reasons = [
     { id: 1, name: 'Venta' },
-    { id: 2, name: 'Salida de prueba' }
-]
+    { id: 2, name: 'Salida de prueba' },
+];
 
 const warehouses = [
     { id: 1, value: 'Bodega 1' },
-    { id: 2, value: 'Bodega 2' }
+    { id: 2, value: 'Bodega 2' },
 ];
 
 const statuses = [
     { id: 1, value: 'Usado' },
-    { id: 2, value: 'Nuevo' }
+    { id: 2, value: 'Nuevo' },
 ];
 
 const data = [
@@ -61,18 +62,20 @@ const data = [
 export default function OutputsPage() {
     const [selectedProvider, setSelectedProvider] = useState(providers[0]);
     const [selectedDate, setSelectedDate] = useState(dayjs());
-    const [selectedReason, setSelectedReason] = useState(reasons[0])
-    const [selectedWarehouse, setSelectedWarehouse] = useState(0)
-    const [selectedStatus, setSelectedStatus] = useState(statuses[0].id)
+    const [selectedReason, setSelectedReason] = useState(reasons[0]);
+    const [selectedWarehouse, setSelectedWarehouse] = useState(0);
+    const [selectedStatus, setSelectedStatus] = useState(statuses[0].id);
+    const { clients, isLoading: isLoadingClients, getClients } = useClientsStore();
+
     const theme = useTheme();
 
     const handleWarehouseSelectChange = (event) => {
         setSelectedWarehouse(event.target.value);
-    }
+    };
 
     const handleStatusSelectChange = (event) => {
         setSelectedStatus(event.target.value);
-    }
+    };
 
     const textFieldStyles = {
         '& .MuiFilledInput-input': {
@@ -80,9 +83,9 @@ export default function OutputsPage() {
             paddingBlock: 1,
             border: '1px solid rgba(0, 0, 0, 0.2)',
             borderRadius: 2.5,
-            ...theme.typography.selectText
-        }
-    }
+            ...theme.typography.selectText,
+        },
+    };
 
     const columns = [
         { id: 'number', label: 'N°', minWidth: 100 },
@@ -111,7 +114,7 @@ export default function OutputsPage() {
                     options={warehouses}
                     name="warehouse"
                 />
-            )
+            ),
         },
         {
             id: 'serialNumber',
@@ -122,24 +125,14 @@ export default function OutputsPage() {
                     return <Typography variant="selectText">N/A</Typography>;
                 }
 
-                return (
-                    <TextField
-                        placeholder="Ingrese n°"
-                        sx={textFieldStyles}
-                    />
-                )
-            }
+                return <TextField placeholder="Ingrese n°" sx={textFieldStyles} />;
+            },
         },
         {
             id: 'assetNumber',
             label: 'Nro de Parte',
             minWidth: 150,
-            render: (_, row) => (
-                <TextField
-                    placeholder="Ingrese n°"
-                    sx={textFieldStyles}
-                />
-            )
+            render: (_, row) => <TextField placeholder="Ingrese n°" sx={textFieldStyles} />,
         },
         {
             id: 'status',
@@ -154,7 +147,7 @@ export default function OutputsPage() {
                     options={statuses}
                     name="status"
                 />
-            )
+            ),
         },
         {
             id: 'amountToEnter',
@@ -170,7 +163,7 @@ export default function OutputsPage() {
                         ...textFieldStyles,
                     }}
                 />
-            )
+            ),
         },
         // {
         //     id: 'status',
@@ -191,32 +184,44 @@ export default function OutputsPage() {
                     {/* <IconButton color="primary" size="small" onClick={() => handleEditButtonClick(row)}>
                     <Edit />
                 </IconButton> */}
-                    <IconButton color="error" size="small" onClick={() => { }}>
+                    <IconButton color="error" size="small" onClick={() => {}}>
                         <Delete />
                     </IconButton>
                     {/* <IconButton color="info" size="small" onClick={() => handleViewButtonClick(row)}>
                     <Visibility />
                 </IconButton> */}
                 </>
-            )
-        }
+            ),
+        },
     ];
+
+    useEffect(() => {
+        getClients();
+    }, []);
 
     return (
         <>
             <CardLayout>
                 <Grid xs={12}>
-                    <Typography variant="h1" sx={{ mr: 5, mb: 2, }}>Salidas</Typography>
+                    <Typography variant="h1" sx={{ mr: 5, mb: 2 }}>
+                        Salidas
+                    </Typography>
                 </Grid>
                 <Grid container spacing={1}>
                     <Grid>
                         <FormAutocomplete
                             variant="inline"
                             labelText="Cliente/Destinatario*"
-                            options={providers}
-                            onChange={(_, value) => setSelectedProvider(value)}
+                            options={clients}
+                            onChange={(_, client) => {
+                                console.log('client: ', client);
+                                // setSelectedProvider(value)
+                            }}
+                            noOptionsText={
+                                isLoadingClients ? 'Cargando' : 'No se encontraron clientes'
+                            }
                             placeholder="Buscar..."
-                            getOptionLabel={(option) => option.name}
+                            getOptionLabel={(option) => `${option.names} ${option.lastnames}`}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             marginEnd={3}
                         />
@@ -235,7 +240,7 @@ export default function OutputsPage() {
                             placeholder="1201"
                             disabled
                             variant="inline"
-                            sx={{ miWidth: 84, width: 120, mr: 2, }}
+                            sx={{ miWidth: 84, width: 120, mr: 2 }}
                         />
                     </Grid>
                     <Grid>
@@ -250,31 +255,20 @@ export default function OutputsPage() {
                         />
                     </Grid>
                 </Grid>
-                <Button
-                    kind="tertiary"
-                    startIcon={<AddIcon />}
-                    sx={{ my: 2, }}
-                >
+                <Button kind="tertiary" startIcon={<AddIcon />} sx={{ my: 2 }}>
                     Buscar Producto
                 </Button>
-                <Table
-                    columns={columns}
-                    data={data}
-                />
+                <Table columns={columns} data={data} />
             </CardLayout>
             <Box
-                sx={{ 
+                sx={{
                     display: 'flex',
                     justifyContent: 'flex-end',
                     mt: 5,
                 }}
             >
-                <Button
-                    sx={{ minWidth: 144.5, }}
-                >
-                    Guardar
-                </Button>
+                <Button sx={{ minWidth: 144.5 }}>Guardar</Button>
             </Box>
         </>
-    )
+    );
 }

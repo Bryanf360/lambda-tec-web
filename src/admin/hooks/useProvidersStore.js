@@ -10,7 +10,7 @@ const useProvidersStore = () => {
     const getProviders = async () => {
         dispatch(setIsLoading(true));
         try {
-            const { data } = await lambdaTecApi.get('/companies');
+            const { data } = await lambdaTecApi.get('/companies/supplier');
             dispatch(setProviders(data.data));
         } catch (err) {
             console.log('err: ', err);
