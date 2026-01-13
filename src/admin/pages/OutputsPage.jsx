@@ -9,7 +9,7 @@ import { CardLayout, FormAutocomplete, InputLabel, Select, Table } from '../comp
 import { DatePicker, SearchInput } from '../components/molecules';
 import FormTextField from '../components/atoms/FormTextField';
 import { Button, TextField } from '../../auth/components';
-import { useClientsStore } from '../hooks';
+import { useClientsStore, useReasonsStore } from '../hooks';
 
 const providers = [
     { id: 1, name: 'Jhon Smith' },
@@ -62,12 +62,18 @@ const data = [
 export default function OutputsPage() {
     const [selectedProvider, setSelectedProvider] = useState(providers[0]);
     const [selectedDate, setSelectedDate] = useState(dayjs());
-    const [selectedReason, setSelectedReason] = useState(reasons[0]);
+    // const [selectedReason, setSelectedReason] = useState(reasons[0]);
     const [selectedWarehouse, setSelectedWarehouse] = useState(0);
     const [selectedStatus, setSelectedStatus] = useState(statuses[0].id);
     const { clients, isLoading: isLoadingClients, getClients } = useClientsStore();
+    const { isLoading: isLoadingReasons, reasons, startLoadingReasonsByType } = useReasonsStore();
 
     const theme = useTheme();
+
+    useEffect(() => {
+        startLoadingReasonsByType('output');
+        getClients();
+    }, []);
 
     const handleWarehouseSelectChange = (event) => {
         setSelectedWarehouse(event.target.value);
@@ -195,10 +201,6 @@ export default function OutputsPage() {
         },
     ];
 
-    useEffect(() => {
-        getClients();
-    }, []);
-
     return (
         <>
             <CardLayout>
@@ -235,20 +237,28 @@ export default function OutputsPage() {
                         />
                     </Grid>
                     <Grid>
+                        {/* 
+                        TODO: validate if is neccessary the nro
                         <FormTextField
                             labelText="Nro"
                             placeholder="1201"
                             disabled
                             variant="inline"
                             sx={{ miWidth: 84, width: 120, mr: 2 }}
-                        />
+                        /> */}
                     </Grid>
                     <Grid>
                         <FormAutocomplete
                             variant="inline"
                             labelText="Motivo*"
                             options={reasons}
-                            onChange={(_, value) => setSelectedReason(value)}
+                            onChange={(_, reason) => {
+                                console.log('reason: ', reason);
+                                // setSelectedReason(value)
+                            }}
+                            noOptionsText={
+                                isLoadingReasons ? 'Cargando' : 'No se encontraron reasons'
+                            }
                             placeholder="Buscar..."
                             getOptionLabel={(option) => option.name}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
