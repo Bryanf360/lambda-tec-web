@@ -26,6 +26,7 @@ export default function SearchProductWithStockTable({
     const selectedProducts = useSelector((state) => state.inputs.selectedProducts);
     const theme = useTheme();
     const dispatch = useDispatch();
+    // console.log('selectedProductInputs: ', selectedProductInputs);
 
     const textFieldStyles = {
         '& .MuiFilledInput-input': {
@@ -69,31 +70,37 @@ export default function SearchProductWithStockTable({
             id: 'quantity',
             label: 'Cantidad',
             minWidth: 125,
-            render: (_, row) => (
-                // <FormAutocomplete
-                //     options={warehouses}
-                //     value={selectedWarehouse}
-                //     onChange={(event, value) => setSelectedWarehouse(value)}
-                //     placeholder="-"
-                //     getOptionLabel={(option) => option.value}
-                //     isOptionEqualToValue={(option, val) => option.id === val.id}
-                //     haveAddButton={false}
-                // />
-                <TextField
-                    sx={{
-                        '& .MuiInputBase-input': {
-                            textAlign: 'center',
-                        },
-                        ...textFieldStyles,
-                    }}
-                    value={
-                        selectedProductInputs[row.id]?.quantity ??
-                        selectedProducts[row.id]?.quantity ??
-                        ''
-                    }
-                    onChange={(e) => handleQuantityInputChange(row.id, e.target.value)}
-                />
-            ),
+            render: (_, row) => {
+                // console.log('row: ', row);
+                return (
+                    // <FormAutocomplete
+                    //     options={warehouses}
+                    //     value={selectedWarehouse}
+                    //     onChange={(event, value) => setSelectedWarehouse(value)}
+                    //     placeholder="-"
+                    //     getOptionLabel={(option) => option.value}
+                    //     isOptionEqualToValue={(option, val) => option.id === val.id}
+                    //     haveAddButton={false}
+                    // />
+                    <TextField
+                        sx={{
+                            '& .MuiInputBase-input': {
+                                textAlign: 'center',
+                            },
+                            ...textFieldStyles,
+                        }}
+                        value={
+                            selectedProductInputs[row.id]?.quantity ??
+                            selectedProducts[row.id]?.quantity ??
+                            row.type === 'consumable'
+                                ? row.stock
+                                : ''
+                        }
+                        onChange={(e) => handleQuantityInputChange(row.id, e.target.value)}
+                        disabled={row.type === 'consumable'}
+                    />
+                );
+            },
         },
         /*
         {
@@ -178,15 +185,31 @@ export default function SearchProductWithStockTable({
     };
 
     const handleShoppingCartButtonClick = (row) => {
+        // console.log('row: ', row);
         const productLocalData = selectedProductInputs[row.id];
         const productStoreData = selectedProducts[row.id];
 
-        const quantity = Number(productLocalData?.quantity ?? productStoreData?.quantity ?? 0);
+        const quantity = Number(
+            productLocalData?.quantity ?? productStoreData?.quantity ?? row.type === 'consumable'
+                ? row.stock
+                : 0
+        );
+        const storedQuantity = Number(productStoreData?.quantity ?? 0);
         const singleWarehouse =
             productLocalData?.singleWarehouse ?? productLocalData?.singleWarehouse ?? false;
 
         if (!quantity || quantity <= 0) {
             toast.error('Debes ingresar una cantidad');
+            return;
+        }
+
+        if (row.stock === 0) {
+            toast.error(`El producto ${row.name} no tiene stock para añadir unidades`);
+            return;
+        }
+
+        if (row.stock <= storedQuantity) {
+            toast.error(`Stock insuficiente para añadir mas unidades del producto ${row.name}`);
             return;
         }
 

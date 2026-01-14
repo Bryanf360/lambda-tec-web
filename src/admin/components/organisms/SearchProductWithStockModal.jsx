@@ -21,7 +21,7 @@ export default function SearchProductWithStockModal({ open, onClose }) {
             startLoadingProductsWithStock({ page: page + 1, limit, search });
         }, 400);
         return () => clearTimeout(delay);
-    }, [page, limit, search]);
+    }, [page, limit, search, open]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -43,11 +43,6 @@ export default function SearchProductWithStockModal({ open, onClose }) {
 
     return (
         <Modal open={open} onClose={onClose} maxWidth="lg" fullWidth>
-            {/* <Grid sx={{ border: '1px solid', }}>
-                <DialogTitle sx={{ border: '1px solid', }}>
-                    <Typography>asdf</Typography>
-                </DialogTitle>
-            </Grid> */}
             <Grid container alignItems="center" sx={{ mb: 1.5 }}>
                 <Inventory2 sx={{ color: theme.palette.green[100] }} />
                 <DialogTitle sx={{ padding: 0, pl: 0.5 }}>

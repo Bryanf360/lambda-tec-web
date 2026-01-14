@@ -30,7 +30,7 @@ export default function InputsPage() {
     const { startSavingInputs, selectedProducts, isLoading } = useInputsStore();
     const { rows, updateRow, deleteRow, errors, validate, resetRows } = useRows(selectedProducts);
     const [movementHeader, setMovementHeader] = useState({
-        providerId: null,
+        companyId: null,
         reasonId: null,
         date: dayjs(),
     });
@@ -39,7 +39,7 @@ export default function InputsPage() {
     const dispatch = useDispatch();
 
     const selectedProvider =
-        providers.find((provider) => provider.id === movementHeader.providerId) || null;
+        providers.find((provider) => provider.id === movementHeader.companyId) || null;
     const selectedReason = reasons.find((reason) => reason.id === movementHeader.reasonId) || null;
 
     useEffect(() => {
@@ -99,14 +99,14 @@ export default function InputsPage() {
     };
 
     const validateMovementHeader = () => {
-        if (!movementHeader.providerId) return 'Debe seleccionar un proveedor antes de guardar';
+        if (!movementHeader.companyId) return 'Debe seleccionar un proveedor antes de guardar';
         if (!movementHeader.reasonId) return 'Debe seleccionar un motivo antes de guardar';
         return null;
     };
 
     const resetMovement = () => {
         setMovementHeader({
-            providerId: null,
+            companyId: null,
             reasonId: null,
             date: dayjs(),
         });
@@ -138,7 +138,7 @@ export default function InputsPage() {
                             labelText="Proveedor*"
                             options={providers}
                             onChange={(_, provider) =>
-                                handleMovementChange('providerId', provider?.id)
+                                handleMovementChange('companyId', provider?.id)
                             }
                             noOptionsText={
                                 isLoadingReasons ? 'Cargando' : 'No se encontraron proveedores'

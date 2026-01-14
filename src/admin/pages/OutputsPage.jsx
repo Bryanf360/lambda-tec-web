@@ -9,6 +9,7 @@ import {
     CardLayout,
     FormAutocomplete,
     InputLabel,
+    InputsTable,
     SearchProductWithStockModal,
     Select,
     Table,
@@ -16,7 +17,11 @@ import {
 import { DatePicker, SearchInput } from '../components/molecules';
 import FormTextField from '../components/atoms/FormTextField';
 import { Button, TextField } from '../../auth/components';
-import { useClientsStore, useReasonsStore } from '../hooks';
+import { useClientsStore, useInputsStore, useReasonsStore, useRows } from '../hooks';
+import { transformRowsToExitDetails } from '../helpers';
+import { toast } from 'react-toastify';
+import { resetSelectedProducts } from '../slices/inputsSlice';
+import { useDispatch } from 'react-redux';
 
 const providers = [
     { id: 1, name: 'Jhon Smith' },
@@ -67,25 +72,31 @@ const data = [
 ];
 
 export default function OutputsPage() {
-    const [selectedProvider, setSelectedProvider] = useState(providers[0]);
-    const [selectedDate, setSelectedDate] = useState(dayjs());
-    // const [selectedReason, setSelectedReason] = useState(reasons[0]);
     const [selectedWarehouse, setSelectedWarehouse] = useState(0);
     const [selectedStatus, setSelectedStatus] = useState(statuses[0].id);
     const { clients, isLoading: isLoadingClients, getClients } = useClientsStore();
     const { isLoading: isLoadingReasons, reasons, startLoadingReasonsByType } = useReasonsStore();
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+    const { startSavingInputs, startSavingOutputs, selectedProducts, isLoading } = useInputsStore();
+    const { rows, updateRow, deleteRow, errors, validate, resetRows } = useRows(selectedProducts);
+    const [movementHeader, setMovementHeader] = useState({
+        companyId: null,
+        reasonId: null,
+        date: dayjs(),
+    });
+    const [clientInput, setClientInput] = useState('');
+    const [reasonInput, setReasonInput] = useState('');
+    const dispatch = useDispatch();
 
     const theme = useTheme();
+
+    const selectedClient = clients.find((client) => client.id === movementHeader.companyId) || null;
+    const selectedReason = reasons.find((reason) => reason.id === movementHeader.reasonId) || null;
 
     useEffect(() => {
         startLoadingReasonsByType('output');
         getClients();
     }, []);
-
-    const handleWarehouseSelectChange = (event) => {
-        setSelectedWarehouse(event.target.value);
-    };
 
     const handleStatusSelectChange = (event) => {
         setSelectedStatus(event.target.value);
@@ -97,6 +108,58 @@ export default function OutputsPage() {
 
     const handleSearchModalClose = () => {
         setIsSearchModalOpen(false);
+    };
+
+    const handleSaveButtonClick = async () => {
+        const error = validateMovementHeader();
+        if (error) {
+            toast.error(error);
+            return;
+        }
+        const firstError = validate();
+        if (firstError) {
+            toast.error(firstError.message);
+            return;
+        }
+        if (rows.length === 0) return toast.error('Debe ingresar productos');
+        const details = transformRowsToExitDetails(rows);
+        const movementToCreate = {
+            type: 'input',
+            ...movementHeader,
+            details,
+        };
+        try {
+            const message = await startSavingOutputs(movementToCreate);
+            toast.success(message);
+            resetMovement();
+        } catch (error) {
+            toast.error(error || 'Error interno del servidor');
+        }
+    };
+
+    const validateMovementHeader = () => {
+        if (!movementHeader.companyId) return 'Debe seleccionar un cliente antes de guardar';
+        if (!movementHeader.reasonId) return 'Debe seleccionar un motivo antes de guardar';
+        return null;
+    };
+
+    const resetMovement = () => {
+        setMovementHeader({
+            companyId: null,
+            reasonId: null,
+            date: dayjs(),
+        });
+        resetRows();
+        setClientInput('');
+        setReasonInput('');
+        dispatch(resetSelectedProducts());
+    };
+
+    const handleMovementChange = (field, value) => {
+        setMovementHeader((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
     };
 
     const textFieldStyles = {
@@ -118,25 +181,20 @@ export default function OutputsPage() {
             id: 'warehouse',
             label: 'Bodega',
             minWidth: 150,
-            render: (_, row) => (
-                // <FormAutocomplete
-                //     options={warehouses}
-                //     value={selectedWarehouse}
-                //     onChange={(event, value) => setSelectedWarehouse(value)}
-                //     placeholder="-"
-                //     getOptionLabel={(option) => option.value}
-                //     isOptionEqualToValue={(option, val) => option.id === val.id}
-                //     haveAddButton={false}
-                // />
-                <Select
-                    // label="label"
-                    placeholder="-"
-                    value={selectedWarehouse}
-                    onChange={handleWarehouseSelectChange}
-                    options={warehouses}
-                    name="warehouse"
-                />
-            ),
+            render: (_, row) => {
+                console.log('myRow: ', row);
+                return (
+                    <Select
+                        // label="label"
+                        placeholder="-"
+                        value={row.warehouseId}
+                        // onChange={handleWarehouseSelectChange}
+                        options={warehouses}
+                        name="warehouse"
+                        disabled={row.type === 'consumable'}
+                    />
+                );
+            },
         },
         {
             id: 'serialNumber',
@@ -162,8 +220,6 @@ export default function OutputsPage() {
             minWidth: 150,
             render: (_, row) => (
                 <Select
-                    // label="label"
-                    // placeholder="asdf"
                     value={selectedStatus}
                     onChange={handleStatusSelectChange}
                     options={statuses}
@@ -232,24 +288,29 @@ export default function OutputsPage() {
                             labelText="Cliente/Destinatario*"
                             options={clients}
                             onChange={(_, client) => {
-                                console.log('client: ', client);
-                                // setSelectedProvider(value)
+                                handleMovementChange('companyId', client?.id);
                             }}
                             noOptionsText={
                                 isLoadingClients ? 'Cargando' : 'No se encontraron clientes'
                             }
+                            onInputChange={(_, newInputValue) => {
+                                setClientInput(newInputValue);
+                            }}
+                            inputValue={clientInput}
                             placeholder="Buscar..."
                             getOptionLabel={(option) => `${option.names} ${option.lastnames}`}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             marginEnd={3}
+                            value={selectedClient}
                         />
                     </Grid>
                     <Grid>
                         <DatePicker
                             labelText="Fecha"
-                            value={selectedDate}
-                            onChange={(newValue) => setSelectedDate(newValue)}
+                            value={movementHeader.date}
+                            onChange={(newValue) => handleMovementChange('date', newValue)}
                             marginEnd={3}
+                            maxDate={dayjs()}
                         />
                     </Grid>
                     <Grid>
@@ -269,7 +330,7 @@ export default function OutputsPage() {
                             labelText="Motivo*"
                             options={reasons}
                             onChange={(_, reason) => {
-                                console.log('reason: ', reason);
+                                handleMovementChange('reasonId', reason?.id);
                                 // setSelectedReason(value)
                             }}
                             noOptionsText={
@@ -278,6 +339,11 @@ export default function OutputsPage() {
                             placeholder="Buscar..."
                             getOptionLabel={(option) => option.name}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
+                            onInputChange={(_, newInputValue) => {
+                                setReasonInput(newInputValue);
+                            }}
+                            value={selectedReason}
+                            inputValue={reasonInput}
                         />
                     </Grid>
                 </Grid>
@@ -289,7 +355,12 @@ export default function OutputsPage() {
                 >
                     Buscar Producto
                 </Button>
-                <Table columns={columns} data={data} isLoading={false} />
+                <InputsTable
+                    data={rows}
+                    updateRow={updateRow}
+                    deleteRow={deleteRow}
+                    mode="output"
+                />
             </CardLayout>
             <Box
                 sx={{
@@ -298,7 +369,9 @@ export default function OutputsPage() {
                     mt: 5,
                 }}
             >
-                <Button sx={{ minWidth: 144.5 }}>Guardar</Button>
+                <Button sx={{ minWidth: 144.5 }} onClick={handleSaveButtonClick}>
+                    Guardar
+                </Button>
             </Box>
             <SearchProductWithStockModal
                 open={isSearchModalOpen}

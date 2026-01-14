@@ -6,11 +6,23 @@ const useInputsStore = () => {
     const dispatch = useDispatch();
     const { selectedProducts } = useSelector((state) => state.inputs);
 
-    // TODO: create method to save inputs
     const startSavingInputs = async (inputs) => {
         try {
             dispatch(setIsLoading(true));
-            const { data } = await lambdaTecApi.post('/inputs', inputs);
+            const { data } = await lambdaTecApi.post('/movements/input', inputs);
+            return data.message;
+        } catch (error) {
+            console.log('error: ', error);
+            throw error?.response?.data?.message;
+        } finally {
+            dispatch(setIsLoading(false));
+        }
+    };
+
+    const startSavingOutputs = async (outputs) => {
+        try {
+            dispatch(setIsLoading(true));
+            const { data } = await lambdaTecApi.post('/movements/output', outputs);
             return data.message;
         } catch (error) {
             console.log('error: ', error);
@@ -23,6 +35,7 @@ const useInputsStore = () => {
     return {
         selectedProducts,
         startSavingInputs,
+        startSavingOutputs,
     };
 };
 

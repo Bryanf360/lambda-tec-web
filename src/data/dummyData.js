@@ -116,3 +116,19 @@ export const unitTypes = [
     { id: 1, name: 'm - Metros' },
     { id: 2, name: 'u - Unidades' },
 ];
+
+export const productInstances = [
+    { product_instance_id: 1, serial_number: 'asdf1234', asset_number: 'qwer1243' },
+    { product_instance_id: 2, serial_number: 'asdf1231', asset_number: 'qwer1241' },
+    { product_instance_id: 3, serial_number: 'asdf1232', asset_number: 'qwer1242' },
+];
+
+export const serialNumbers = [
+    { id: 1, name: 'asdf1234' },
+    { id: 2, name: 'asdf1231' },
+];
+
+export const activeNumbers = [
+    { id: 1, name: 'qwer1234' },
+    { id: 2, name: 'qwer1231' },
+];

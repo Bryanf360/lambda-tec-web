@@ -6,8 +6,15 @@ import { Delete } from '@mui/icons-material';
 import { Select } from '../../../core/components';
 import Table from './Table';
 import { TextField } from '../../../auth/components';
-import { inputs, statuses, warehouses } from '../../../data/dummyData';
-import { DeleteModal } from '../atoms';
+import {
+    activeNumbers,
+    inputs,
+    productInstances,
+    serialNumbers,
+    statuses,
+    warehouses,
+} from '../../../data/dummyData';
+import { DeleteModal, SerialNumberSelect } from '../atoms';
 import { useRows } from '../../hooks';
 import { decreaseQuantity, deleteSelectedProduct } from '../../slices/inputsSlice';
 import { useDispatch } from 'react-redux';
@@ -18,6 +25,7 @@ export default function InputsTable({
     updateRow,
     deleteRow,
     isLoading = false,
+    mode = 'input',
     ...props
 }) {
     const [selectedWarehouse, setSelectedWarehouse] = useState(warehouses[0].id);
@@ -111,7 +119,7 @@ export default function InputsTable({
                     }}
                     options={warehouses}
                     name="warehouse"
-                    disabled={row.singleWarehouse && row.index !== 1}
+                    disabled={row.isConsumable || (row.singleWarehouse && row.index !== 1)}
                 />
             ),
         },
@@ -124,7 +132,7 @@ export default function InputsTable({
                     return <Typography variant="selectText">N/A</Typography>;
                 }
 
-                return (
+                return mode === 'input' ? (
                     <TextField
                         placeholder="Ingrese n°"
                         sx={textFieldStyles}
@@ -132,6 +140,18 @@ export default function InputsTable({
                             const validatedValue = e.target.value.replace(/[^A-Za-z0-9-]/g, '');
                             e.target.value = validatedValue;
                             updateRow(row.rowId, 'serialNumber', validatedValue);
+                        }}
+                    />
+                ) : (
+                    <SerialNumberSelect
+                        productId={row.productId}
+                        warehouseId={row.warehouse}
+                        value={row.instanceId}
+                        onSelect={(instance) => {
+                            updateRow(row.rowId, 'instanceId', instance.product_instance_id);
+                            // TODO: validate if is neccessary serialNumber and assetNumber
+                            // updateRow(row.rowId, 'serialNumber', instance.serialNumber);
+                            // updateRow(row.rowId, 'assetNumber', instance.assetNumber);
                         }}
                     />
                 );
@@ -146,7 +166,7 @@ export default function InputsTable({
                     return <Typography variant="selectText">N/A</Typography>;
                 }
 
-                return (
+                return mode === 'input' ? (
                     <TextField
                         placeholder="Ingrese n°"
                         sx={textFieldStyles}
@@ -155,6 +175,20 @@ export default function InputsTable({
                             e.target.value = validatedValue;
                             updateRow(row.rowId, 'assetNumber', validatedValue);
                         }}
+                    />
+                ) : (
+                    // TODO: mejorar componente reusable
+                    <SerialNumberSelect
+                        productId={row.productId}
+                        warehouseId={row.warehouse}
+                        value={row.instanceId}
+                        onSelect={(instance) => {
+                            updateRow(row.rowId, 'instanceId', instance.product_instance_id);
+                            // TODO: validate if is neccessary serialNumber and assetNumber
+                            // updateRow(row.rowId, 'serialNumber', instance.serialNumber);
+                            // updateRow(row.rowId, 'assetNumber', instance.assetNumber);
+                        }}
+                        getOptionLabel={(o) => o.asset_number}
                     />
                 );
             },

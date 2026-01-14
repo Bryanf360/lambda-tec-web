@@ -65,10 +65,12 @@ function syncRows(selectedProducts, currentRows, productOrderRef) {
                     index: currentCount + i + 1,
                     quantity: product.quantity,
 
-                    warehouse: '',
+                    warehouse: product.warehouseId ?? '',
                     serialNumber: '',
                     assetNumber: '',
                     status: '',
+
+                    instanceId: null,
 
                     isConsumable: product.unit_type.simbol !== 'u',
                     amountToEnter: product.unit_type.simbol !== 'u' ? product.quantity : null,
