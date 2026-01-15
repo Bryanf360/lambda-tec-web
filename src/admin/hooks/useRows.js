@@ -10,12 +10,21 @@ function validateRows(rows) {
     const errors = [];
 
     rows.forEach((row) => {
+        console.log('row: ', row);
         if (!row.warehouse || row.warehouse === '') {
             // console.log(row);
             errors.push({
                 rowId: row.rowId,
                 field: 'warehouse',
                 message: `Falta Bodega (Producto: ${row.name}, Fila: ${row.index})`,
+            });
+        }
+
+        if (!row.instanceId) {
+            errors.push({
+                rowId: row.rowId,
+                field: 'instanceId',
+                message: `Falta Número de Activo / Número de Asset (Producto: ${row.name}, Fila: ${row.index})`,
             });
         }
 
