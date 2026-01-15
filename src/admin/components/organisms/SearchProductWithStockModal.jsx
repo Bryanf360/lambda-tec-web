@@ -21,7 +21,7 @@ export default function SearchProductWithStockModal({ open, onClose }) {
             startLoadingProductsWithStock({ page: page + 1, limit, search });
         }, 400);
         return () => clearTimeout(delay);
-    }, [page, limit, search, open]);
+    }, [page, limit, search]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

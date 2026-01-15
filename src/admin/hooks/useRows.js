@@ -10,7 +10,6 @@ function validateRows(rows) {
     const errors = [];
 
     rows.forEach((row) => {
-        console.log('row: ', row);
         if (!row.warehouse || row.warehouse === '') {
             // console.log(row);
             errors.push({
@@ -20,11 +19,27 @@ function validateRows(rows) {
             });
         }
 
-        if (!row.instanceId) {
+        if (!row.instanceId && !row.serialNumber && !row.assetNumber) {
             errors.push({
                 rowId: row.rowId,
                 field: 'instanceId',
-                message: `Falta Número de Activo / Número de Asset (Producto: ${row.name}, Fila: ${row.index})`,
+                message: `Falta Número de Serie / Número de Activo (Producto: ${row.name}, Fila: ${row.index})`,
+            });
+        }
+
+        if (!row.serialNumber) {
+            errors.push({
+                rowId: row.rowId,
+                field: 'serialNumber',
+                message: `Falta Número de Serie (Producto: ${row.name}, Fila: ${row.index})`,
+            });
+        }
+
+        if (!row.assetNumber) {
+            errors.push({
+                rowId: row.rowId,
+                field: 'assetNumber',
+                message: `Falta Número de Activo (Producto: ${row.name}, Fila: ${row.index})`,
             });
         }
 
