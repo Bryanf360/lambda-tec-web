@@ -14,7 +14,7 @@ import {
     Select,
     Table,
 } from '../components';
-import { DatePicker, SearchInput } from '../components/molecules';
+import { AddClientModal, DatePicker, SearchInput } from '../components/molecules';
 import FormTextField from '../components/atoms/FormTextField';
 import { Button, TextField } from '../../auth/components';
 import { useClientsStore, useInputsStore, useReasonsStore, useRows } from '../hooks';
@@ -86,8 +86,8 @@ export default function OutputsPage() {
     });
     const [clientInput, setClientInput] = useState('');
     const [reasonInput, setReasonInput] = useState('');
+    const [isAddClientModalOpen, setIsAddClientModalOpen] = useState(false);
     const dispatch = useDispatch();
-
     const theme = useTheme();
 
     const selectedClient = clients.find((client) => client.id === movementHeader.companyId) || null;
@@ -166,6 +166,14 @@ export default function OutputsPage() {
             ...prev,
             [field]: value,
         }));
+    };
+
+    const handleAddClientModalClose = () => {
+        setIsAddClientModalOpen(false);
+    };
+
+    const handleAddProviderButtonClick = () => {
+        setIsAddClientModalOpen(true);
     };
 
     const textFieldStyles = {
@@ -308,6 +316,7 @@ export default function OutputsPage() {
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             marginEnd={3}
                             value={selectedClient}
+                            onAddButtonClick={handleAddProviderButtonClick}
                         />
                     </Grid>
                     <Grid>
@@ -383,6 +392,7 @@ export default function OutputsPage() {
                 open={isSearchModalOpen}
                 onClose={handleSearchModalClose}
             />
+            <AddClientModal open={isAddClientModalOpen} onClose={handleAddClientModalClose} />
         </>
     );
 }
