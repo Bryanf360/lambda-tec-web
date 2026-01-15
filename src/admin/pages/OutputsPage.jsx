@@ -98,6 +98,12 @@ export default function OutputsPage() {
         getClients();
     }, []);
 
+    useEffect(() => {
+        return () => {
+            resetMovement();
+        };
+    }, []);
+
     const handleStatusSelectChange = (event) => {
         setSelectedStatus(event.target.value);
     };

@@ -47,6 +47,12 @@ export default function InputsPage() {
         getProviders();
     }, []);
 
+    useEffect(() => {
+        return () => {
+            resetMovement();
+        };
+    }, []);
+
     const handleAddProviderModalClose = () => {
         setIsAddProviderModalOpen(false);
     };
