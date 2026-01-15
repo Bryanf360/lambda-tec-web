@@ -14,7 +14,7 @@ import {
     Select,
     Table,
 } from '../components';
-import { AddClientModal, DatePicker, SearchInput } from '../components/molecules';
+import { AddClientModal, AddReasonModal, DatePicker, SearchInput } from '../components/molecules';
 import FormTextField from '../components/atoms/FormTextField';
 import { Button, TextField } from '../../auth/components';
 import { useClientsStore, useInputsStore, useReasonsStore, useRows } from '../hooks';
@@ -88,6 +88,7 @@ export default function OutputsPage() {
     const [reasonInput, setReasonInput] = useState('');
     const [isAddClientModalOpen, setIsAddClientModalOpen] = useState(false);
     const dispatch = useDispatch();
+    const [isAddReasonModalOpen, setIsAddReasonModalOpen] = useState(false);
     const theme = useTheme();
 
     const selectedClient = clients.find((client) => client.id === movementHeader.companyId) || null;
@@ -174,6 +175,14 @@ export default function OutputsPage() {
 
     const handleAddProviderButtonClick = () => {
         setIsAddClientModalOpen(true);
+    };
+
+    const handleAddReasonModalClose = () => {
+        setIsAddReasonModalOpen(false);
+    };
+
+    const handleAddReasonButtonClick = () => {
+        setIsAddReasonModalOpen(true);
     };
 
     const textFieldStyles = {
@@ -359,6 +368,7 @@ export default function OutputsPage() {
                             }}
                             value={selectedReason}
                             inputValue={reasonInput}
+                            onAddButtonClick={handleAddReasonButtonClick}
                         />
                     </Grid>
                 </Grid>
@@ -393,6 +403,11 @@ export default function OutputsPage() {
                 onClose={handleSearchModalClose}
             />
             <AddClientModal open={isAddClientModalOpen} onClose={handleAddClientModalClose} />
+            <AddReasonModal
+                mode="output"
+                open={isAddReasonModalOpen}
+                onClose={handleAddReasonModalClose}
+            />
         </>
     );
 }

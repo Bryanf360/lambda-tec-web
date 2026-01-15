@@ -7,7 +7,7 @@ import { useReasonsStore } from '../../hooks';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 
-export default function AddReasonModal({ open, onClose }) {
+export default function AddReasonModal({ mode = 'input', open, onClose }) {
     const { isLoading, startSavingReason } = useReasonsStore();
     const initialValues = {
         name: '',
@@ -15,7 +15,7 @@ export default function AddReasonModal({ open, onClose }) {
 
     const handleFormSubmit = async (values, { resetForm }) => {
         const reason = {
-            type: 'input',
+            type: mode,
             name: values.name,
         };
         try {
