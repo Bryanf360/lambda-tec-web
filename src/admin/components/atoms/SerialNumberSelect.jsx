@@ -3,9 +3,19 @@ import { useEffect, useState } from 'react';
 
 import lambdaTecApi from '../../../core/api/lambdaTecApi';
 
-export default function SerialNumberSelect({ productId, warehouseId, value, onSelect, ...props }) {
+export default function SerialNumberSelect({
+    productId,
+    warehouseId,
+    value,
+    onSelect,
+    usedInstanceIds = [],
+    ...props
+}) {
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
+    const filteredOptions = options.filter(
+        (o) => !usedInstanceIds.includes(o.product_instance_id) || o.product_instance_id === value
+    );
 
     useEffect(() => {
         if (!productId || !warehouseId) return;
@@ -24,11 +34,12 @@ export default function SerialNumberSelect({ productId, warehouseId, value, onSe
     return (
         <Autocomplete
             size="small"
-            options={options}
+            options={filteredOptions}
             loading={loading}
             value={selected}
             getOptionLabel={(o) => o.serial_number}
-            onChange={(_, val) => val && onSelect(val)}
+            // onChange={(_, val) => val && onSelect(val)}
+            onChange={(_, val) => onSelect(val)}
             renderInput={(params) => (
                 <TextField
                     {...params}

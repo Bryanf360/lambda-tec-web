@@ -32,8 +32,8 @@ export default function InputsTable({
     const [selectedStatus, setSelectedStatus] = useState(statuses[0].id);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const dispatch = useDispatch();
-
     const theme = useTheme();
+    const usedInstanceIds = data.map((r) => r.instanceId).filter(Boolean);
 
     const handleWarehouseSelectChange = (event) => {
         setSelectedWarehouse(event.target.value);
@@ -116,6 +116,7 @@ export default function InputsTable({
                     value={row.warehouse}
                     onChange={(e) => {
                         updateRow(row.rowId, 'warehouse', e.target.value);
+                        updateRow(row.rowId, 'status', '');
                     }}
                     options={warehouses}
                     name="warehouse"
@@ -148,11 +149,24 @@ export default function InputsTable({
                         warehouseId={row.warehouse}
                         value={row.instanceId}
                         onSelect={(instance) => {
-                            updateRow(row.rowId, 'instanceId', instance.product_instance_id);
+                            updateRow(
+                                row.rowId,
+                                'instanceId',
+                                instance?.product_instance_id ?? null
+                            );
                             // TODO: validate if is neccessary serialNumber and assetNumber
                             // updateRow(row.rowId, 'serialNumber', instance.serialNumber);
                             // updateRow(row.rowId, 'assetNumber', instance.assetNumber);
+                            // const value = instance.status === 'new' ? 1 : 2;
+                            const value =
+                                instance?.status === 'new'
+                                    ? 1
+                                    : instance?.status === 'used'
+                                    ? 2
+                                    : '';
+                            updateRow(row.rowId, 'status', value);
                         }}
+                        usedInstanceIds={usedInstanceIds}
                     />
                 );
             },
@@ -183,12 +197,25 @@ export default function InputsTable({
                         warehouseId={row.warehouse}
                         value={row.instanceId}
                         onSelect={(instance) => {
-                            updateRow(row.rowId, 'instanceId', instance.product_instance_id);
+                            updateRow(
+                                row.rowId,
+                                'instanceId',
+                                instance?.product_instance_id ?? null
+                            );
                             // TODO: validate if is neccessary serialNumber and assetNumber
                             // updateRow(row.rowId, 'serialNumber', instance.serialNumber);
                             // updateRow(row.rowId, 'assetNumber', instance.assetNumber);
+                            // const value = instance.status === 'new' ? 1 : 2;
+                            const value =
+                                instance?.status === 'new'
+                                    ? 1
+                                    : instance?.status === 'used'
+                                    ? 2
+                                    : '';
+                            updateRow(row.rowId, 'status', value);
                         }}
                         getOptionLabel={(o) => o.asset_number}
+                        usedInstanceIds={usedInstanceIds}
                     />
                 );
             },
@@ -213,6 +240,7 @@ export default function InputsTable({
                         }}
                         options={statuses}
                         name="status"
+                        disabled={mode === 'output'}
                     />
                 );
             },

@@ -17,8 +17,8 @@ export const warehouses = [
 ];
 
 export const statuses = [
-    { id: 1, name: 'Usado' },
-    { id: 2, name: 'Nuevo' },
+    { id: 1, name: 'Nuevo' },
+    { id: 2, name: 'Usado' },
 ];
 
 export const roles = [
