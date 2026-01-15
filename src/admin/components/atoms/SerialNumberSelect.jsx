@@ -43,7 +43,27 @@ export default function SerialNumberSelect({
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="Nro. Serie"
+                    placeholder="Nro. Serie"
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            backgroundColor: '#f2f2f2',
+                            borderRadius: '12px',
+                            height: 36,
+                            paddingRight: '8px',
+                            marginTop: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#d0d0d0',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#bdbdbd',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#9e9e9e',
+                        },
+                    }}
                     InputProps={{
                         ...params.InputProps,
                         endAdornment: (
