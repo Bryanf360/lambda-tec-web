@@ -16,11 +16,12 @@ export default function SearchProductModal({ open, onClose }) {
     const theme = useTheme();
 
     useEffect(() => {
+        if (!open) return;
         const delay = setTimeout(() => {
             startLoadingProducts({ page: page + 1, limit, search });
         }, 400);
         return () => clearTimeout(delay);
-    }, [page, limit, search]);
+    }, [page, limit, search, open]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
