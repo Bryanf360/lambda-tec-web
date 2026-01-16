@@ -62,6 +62,7 @@ export default function Table({
     havePagination = true,
     onPageChange,
     onRowsPerPageChange,
+    rowsPerPage,
     ...props
 }) {
     return (
