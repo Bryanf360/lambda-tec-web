@@ -1,6 +1,7 @@
 import { ShoppingCartCheckout } from '@mui/icons-material';
 import { Checkbox, IconButton, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
@@ -158,7 +159,7 @@ export default function SearchProductWithStockTable({
                         size="small"
                         onClick={() => handleShoppingCartButtonClick(row)}
                     >
-                        <ShoppingCartCheckout sx={{ color: 'primary.main' }} />
+                        <ExitToAppIcon sx={{ color: 'primary.main' }} />
                     </IconButton>
                     {/* <IconButton color="info" size="small" onClick={() => handleViewButtonClick(row)}>
                     <Visibility />
