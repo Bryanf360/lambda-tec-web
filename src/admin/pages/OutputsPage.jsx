@@ -301,7 +301,7 @@ export default function OutputsPage() {
             <CardLayout>
                 <Grid xs={12}>
                     <Typography variant="h1" sx={{ mr: 5, mb: 2 }}>
-                        Salidas
+                        Despacho de artículos
                     </Typography>
                 </Grid>
                 <Grid container spacing={1}>
@@ -326,6 +326,9 @@ export default function OutputsPage() {
                             marginEnd={3}
                             value={selectedClient}
                             onAddButtonClick={handleAddProviderButtonClick}
+                            labelStyles={{
+                                mt: 1,
+                            }}
                         />
                     </Grid>
                     <Grid>
@@ -369,6 +372,9 @@ export default function OutputsPage() {
                             value={selectedReason}
                             inputValue={reasonInput}
                             onAddButtonClick={handleAddReasonButtonClick}
+                            labelStyles={{
+                                mt: 1,
+                            }}
                         />
                     </Grid>
                 </Grid>

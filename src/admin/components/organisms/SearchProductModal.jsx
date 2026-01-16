@@ -7,6 +7,8 @@ import { SearchInput } from '../molecules';
 import SearchProductTable from './SearchProductTable';
 import { Button } from '../../../auth/components';
 import { useProductsStore } from '../../hooks';
+import { useDispatch } from 'react-redux';
+import { setProducts } from '../../slices/productsSlice';
 
 export default function SearchProductModal({ open, onClose }) {
     const { isLoading, meta, products, startLoadingProducts } = useProductsStore();
@@ -14,14 +16,24 @@ export default function SearchProductModal({ open, onClose }) {
     const [limit, setLimit] = useState(meta.limit);
     const [search, setSearch] = useState('');
     const theme = useTheme();
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!open) return;
+        // if (!open) return;
         const delay = setTimeout(() => {
             startLoadingProducts({ page: page + 1, limit, search });
         }, 400);
-        return () => clearTimeout(delay);
-    }, [page, limit, search, open]);
+        return () => {
+            // dispatch(setProducts({ data: [], meta: { page: 1, limit: 5, total: 0 } }));
+            clearTimeout(delay);
+        };
+    }, [page, limit, search]);
+
+    // useEffect(() => {
+    //     if (!open) return;
+    //     setPage(0);
+    //     setSearch('');
+    // }, [open]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

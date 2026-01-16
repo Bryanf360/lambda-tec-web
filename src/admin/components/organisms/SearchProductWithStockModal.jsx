@@ -17,6 +17,13 @@ export default function SearchProductWithStockModal({ open, onClose }) {
     const theme = useTheme();
 
     useEffect(() => {
+        if (!open) return;
+
+        startLoadingProductsWithStock({ page: 1, limit, search });
+    }, [open]);
+
+    useEffect(() => {
+        if (!open) return;
         const delay = setTimeout(() => {
             startLoadingProductsWithStock({ page: page + 1, limit, search });
         }, 400);

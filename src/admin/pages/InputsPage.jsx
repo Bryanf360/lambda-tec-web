@@ -159,6 +159,9 @@ export default function InputsPage() {
                             marginEnd={3}
                             onAddButtonClick={handleAddProviderButtonClick}
                             value={selectedProvider}
+                            labelStyles={{
+                                mt: 1,
+                            }}
                         />
                     </Grid>
                     <Grid>
@@ -201,6 +204,9 @@ export default function InputsPage() {
                             }}
                             value={selectedReason}
                             inputValue={reasonInput}
+                            labelStyles={{
+                                mt: 1,
+                            }}
                         />
                     </Grid>
                 </Grid>

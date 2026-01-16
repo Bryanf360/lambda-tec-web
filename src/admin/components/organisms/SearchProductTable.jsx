@@ -199,7 +199,8 @@ export default function SearchProductTable({
         <Table
             isLoading={isLoading}
             page={page}
-            rowsPerPage={limit}
+            // TODO: validate if is neccessary rows per page
+            // rowsPerPage={limit}
             total={total}
             columns={columns}
             data={data}

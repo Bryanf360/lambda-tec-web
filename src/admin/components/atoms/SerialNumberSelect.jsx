@@ -43,7 +43,7 @@ export default function SerialNumberSelect({
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    placeholder="Nro. Serie"
+                    placeholder="--"
                     variant="outlined"
                     size="small"
                     sx={{

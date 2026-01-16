@@ -9,6 +9,7 @@ import { AddProductModal, CardLayout, DeleteModal, SearchInput, Table } from '..
 import { Button, Chip } from '../../auth/components';
 import FormTextField from '../components/atoms/FormTextField';
 import { useProductsStore } from '../hooks';
+import { setProducts } from '../slices/productsSlice';
 
 const data = [
     {
@@ -74,6 +75,7 @@ export default function ProductsPage() {
     const [page, setPage] = useState(meta.page - 1);
     const [limit, setLimit] = useState(meta.limit);
     const [search, setSearch] = useState('');
+    const [hasInteracted, setHasInteracted] = useState(false);
 
     const columns = [
         { id: 'name', label: 'Nombre', minWidth: 200 },
@@ -163,23 +165,31 @@ export default function ProductsPage() {
     ];
 
     useEffect(() => {
+        if (!hasInteracted) return;
         const delay = setTimeout(() => {
             startLoadingProductsWithStock({ page: page + 1, limit, search });
         }, 400);
         return () => clearTimeout(delay);
     }, [page, limit, search]);
 
+    useEffect(() => {
+        startLoadingProductsWithStock({ page: page + 1, limit, search });
+    }, []);
+
     const handleChangePage = (event, newPage) => {
         // TODO: test pagination to reset to 5
+        setHasInteracted(true);
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
+        setHasInteracted(true);
         setLimit(parseInt(event.target.value, 10));
         setPage(0);
     };
 
     const handleSearch = (searchTerm) => {
+        setHasInteracted(true);
         setSearch(searchTerm);
         setPage(0);
     };

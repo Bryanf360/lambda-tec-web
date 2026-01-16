@@ -250,7 +250,7 @@ export default function InputsTable({
         },
         {
             id: 'amountToEnter',
-            label: 'Cantidad a Ingresar',
+            label: mode === 'input' ? 'Cantidad a Ingresar' : 'Cantidad a Salir',
             minWidth: 170,
             render: (_, row) => {
                 return row.isConsumable ? (

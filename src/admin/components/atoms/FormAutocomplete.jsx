@@ -1,16 +1,10 @@
-import {
-    Autocomplete,
-    Box,
-    InputAdornment,
-    styled,
-    useTheme,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Autocomplete, Box, InputAdornment, styled, useTheme } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AddIcon from '@mui/icons-material/Add';
 
-import { Button, TextField } from "../../../auth/components";
-import { InputLabel } from "./";
+import { Button, TextField } from '../../../auth/components';
+import { InputLabel } from './';
 
 const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
     '& .MuiFilledInput-root': {
@@ -47,21 +41,18 @@ export default function FormAutocomplete({
     marginEnd,
     marginStart,
     haveAddButton = true,
-    placeholder = "",
+    placeholder = '',
     onAddButtonClick,
     error,
     helperText,
-    // onChange,
-    // name,
+    labelStyles,
     ...props
 }) {
     const theme = useTheme();
 
     return (
         <>
-            {labelText && variant === 'block' && (
-                <InputLabel>{labelText}</InputLabel>
-            )}
+            {labelText && variant === 'block' && <InputLabel>{labelText}</InputLabel>}
             <Box
                 sx={{
                     display: 'flex',
@@ -70,9 +61,10 @@ export default function FormAutocomplete({
                     p: 0,
                     mr: marginEnd,
                     ml: marginStart,
-                }}>
+                }}
+            >
                 {labelText && variant === 'inline' && (
-                    <InputLabel sx={{ mr: 1.3, }}>{labelText}</InputLabel>
+                    <InputLabel sx={{ mr: 1.3, ...labelStyles }}>{labelText}</InputLabel>
                 )}
                 <StyledAutocomplete
                     popupIcon={<KeyboardArrowDownIcon sx={{ color: '#1a2b6d' }} />}
@@ -87,7 +79,13 @@ export default function FormAutocomplete({
                                     ...params.InputProps,
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <SearchIcon fontSize="small" sx={{ color: theme.palette.grey[400], fontSize: '1.5rem' }} />
+                                            <SearchIcon
+                                                fontSize="small"
+                                                sx={{
+                                                    color: theme.palette.grey[400],
+                                                    fontSize: '1.5rem',
+                                                }}
+                                            />
                                         </InputAdornment>
                                     ),
                                     sx: {
@@ -95,8 +93,8 @@ export default function FormAutocomplete({
                                         fontSize: '0.875rem',
                                         fontWeigth: 500,
                                         letterSpacing: 0,
-                                    }
-                                }
+                                    },
+                                },
                             }}
                             // name={name}
                             error={error}
@@ -109,7 +107,11 @@ export default function FormAutocomplete({
                     //     onChange(value);
                     // }}
                     {...props}
-                    sx={{ flex: 1, ...(variant === 'inline' ? { minWidth: 100, width: 200 } : {}), ...props.sx }}
+                    sx={{
+                        flex: 1,
+                        ...(variant === 'inline' ? { minWidth: 100, width: 200 } : {}),
+                        ...props.sx,
+                    }}
                 />
                 {haveAddButton && (
                     <Button
