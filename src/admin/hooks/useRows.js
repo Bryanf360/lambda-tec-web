@@ -11,7 +11,6 @@ function validateRows(rows) {
 
     rows.forEach((row) => {
         if (!row.warehouse || row.warehouse === '') {
-            // console.log(row);
             errors.push({
                 rowId: row.rowId,
                 field: 'warehouse',
@@ -19,7 +18,7 @@ function validateRows(rows) {
             });
         }
 
-        if (!row.instanceId && !row.serialNumber && !row.assetNumber) {
+        if (!row.isConsumable && !row.instanceId && !row.serialNumber && !row.assetNumber) {
             errors.push({
                 rowId: row.rowId,
                 field: 'instanceId',
@@ -27,7 +26,7 @@ function validateRows(rows) {
             });
         }
 
-        if (!row.serialNumber) {
+        if (!row.isConsumable && !row.instanceId && !row.serialNumber) {
             errors.push({
                 rowId: row.rowId,
                 field: 'serialNumber',
@@ -35,7 +34,7 @@ function validateRows(rows) {
             });
         }
 
-        if (!row.assetNumber) {
+        if (!row.isConsumable && !row.instanceId && !row.assetNumber) {
             errors.push({
                 rowId: row.rowId,
                 field: 'assetNumber',

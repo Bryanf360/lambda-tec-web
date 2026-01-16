@@ -26,7 +26,6 @@ export default function SearchProductWithStockTable({
     const selectedProducts = useSelector((state) => state.inputs.selectedProducts);
     const theme = useTheme();
     const dispatch = useDispatch();
-    // console.log('selectedProductInputs: ', selectedProductInputs);
 
     const textFieldStyles = {
         '& .MuiFilledInput-input': {
@@ -71,7 +70,6 @@ export default function SearchProductWithStockTable({
             label: 'Cantidad',
             minWidth: 125,
             render: (_, row) => {
-                // console.log('row: ', row);
                 return (
                     // <FormAutocomplete
                     //     options={warehouses}
@@ -90,11 +88,14 @@ export default function SearchProductWithStockTable({
                             ...textFieldStyles,
                         }}
                         value={
-                            selectedProductInputs[row.id]?.quantity ??
-                            selectedProducts[row.id]?.quantity ??
+                            // data de cantidades de productos local
                             row.type === 'consumable'
                                 ? row.stock
-                                : ''
+                                : selectedProductInputs[row.id]?.quantity ??
+                                  selectedProducts[row.id]?.quantity
+                            // row.type === 'consumable'
+                            //     ? row.stock
+                            //     : ''
                         }
                         onChange={(e) => handleQuantityInputChange(row.id, e.target.value)}
                         disabled={row.type === 'consumable'}
@@ -185,20 +186,18 @@ export default function SearchProductWithStockTable({
     };
 
     const handleShoppingCartButtonClick = (row) => {
-        // console.log('row: ', row);
         const productLocalData = selectedProductInputs[row.id];
         const productStoreData = selectedProducts[row.id];
 
-        const quantity = Number(
-            productLocalData?.quantity ?? productStoreData?.quantity ?? row.type === 'consumable'
-                ? row.stock
-                : 0
+        let quantity = Number(productLocalData?.quantity ?? productStoreData?.quantity ?? 0);
+        if (row.type === 'consumable') quantity = row.stock;
+        const storedQuantity = Number(
+            productStoreData?.quantity ?? productLocalData?.quantity ?? 0
         );
-        const storedQuantity = Number(productStoreData?.quantity ?? 0);
         const singleWarehouse =
             productLocalData?.singleWarehouse ?? productLocalData?.singleWarehouse ?? false;
 
-        if (!quantity || quantity <= 0) {
+        if (row.type !== 'consumable' && (!quantity || quantity <= 0)) {
             toast.error('Debes ingresar una cantidad');
             return;
         }
@@ -208,9 +207,16 @@ export default function SearchProductWithStockTable({
             return;
         }
 
-        if (row.stock <= storedQuantity) {
-            toast.error(`Stock insuficiente para añadir mas unidades del producto ${row.name}`);
-            return;
+        if (!productStoreData?.quantity) {
+            if (row.stock < storedQuantity) {
+                toast.error(`Stock insuficiente para añadir mas unidades del producto ${row.name}`);
+                return;
+            }
+        } else {
+            if (row.stock <= storedQuantity) {
+                toast.error(`Stock insuficiente para añadir mas unidades del producto ${row.name}`);
+                return;
+            }
         }
 
         // ✅ Aquí sí sincronizas con Redux (tu store global)

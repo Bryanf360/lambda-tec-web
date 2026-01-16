@@ -120,7 +120,10 @@ export default function InputsTable({
                     }}
                     options={warehouses}
                     name="warehouse"
-                    disabled={row.isConsumable || (row.singleWarehouse && row.index !== 1)}
+                    disabled={
+                        (mode === 'output' && row.isConsumable) ||
+                        (row.singleWarehouse && row.index !== 1)
+                    }
                 />
             ),
         },
