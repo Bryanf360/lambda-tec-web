@@ -1,4 +1,4 @@
-import { Button, styled } from "@mui/material"
+import { Button, styled } from '@mui/material';
 
 const kindMap = {
     primary: { color: 'primary', variant: 'contained' },
@@ -14,15 +14,15 @@ const StyledButton = styled(Button)(({ theme, ownerState }) => ({
     paddingBlock: 8,
     boxShadow: ownerState.kind !== 'secondary' ? '0 4px 4px 0 rgba(0, 0, 0, 0.25)' : 'none',
     '&.MuiButtonBase-root': {
-        border: ownerState.kind !== 'secondary' ? 'none' : '1px solid #D1D1D1'
+        border: ownerState.kind !== 'secondary' ? 'none' : '1px solid #D1D1D1',
     },
     '& .MuiButtonBase-root:hover': {
-        boxShadow: ownerState.kind !== 'secondary' ? '0 4px 4px 0 rgba(0, 0, 0, 0.25)' : 'none'
-    }
+        boxShadow: ownerState.kind !== 'secondary' ? '0 4px 4px 0 rgba(0, 0, 0, 0.25)' : 'none',
+    },
 }));
 
 export default ({
-    kind = "primary",
+    kind = 'primary',
     // sx,
     children,
     ...props
@@ -34,11 +34,11 @@ export default ({
             variant={variant}
             color={color}
             ownerState={{
-                kind
+                kind,
             }}
             {...props}
         >
             {children}
         </StyledButton>
-    )
-}
+    );
+};

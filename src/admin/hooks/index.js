@@ -4,6 +4,7 @@ export { default as useCitiesStore } from './useCitiesStore';
 export { default as useClientsStore } from './useClientsStore';
 export { default as useDashboardStore } from './useDashboardStore';
 export { default as useInputsStore } from './useInputsStore';
+export { default as useInstancesStore } from './useInstancesStore';
 export { default as useModelsStore } from './useModelsStore';
 export { default as usePartNumbersStore } from './usePartNumbersStore';
 export { default as useProductsStore } from './useProductsStore';

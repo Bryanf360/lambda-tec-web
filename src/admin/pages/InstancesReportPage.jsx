@@ -1,32 +1,31 @@
+import { useEffect } from 'react';
+
 import { Grid, Typography } from '@mui/material';
 
-import { CardLayout } from '../components';
-import { Button } from '../../auth/components';
-import { useNavigate } from 'react-router-dom';
+import { CardLayout, InstancesReportTable } from '../components';
+import { useInstancesStore } from '../hooks';
 
-export default function ReportsPage() {
-    const navigate = useNavigate();
+export default function InstancesReportPage() {
+    const { isLoading, instances, startLoadingInstances } = useInstancesStore();
 
-    const handleInstancesButtonClick = () => {
-        navigate('/report/instances');
-    };
+    useEffect(() => {
+        startLoadingInstances();
+    }, []);
 
     return (
         <CardLayout>
             <Grid xs={12}>
                 <Typography variant="h1" sx={{ mr: 5, mb: 2 }}>
-                    Recepción de artículos
+                    Instancias
                 </Typography>
             </Grid>
-            <Button variant="contained" kind="primary" onClick={handleInstancesButtonClick}>
-                Instancias
-            </Button>
             {/* <Button variant="contained" kind="primary" onClick={handleInstancesButtonClick}>
                 Instancias
             </Button>
             <Button variant="contained" kind="primary" onClick={handleInstancesButtonClick}>
                 Instancias
             </Button> */}
+            <InstancesReportTable isLoading={isLoading} data={[]} />
         </CardLayout>
     );
 }

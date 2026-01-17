@@ -14,6 +14,7 @@ import {
     providersReducer,
     inputsReducer,
     clientsReducer,
+    instancesReducer,
 } from './admin/slices';
 
 export default configureStore({
@@ -24,6 +25,7 @@ export default configureStore({
         clients: clientsReducer,
         dashboard: dashboardReducer,
         inputs: inputsReducer,
+        instances: instancesReducer,
         models: modelsReducer,
         partNumbers: partNumbersReducer,
         products: productsReducer,

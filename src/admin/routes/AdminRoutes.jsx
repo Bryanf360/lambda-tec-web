@@ -1,15 +1,16 @@
-import { Navigate, Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { 
+import {
     DashboardPage,
-    InputsPage, 
-    OutputsPage, 
-    ProductDetailsPage, 
-    ProductsPage, 
-    ReportsPage, 
+    InputsPage,
+    InstancesReportPage,
+    OutputsPage,
+    ProductDetailsPage,
+    ProductsPage,
+    ReportsPage,
     UsersPage,
-} from "../pages"
-import { AdminLayout } from "../components"
+} from '../pages';
+import { AdminLayout } from '../components';
 
 export const AdminRoutes = () => {
     return (
@@ -21,9 +22,10 @@ export const AdminRoutes = () => {
                 <Route path="inputs" element={<InputsPage />} />
                 <Route path="outputs" element={<OutputsPage />} />
                 <Route path="reports" element={<ReportsPage />} />
+                <Route path="report/instances" element={<InstancesReportPage />} />
                 <Route path="users" element={<UsersPage />} />
                 <Route path="*" element={<Navigate to="/dashboard" />} />
             </Route>
         </Routes>
-    )
-}
+    );
+};
