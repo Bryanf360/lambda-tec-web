@@ -1,18 +1,19 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import lambdaTecApi from '../../core/api/lambdaTecApi';
-import { setIsLoading } from '../slices/instancesSlice';
+import { setInstances, setIsLoading } from '../slices/instancesSlice';
 
 const useInstancesStore = () => {
-    const { isLoading, instances } = useSelector((state) => state.instances);
+    const { isLoading, instances, meta } = useSelector((state) => state.instances);
     const dispatch = useDispatch();
 
-    const startLoadingInstances = async () => {
+    const startLoadingInstances = async ({ page = 1, limit = 10 }) => {
         try {
             dispatch(setIsLoading(true));
-            const { data } = await lambdaTecApi.get('/reports/instances');
-            console.log('data: ', data);
-            // dispatch(loadingInstances(data.data));
+            const { data } = await lambdaTecApi.get('/reports/instances', {
+                params: { page, limit },
+            });
+            dispatch(setInstances({ data: data.data, meta: data.meta }));
         } catch (error) {
             console.log('error: ', error);
             // toast.error(error?.response?.data?.message);
@@ -23,6 +24,7 @@ const useInstancesStore = () => {
 
     return {
         isLoading,
+        meta,
         instances,
         startLoadingInstances,
     };

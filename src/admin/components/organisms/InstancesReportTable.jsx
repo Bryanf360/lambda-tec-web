@@ -1,12 +1,13 @@
 import { Typography } from '@mui/material';
 
 import Table from './Table';
+import dayjs from 'dayjs';
 
-export default function InstancesReportTable({ data = [], isLoading = false, ...props }) {
+export default function InstancesReportTable(props) {
     const columns = [
-        { id: 'type', label: 'Tipo', minWidth: 200 },
-        { id: 'name', label: 'Nombre', minWidth: 200 },
-        { id: 'description', label: 'Descripción', minWidth: 200 },
+        { id: 'type', label: 'Tipo', minWidth: 100 },
+        { id: 'name', label: 'Nombre', minWidth: 175 },
+        { id: 'description', label: 'Descripción', minWidth: 225 },
         {
             id: 'brand',
             label: 'Marca',
@@ -18,7 +19,7 @@ export default function InstancesReportTable({ data = [], isLoading = false, ...
         {
             id: 'model',
             label: 'Modelo',
-            minWidth: 150,
+            minWidth: 125,
             // render: (_, row) => (
             //     <Typography variant="tableCell">{`${row['model']['name']}`}</Typography>
             // ),
@@ -39,15 +40,25 @@ export default function InstancesReportTable({ data = [], isLoading = false, ...
             //     <Typography variant="tableCell">{`${row['unit_type']['simbol']} - ${row['unit_type']['name']}`}</Typography>
             // ),
         },
-        { id: 'serialNumber', label: 'Número de Serie', minWidth: 200 },
-        { id: 'assetNumber', label: 'Número de Activo', minWidth: 200 },
-        { id: 'warehouse', label: 'Bodega', minWidth: 200 },
-        { id: 'createdAt', label: 'Fecha de Creación', minWidth: 200 },
+        { id: 'serialNumber', label: 'Número de Serie', minWidth: 125 },
+        { id: 'assetNumber', label: 'Número de Activo', minWidth: 125 },
+        { id: 'warehouse', label: 'Bodega', minWidth: 150 },
+        { id: 'status', label: 'Estado', minWidth: 100 },
+        {
+            id: 'createdAt',
+            label: 'Fecha de Creación',
+            minWidth: 150,
+            render: (_, row) => (
+                <Typography variant="tableCell">
+                    {dayjs(row.createdAt).format('DD/MM/YYYY')}
+                </Typography>
+            ),
+        },
     ];
 
     return (
         <>
-            <Table isLoading={isLoading} columns={columns} data={[]} {...props} />
+            <Table columns={columns} {...props} />
         </>
     );
 }

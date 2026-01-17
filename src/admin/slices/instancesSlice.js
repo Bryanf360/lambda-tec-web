@@ -5,11 +5,16 @@ export const instancesSlice = createSlice({
     initialState: {
         isLoading: true,
         instances: [],
+        meta: {
+            page: 1,
+            limit: 5,
+            total: 0,
+        },
     },
     reducers: {
-        loadingInstances: (state, { payload }) => {
-            state.brands = payload;
-            state.isLoading = false;
+        setInstances: (state, { payload }) => {
+            state.instances = payload.data;
+            state.meta = payload.meta;
         },
         setIsLoading: (state, { payload }) => {
             state.isLoading = payload;
@@ -18,6 +23,6 @@ export const instancesSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { loadingInstances, setIsLoading } = instancesSlice.actions;
+export const { setInstances, setIsLoading } = instancesSlice.actions;
 
 export default instancesSlice.reducer;
