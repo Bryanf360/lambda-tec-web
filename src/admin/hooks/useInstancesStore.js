@@ -7,11 +7,11 @@ const useInstancesStore = () => {
     const { isLoading, instances, meta } = useSelector((state) => state.instances);
     const dispatch = useDispatch();
 
-    const startLoadingInstances = async ({ page = 1, limit = 10 }) => {
+    const startLoadingInstances = async ({ page = 1, limit = 10, dateFrom, dateTo }) => {
         try {
             dispatch(setIsLoading(true));
             const { data } = await lambdaTecApi.get('/reports/instances', {
-                params: { page, limit },
+                params: { page, limit, dateFrom, dateTo },
             });
             dispatch(setInstances({ data: data.data, meta: data.meta }));
         } catch (error) {

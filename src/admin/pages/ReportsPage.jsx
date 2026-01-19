@@ -18,8 +18,8 @@ export default function ReportsPage() {
                     Recepción de artículos
                 </Typography>
             </Grid>
-            <Button variant="contained" kind="primary" onClick={handleInstancesButtonClick}>
-                Instancias
+            <Button kind="tertiary" onClick={handleInstancesButtonClick}>
+                Productos en Bodega
             </Button>
             {/* <Button variant="contained" kind="primary" onClick={handleInstancesButtonClick}>
                 Instancias
