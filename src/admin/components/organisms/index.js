@@ -1,5 +1,6 @@
 export { default as AddModal } from './AddModal';
 export { default as Drawer } from './Drawer';
+export { default as InputsReportTable } from './InputsReportTable';
 export { default as InputsTable } from './InputsTable';
 export { default as InstancesReportTable } from './InstancesReportTable';
 export { default as SearchProductModal } from './SearchProductModal';

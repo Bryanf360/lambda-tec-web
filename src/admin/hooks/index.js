@@ -6,6 +6,7 @@ export { default as useDashboardStore } from './useDashboardStore';
 export { default as useInputsStore } from './useInputsStore';
 export { default as useInstancesStore } from './useInstancesStore';
 export { default as useModelsStore } from './useModelsStore';
+export { default as useMovementsStore } from './useMovementsStore';
 export { default as usePartNumbersStore } from './usePartNumbersStore';
 export { default as useProductsStore } from './useProductsStore';
 export { default as useProvidersStore } from './useProvidersStore';

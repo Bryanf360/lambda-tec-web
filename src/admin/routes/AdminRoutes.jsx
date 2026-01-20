@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
     DashboardPage,
     InputsPage,
+    InputsReportPage,
     InstancesReportPage,
     OutputsPage,
     ProductDetailsPage,
@@ -23,6 +24,7 @@ export const AdminRoutes = () => {
                 <Route path="outputs" element={<OutputsPage />} />
                 <Route path="reports" element={<ReportsPage />} />
                 <Route path="report/instances" element={<InstancesReportPage />} />
+                <Route path="report/inputs" element={<InputsReportPage />} />
                 <Route path="users" element={<UsersPage />} />
                 <Route path="*" element={<Navigate to="/dashboard" />} />
             </Route>

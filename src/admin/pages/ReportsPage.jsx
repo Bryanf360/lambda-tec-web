@@ -11,6 +11,10 @@ export default function ReportsPage() {
         navigate('/report/instances');
     };
 
+    const handleInputsButtonClick = () => {
+        navigate('/report/inputs');
+    };
+
     return (
         <CardLayout>
             <Grid xs={12}>
@@ -20,6 +24,10 @@ export default function ReportsPage() {
             </Grid>
             <Button kind="tertiary" onClick={handleInstancesButtonClick}>
                 Productos en Bodega
+            </Button>
+            {/* TODO: fix stick buttons */}
+            <Button kind="tertiary" onClick={handleInputsButtonClick} sx={{ mx: 1 }}>
+                Historial de Ingreso de Productos
             </Button>
             {/* <Button variant="contained" kind="primary" onClick={handleInstancesButtonClick}>
                 Instancias

@@ -6,6 +6,7 @@ export { default as dashboardReducer } from './dashboardSlice';
 export { default as inputsReducer } from './inputsSlice';
 export { default as instancesReducer } from './instancesSlice';
 export { default as modelsReducer } from './modelsSlice';
+export { default as movementsReducer } from './movementsSlice';
 export { default as partNumbersReducer } from './partNumbersSlice';
 export { default as productsReducer } from './productsSlice';
 export { default as providersReducer } from './providersSlice';
