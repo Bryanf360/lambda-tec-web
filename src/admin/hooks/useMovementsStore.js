@@ -22,11 +22,27 @@ const useMovementsStore = () => {
         }
     };
 
+    const startLoadingOutputMovements = async ({ page = 1, limit = 10, dateFrom, dateTo }) => {
+        try {
+            dispatch(setIsLoading(true));
+            const { data } = await lambdaTecApi.get('/reports/outputs', {
+                params: { page, limit, dateFrom, dateTo },
+            });
+            dispatch(setMovements({ data: data.data, meta: data.meta }));
+        } catch (error) {
+            console.log('error: ', error);
+            // toast.error(error?.response?.data?.message);
+        } finally {
+            dispatch(setIsLoading(false));
+        }
+    };
+
     return {
         isLoading,
         meta,
         movements,
         startLoadingMovements,
+        startLoadingOutputMovements,
     };
 };
 

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { Grid, Typography } from '@mui/material';
+import { Grid, IconButton, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 import PrintIcon from '@mui/icons-material/Print';
+import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { CardLayout, DatePicker, InputsReportTable, InstancesReportTable } from '../components';
 import { useInstancesStore, useMovementsStore } from '../hooks';
@@ -16,6 +18,7 @@ export default function InputsReportPage() {
     const [limit, setLimit] = useState(meta.limit);
     const [dateFrom, setDateFrom] = useState(dayjs());
     const [dateTo, setDateTo] = useState(dayjs());
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (dateFrom && dateTo && dayjs(dateFrom).isAfter(dayjs(dateTo), 'day')) {
@@ -72,10 +75,28 @@ export default function InputsReportPage() {
         }
     };
 
+    const hanldeBackButtonClick = () => {
+        navigate('/reports');
+    };
+
     return (
         <CardLayout>
-            <Grid xs={12}>
-                <Typography variant="h1" sx={{ mr: 5, mb: 2 }}>
+            <Grid container alignItems="center" sx={{ mb: 2 }}>
+                <IconButton
+                    sx={{
+                        backgroundColor: 'secondary.main',
+                        borderRadius: 2,
+                        boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
+                        padding: 1,
+                        '&:hover': {
+                            backgroundColor: '#f5f5f5',
+                        },
+                    }}
+                    onClick={hanldeBackButtonClick}
+                >
+                    <ArrowBackIcon sx={{ color: '#C49B5B' }} />
+                </IconButton>
+                <Typography variant="h1" sx={{ m: 3 }}>
                     Historial de Ingresos de Productos
                 </Typography>
             </Grid>
@@ -85,7 +106,15 @@ export default function InputsReportPage() {
                         labelText="Fecha desde"
                         value={dateFrom}
                         onChange={(newValue) => {
-                            console.log('dateFrom: ', newValue);
+                            if (
+                                newValue &&
+                                dateTo &&
+                                dayjs(newValue).isAfter(dayjs(dateTo), 'day')
+                            ) {
+                                toast.error('La fecha "Desde" no puede ser mayor que "Hasta"');
+                                return;
+                            }
+                            setPage(0);
                             setDateFrom(newValue);
                         }}
                         marginEnd={3}
@@ -96,7 +125,15 @@ export default function InputsReportPage() {
                         labelText="Fecha hasta"
                         value={dateTo}
                         onChange={(newValue) => {
-                            console.log('dateTo: ', dateTo);
+                            if (
+                                dateFrom &&
+                                newValue &&
+                                dayjs(dateFrom).isAfter(dayjs(newValue), 'day')
+                            ) {
+                                toast.error('La fecha "Desde" no puede ser mayor que "Hasta"');
+                                return;
+                            }
+                            setPage(0);
                             setDateTo(newValue);
                         }}
                         marginEnd={3}

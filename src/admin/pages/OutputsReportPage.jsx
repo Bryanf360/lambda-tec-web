@@ -3,17 +3,17 @@ import { useEffect, useState } from 'react';
 import { Grid, IconButton, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 import PrintIcon from '@mui/icons-material/Print';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
-import { CardLayout, DatePicker, InstancesReportTable } from '../components';
-import { useInstancesStore } from '../hooks';
-import { Button } from '../../auth/components';
-import lambdaTecApi from '../../core/api/lambdaTecApi';
 import dayjs from 'dayjs';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 
-export default function InstancesReportPage() {
-    const { isLoading, instances, meta, startLoadingInstances } = useInstancesStore();
+import { CardLayout, DatePicker, InputsReportTable, InstancesReportTable } from '../components';
+import { useInstancesStore, useMovementsStore } from '../hooks';
+import { Button } from '../../auth/components';
+import lambdaTecApi from '../../core/api/lambdaTecApi';
+
+export default function OutputsReportPage() {
+    const { isLoading, movements, meta, startLoadingOutputMovements } = useMovementsStore();
     const [page, setPage] = useState(meta.page - 1);
     const [limit, setLimit] = useState(meta.limit);
     const [dateFrom, setDateFrom] = useState(dayjs());
@@ -21,11 +21,7 @@ export default function InstancesReportPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (dateFrom && dateTo && dayjs(dateFrom).isAfter(dayjs(dateTo), 'day')) {
-            toast.error('La fecha "Desde" no puede ser mayor que "Hasta"');
-            return;
-        }
-        startLoadingInstances({
+        startLoadingOutputMovements({
             page: page + 1,
             limit,
             dateFrom: dateFrom.format('YYYY-MM-DD'),
@@ -49,7 +45,7 @@ export default function InstancesReportPage() {
         try {
             // TODO: move consume of api to custom hook de instances
             const response = await lambdaTecApi.get(
-                `/reports/instances/export?dateFrom=${dDateFrom}&dateTo=${dDateTo}`,
+                `/reports/outputs/export?dateFrom=${dDateFrom}&dateTo=${dDateTo}`,
                 {
                     responseType: 'blob',
                 }
@@ -63,7 +59,7 @@ export default function InstancesReportPage() {
 
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'productos-en-bodega.pdf';
+            link.download = 'historial-salidas-productos.pdf';
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -97,7 +93,7 @@ export default function InstancesReportPage() {
                     <ArrowBackIcon sx={{ color: '#C49B5B' }} />
                 </IconButton>
                 <Typography variant="h1" sx={{ m: 3 }}>
-                    Productos en Bodega
+                    Historial de Salidas de Productos
                 </Typography>
             </Grid>
             <Grid container sx={{ flexDirection: 'row', justifyContent: 'space-between', mb: 3 }}>
@@ -159,7 +155,7 @@ export default function InstancesReportPage() {
             <Button variant="contained" kind="primary" onClick={handleInstancesButtonClick}>
                 Instancias
             </Button> */}
-            <InstancesReportTable
+            {/* <InstancesReportTable
                 isLoading={isLoading}
                 data={instances}
                 page={page}
@@ -167,6 +163,16 @@ export default function InstancesReportPage() {
                 rowsPerPage={limit}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
+            /> */}
+            <InputsReportTable
+                isLoading={isLoading}
+                data={movements}
+                page={page}
+                total={meta.total}
+                rowsPerPage={limit}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                mode="outputs"
             />
         </CardLayout>
     );

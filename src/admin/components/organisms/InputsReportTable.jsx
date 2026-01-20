@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import Table from './Table';
 import dayjs from 'dayjs';
 
-export default function InputsReportTable(props) {
+export default function InputsReportTable({ mode = 'input', ...props }) {
     const columns = [
         {
             id: 'code',
@@ -55,8 +55,8 @@ export default function InputsReportTable(props) {
         },
         { id: 'reason', label: 'Motivo', minWidth: 175 },
         {
-            id: 'supplier',
-            label: 'Proveedor',
+            id: mode === 'input' ? 'supplier' : 'client',
+            label: mode === 'input' ? 'Proveedor' : 'Cliente',
             minWidth: 100,
             // render: (_, row) => (
             //     <Typography variant="tableCell">{`${row['unit_type']['simbol']} - ${row['unit_type']['name']}`}</Typography>

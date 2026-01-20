@@ -3,6 +3,7 @@ export { default as InputsPage } from './InputsPage';
 export { default as InputsReportPage } from './InputsReportPage';
 export { default as InstancesReportPage } from './InstancesReportPage';
 export { default as OutputsPage } from './OutputsPage';
+export { default as OutputsReportPage } from './OutputsReportPage';
 export { default as ProductDetailsPage } from './ProductDetailsPage';
 export { default as ProductsPage } from './ProductsPage';
 export { default as ReportsPage } from './ReportsPage';

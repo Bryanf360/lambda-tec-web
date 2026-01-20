@@ -6,6 +6,7 @@ import {
     InputsReportPage,
     InstancesReportPage,
     OutputsPage,
+    OutputsReportPage,
     ProductDetailsPage,
     ProductsPage,
     ReportsPage,
@@ -25,6 +26,7 @@ export const AdminRoutes = () => {
                 <Route path="reports" element={<ReportsPage />} />
                 <Route path="report/instances" element={<InstancesReportPage />} />
                 <Route path="report/inputs" element={<InputsReportPage />} />
+                <Route path="report/outputs" element={<OutputsReportPage />} />
                 <Route path="users" element={<UsersPage />} />
                 <Route path="*" element={<Navigate to="/dashboard" />} />
             </Route>
