@@ -13,3 +13,4 @@ export { default as providersReducer } from './providersSlice';
 export { default as provincesReducer } from './provincesSlice';
 export { default as reasonsReducer } from './reasonsSlice';
 export { default as unitTypesReducer } from './unitTypesSlice';
+export { default as usersReducer } from './usersSlice';

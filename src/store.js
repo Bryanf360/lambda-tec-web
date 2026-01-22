@@ -16,6 +16,7 @@ import {
     clientsReducer,
     instancesReducer,
     movementsReducer,
+    usersReducer,
 } from './admin/slices';
 
 export default configureStore({
@@ -35,5 +36,6 @@ export default configureStore({
         provinces: provincesReducer,
         reasons: reasonsReducer,
         unitTypes: unitTypesReducer,
+        users: usersReducer,
     },
 });

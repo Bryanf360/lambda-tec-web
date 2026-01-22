@@ -54,6 +54,11 @@ export default function ({ width, isOpen, onClose }) {
             path: '/reports',
             icon: <AssignmentTurnedInOutlinedIcon sx={{ color: theme.palette.white[100] }} />,
         },
+        {
+            text: 'Usuarios',
+            path: '/users',
+            icon: <AssignmentTurnedInOutlinedIcon sx={{ color: theme.palette.white[100] }} />,
+        },
     ];
 
     const handleItemButtonClick = () => {

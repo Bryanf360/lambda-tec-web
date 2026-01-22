@@ -119,6 +119,10 @@ export default function ({
                     }}
                     disableUnderline
                 >
+                    <MenuItem value={0} disabled>
+                        <Typography sx={{ opacity: 0.4 }}>{placeholder}</Typography>
+                    </MenuItem>
+
                     {options.map((option) => (
                         <MenuItem
                             key={option.id}
