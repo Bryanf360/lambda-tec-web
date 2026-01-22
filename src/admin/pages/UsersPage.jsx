@@ -72,11 +72,13 @@ const data = [
 export default function UsersPage() {
     const {} = useFetch('https://jsonplaceholder.typicode.com/users');
     const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
-    const { users, isLoading, getUsers } = useUsersStore();
+    const { isLoading, users, meta, getUsers } = useUsersStore();
+    const [page, setPage] = useState(meta.page - 1);
+    const [limit, setLimit] = useState(meta.limit);
 
     useEffect(() => {
-        getUsers();
-    }, []);
+        getUsers({ page: page + 1, limit });
+    }, [page, limit]);
 
     const handleAddButtonClick = () => {
         setIsAddUserModalOpen(true);
@@ -89,6 +91,16 @@ export default function UsersPage() {
     const StatusChip = ({ status }) => (
         <Chip label={status} size="small" color={status === 'active' ? 'success' : 'default'} />
     );
+
+    const handleChangePage = (event, newPage) => {
+        // TODO: test pagination to reset to 5
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setLimit(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     const columns = [
         { id: 'names', label: 'Nombres', minWidth: 200 },
@@ -148,13 +160,13 @@ export default function UsersPage() {
             <Table
                 data={users}
                 columns={columns}
-                isLoading={false}
-                page={1}
+                isLoading={isLoading}
+                page={page}
                 // TODO: review if is a neccessary
                 // rowsPerPage={limit}
-                total={5}
-                onPageChange={() => {}}
-                onRowsPerPageChange={() => {}}
+                total={meta.total}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
             />
             <AddUserModal open={isAddUserModalOpen} onClose={handleAddUserModalClose} />
         </CardLayout>

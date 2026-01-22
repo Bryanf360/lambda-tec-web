@@ -5,13 +5,15 @@ import { addUser, setIsLoading, setUsers, updateUser } from '../slices/usersSlic
 
 const useUsersStore = () => {
     const dispatch = useDispatch();
-    const { users, isLoading } = useSelector((state) => state.users);
+    const { isLoading, users, meta } = useSelector((state) => state.users);
 
-    const getUsers = async () => {
+    const getUsers = async ({ page = 1, limit = 10 }) => {
         dispatch(setIsLoading(true));
         try {
-            const { data } = await lambdaTecApi.get('/users');
-            dispatch(setUsers(data.data));
+            const { data } = await lambdaTecApi.get('/users', {
+                params: { page, limit },
+            });
+            dispatch(setUsers({ data: data.data, meta: data.meta }));
         } catch (err) {
             console.log('err: ', err);
         } finally {
@@ -51,8 +53,9 @@ const useUsersStore = () => {
     };
 
     return {
-        users,
         isLoading,
+        users,
+        meta,
         getUsers,
         saveUser,
         removeUser,

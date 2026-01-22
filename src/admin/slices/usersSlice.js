@@ -1,8 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    users: [],
     isLoading: false,
+    meta: {
+        page: 1,
+        limit: 5,
+        total: 0,
+    },
+    users: [],
 };
 
 const usersSlice = createSlice({
@@ -12,8 +17,9 @@ const usersSlice = createSlice({
         setIsLoading: (state, action) => {
             state.isLoading = action.payload;
         },
-        setUsers: (state, action) => {
-            state.users = action.payload;
+        setUsers: (state, { payload }) => {
+            state.users = payload.data;
+            state.meta = payload.meta;
         },
         addUser: (state, action) => {
             state.users.unshift(action.payload);
