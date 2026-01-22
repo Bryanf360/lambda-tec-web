@@ -62,3 +62,23 @@ export const providerValidationSchema = Yup.object({
     province: Yup.object().nullable().required('La provincia es requerida'),
     city: Yup.object().nullable().required('La ciudad es requerida'),
 });
+
+export const userValidationSchema = Yup.object({
+    names: Yup.string().required('Los nombres son requeridos'),
+    lastnames: Yup.string().required('Los apellidos son requeridos'),
+    email: Yup.string().email('El correo no es válido').required('El correo es requerido'),
+    role: Yup.mixed().test(
+        'required',
+        'El rol es requerido',
+        (value) => value !== '' && value !== undefined && value !== null
+    ),
+    status: Yup.mixed().test(
+        'required',
+        'El estado es requerido',
+        (value) => value !== '' && value !== undefined && value !== null
+    ),
+    password: Yup.string().required('La contraseña es requerida').min(6, 'Mínimo 6 caracteres'),
+    repeatPassword: Yup.string()
+        .required('Debe repetir la contraseña')
+        .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden'),
+});

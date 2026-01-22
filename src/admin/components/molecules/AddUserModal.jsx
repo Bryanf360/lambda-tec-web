@@ -1,24 +1,37 @@
 import { useEffect, useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { Box, Grid, IconButton, InputAdornment } from '@mui/material';
 
 import { Form, Formik } from 'formik';
 import { toast } from 'react-toastify';
 
 import { AddModal, FormAutocomplete, FormTextField } from '../';
 import { useCitiesStore, useProvidersStore, useProvincesStore, useUsersStore } from '../../hooks';
-import { providerValidationSchema } from '../../helpers';
+import { providerValidationSchema, userValidationSchema } from '../../helpers';
 import { Select } from '../../../core/components';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export default function AddUserModal({ open, onClose }) {
-    const { saveUser, isLoading } = useUsersStore();
+    const { saveUser, isLoading, isSaving, getUsers } = useUsersStore();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+
     const initialValues = {
         names: '',
         lastnames: '',
         email: '',
         role: '',
+        status: '',
         password: '',
         repeatPassword: '',
+    };
+
+    const handleTogglePassword = () => {
+        setShowPassword((prev) => !prev);
+    };
+
+    const handleRepeatPasswordToggle = () => {
+        setShowRepeatPassword((prev) => !prev);
     };
 
     const handleFormSubmit = async (values, { resetForm }) => {
@@ -28,13 +41,15 @@ export default function AddUserModal({ open, onClose }) {
             email: values.email,
             role: values.role === 1 ? 'admin' : 'technician',
             password: values.password,
-            status: 'active',
+            status: values.status === 1 ? 'active' : 'inactive',
         };
         try {
             const message = await saveUser(user);
             toast.success(message);
             resetForm();
             onClose();
+            console.log('asdfasdf');
+            getUsers({ page: 1, limit: 5 });
         } catch (error) {
             toast.error(error || 'Error interno del servidor');
         }
@@ -48,7 +63,7 @@ export default function AddUserModal({ open, onClose }) {
         <Formik
             initialValues={initialValues}
             onSubmit={handleFormSubmit}
-            // validationSchema={providerValidationSchema}
+            validationSchema={userValidationSchema}
         >
             {({
                 values,
@@ -72,7 +87,8 @@ export default function AddUserModal({ open, onClose }) {
                         }}
                         hasCenteredButtons={false}
                         onSubmit={handleSubmit}
-                        isLoading={isLoading}
+                        isLoading={isSaving}
+                        showDate={false}
                     >
                         <Grid container spacing={1} component={Form}>
                             <Grid size={{ xs: 12, sm: 6 }}>
@@ -123,7 +139,7 @@ export default function AddUserModal({ open, onClose }) {
                                     required
                                 /> */}
                                 <Select
-                                    labelText="Rol"
+                                    labelText="Rol*"
                                     value={values.role}
                                     name="role"
                                     onChange={handleChange}
@@ -138,9 +154,29 @@ export default function AddUserModal({ open, onClose }) {
                                         { id: 2, name: 'Técnico' },
                                     ]}
                                     variant="form"
+                                    // sx={{ mb: 2 }}
                                 />
+                                <Box sx={{ mb: 2 }} />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 6 }}>
+                                <Select
+                                    labelText="Estado*"
+                                    value={values.status}
+                                    name="status"
+                                    onChange={handleChange}
+                                    placeholder="Seleccione"
+                                    labelId="select-label"
+                                    id="select"
+                                    required
+                                    error={Boolean(touched.status && errors.status)}
+                                    errorMessage={errors.status}
+                                    options={[
+                                        { id: 1, name: 'Activo' },
+                                        { id: 2, name: 'Inactivo' },
+                                    ]}
+                                    variant="form"
+                                />
+                                <Box sx={{ mb: 2 }} />
                                 <FormTextField
                                     labelText="Contraseña*"
                                     placeholder="Ingrese la contraseña"
@@ -150,6 +186,27 @@ export default function AddUserModal({ open, onClose }) {
                                     error={touched.password && Boolean(errors.password)}
                                     helperText={touched.password && errors.password}
                                     sx={{ mb: 2 }}
+                                    type={showPassword ? 'text' : 'password'}
+                                    slotProps={{
+                                        input: {
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={handleTogglePassword}
+                                                        onMouseDown={(e) => e.preventDefault()}
+                                                        edge="end"
+                                                    >
+                                                        {showPassword ? (
+                                                            <VisibilityOff />
+                                                        ) : (
+                                                            <Visibility />
+                                                        )}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                            disableUnderline: true,
+                                        },
+                                    }}
                                 />
                                 <FormTextField
                                     labelText="Repite Contraseña*"
@@ -160,6 +217,27 @@ export default function AddUserModal({ open, onClose }) {
                                     error={touched.repeatPassword && Boolean(errors.repeatPassword)}
                                     helperText={touched.repeatPassword && errors.repeatPassword}
                                     sx={{ mb: 2 }}
+                                    type={showRepeatPassword ? 'text' : 'password'}
+                                    slotProps={{
+                                        input: {
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={handleRepeatPasswordToggle}
+                                                        onMouseDown={(e) => e.preventDefault()}
+                                                        edge="end"
+                                                    >
+                                                        {showRepeatPassword ? (
+                                                            <VisibilityOff />
+                                                        ) : (
+                                                            <Visibility />
+                                                        )}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                            disableUnderline: true,
+                                        },
+                                    }}
                                 />
                             </Grid>
                         </Grid>

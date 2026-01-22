@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     isLoading: false,
+    isSaving: false,
     meta: {
         page: 1,
         limit: 5,
@@ -16,6 +17,9 @@ const usersSlice = createSlice({
     reducers: {
         setIsLoading: (state, action) => {
             state.isLoading = action.payload;
+        },
+        setIsSaving: (state, action) => {
+            state.isSaving = action.payload;
         },
         setUsers: (state, { payload }) => {
             state.users = payload.data;
@@ -34,6 +38,7 @@ const usersSlice = createSlice({
     },
 });
 
-export const { setIsLoading, setUsers, addUser, updateUser, deleteUser } = usersSlice.actions;
+export const { setIsLoading, setIsSaving, setUsers, addUser, updateUser, deleteUser } =
+    usersSlice.actions;
 
 export default usersSlice.reducer;

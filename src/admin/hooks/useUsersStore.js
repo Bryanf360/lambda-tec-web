@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import lambdaTecApi from '../../core/api/lambdaTecApi';
-import { addUser, setIsLoading, setUsers, updateUser } from '../slices/usersSlice';
+import { addUser, setIsLoading, setIsSaving, setUsers, updateUser } from '../slices/usersSlice';
 
 const useUsersStore = () => {
     const dispatch = useDispatch();
-    const { isLoading, users, meta } = useSelector((state) => state.users);
+    const { isLoading, isSaving, users, meta } = useSelector((state) => state.users);
 
     const getUsers = async ({ page = 1, limit = 10 }) => {
         dispatch(setIsLoading(true));
@@ -22,7 +22,7 @@ const useUsersStore = () => {
     };
 
     const saveUser = async (user) => {
-        dispatch(setIsLoading(true));
+        dispatch(setIsSaving(true));
         try {
             if (user.id) {
                 const { data } = await lambdaTecApi.put('/users', user);
@@ -30,12 +30,12 @@ const useUsersStore = () => {
                 return data.message;
             }
             const { data } = await lambdaTecApi.post('/users', user);
-            dispatch(addUser(data.data));
+            // dispatch(addUser(data.data));
             return data.message;
         } catch (err) {
             throw err?.response?.data?.message;
         } finally {
-            dispatch(setIsLoading(false));
+            dispatch(setIsSaving(false));
         }
     };
 
@@ -54,6 +54,7 @@ const useUsersStore = () => {
 
     return {
         isLoading,
+        isSaving,
         users,
         meta,
         getUsers,

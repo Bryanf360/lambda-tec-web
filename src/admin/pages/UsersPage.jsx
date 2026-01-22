@@ -112,7 +112,10 @@ export default function UsersPage() {
             id: 'status',
             label: 'Estado',
             minWidth: 200,
-            render: (_, row) => <StatusChip status={row.status} />,
+            render: (_, row) => {
+                console.log(row);
+                return <StatusChip status={row.status} />;
+            },
         },
         {
             id: 'actions',
@@ -163,8 +166,6 @@ export default function UsersPage() {
                 isLoading={isLoading}
                 page={page}
                 limit={limit}
-                // TODO: review if is a neccessary
-                // rowsPerPage={limit}
                 total={meta.total}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}

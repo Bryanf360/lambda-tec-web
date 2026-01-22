@@ -66,7 +66,6 @@ export default function AddProductModal({ open, onClose, mode, product }) {
             onClose();
         }
         if (isOk && !product?.id) {
-            console.log('@@@@@@');
             startLoadingProductsWithStock({ page: 1 });
         }
     };
@@ -214,8 +213,8 @@ export default function AddProductModal({ open, onClose, mode, product }) {
                                             !values.brand
                                                 ? 'Selecciona una marca primero'
                                                 : isLoadingModels
-                                                ? 'Cargando modelos...'
-                                                : 'No se encontraron modelos'
+                                                  ? 'Cargando modelos...'
+                                                  : 'No se encontraron modelos'
                                         }
                                         value={values.model}
                                         onChange={(event, value) => {
@@ -240,8 +239,8 @@ export default function AddProductModal({ open, onClose, mode, product }) {
                                             !values.model
                                                 ? 'Selecciona un modelo primero'
                                                 : isLoadingPartNumbers
-                                                ? 'Cargando números de parte...'
-                                                : 'No se encontraron números de parte'
+                                                  ? 'Cargando números de parte...'
+                                                  : 'No se encontraron números de parte'
                                         }
                                         getOptionLabel={(option) => option.name}
                                         isOptionEqualToValue={(option, val) => option.id === val.id}
