@@ -162,6 +162,7 @@ export default function UsersPage() {
                 columns={columns}
                 isLoading={isLoading}
                 page={page}
+                limit={limit}
                 // TODO: review if is a neccessary
                 // rowsPerPage={limit}
                 total={meta.total}
