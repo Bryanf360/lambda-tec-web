@@ -82,3 +82,19 @@ export const userValidationSchema = Yup.object({
         .required('Debe repetir la contraseña')
         .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden'),
 });
+
+export const editUserValidationSchema = Yup.object({
+    names: Yup.string().required('Los nombres son requeridos'),
+    lastnames: Yup.string().required('Los apellidos son requeridos'),
+    email: Yup.string().email('El correo no es válido').required('El correo es requerido'),
+    role: Yup.mixed().test(
+        'required',
+        'El rol es requerido',
+        (value) => value !== '' && value !== undefined && value !== null
+    ),
+    status: Yup.mixed().test(
+        'required',
+        'El estado es requerido',
+        (value) => value !== '' && value !== undefined && value !== null
+    ),
+});

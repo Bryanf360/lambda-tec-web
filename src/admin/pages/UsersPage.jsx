@@ -75,6 +75,7 @@ export default function UsersPage() {
     const { isLoading, users, meta, getUsers } = useUsersStore();
     const [page, setPage] = useState(meta.page - 1);
     const [limit, setLimit] = useState(meta.limit);
+    const [selectedUser, setSelectedUser] = useState(null);
 
     useEffect(() => {
         getUsers({ page: page + 1, limit });
@@ -86,6 +87,7 @@ export default function UsersPage() {
 
     const handleAddUserModalClose = () => {
         setIsAddUserModalOpen(false);
+        setSelectedUser(null);
     };
 
     const StatusChip = ({ status }) => (
@@ -102,6 +104,11 @@ export default function UsersPage() {
         setPage(0);
     };
 
+    const handleEditButtonClick = (user) => {
+        setIsAddUserModalOpen(true);
+        setSelectedUser(user);
+    };
+
     const columns = [
         { id: 'names', label: 'Nombres', minWidth: 200 },
         { id: 'lastnames', label: 'Apellidos', minWidth: 200 },
@@ -113,7 +120,6 @@ export default function UsersPage() {
             label: 'Estado',
             minWidth: 200,
             render: (_, row) => {
-                console.log(row);
                 return <StatusChip status={row.status} />;
             },
         },
@@ -123,7 +129,11 @@ export default function UsersPage() {
             minWidth: 150,
             render: (_, row) => (
                 <>
-                    <IconButton color="primary" size="small" onClick={() => {}}>
+                    <IconButton
+                        color="primary"
+                        size="small"
+                        onClick={() => handleEditButtonClick(row)}
+                    >
                         <Edit />
                     </IconButton>
                     <IconButton color="error" size="small" onClick={() => {}}>
@@ -170,7 +180,12 @@ export default function UsersPage() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            <AddUserModal open={isAddUserModalOpen} onClose={handleAddUserModalClose} />
+            <AddUserModal
+                open={isAddUserModalOpen}
+                onClose={handleAddUserModalClose}
+                mode={selectedUser ? 'edit' : 'create'}
+                user={selectedUser}
+            />
         </CardLayout>
     );
 

@@ -1,11 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import lambdaTecApi from '../../core/api/lambdaTecApi';
-import { addUser, setIsLoading, setIsSaving, setUsers, updateUser } from '../slices/usersSlice';
+import {
+    addUser,
+    setIsEditing,
+    setIsLoading,
+    setIsSaving,
+    setUsers,
+    updateUser,
+} from '../slices/usersSlice';
 
 const useUsersStore = () => {
     const dispatch = useDispatch();
-    const { isLoading, isSaving, users, meta } = useSelector((state) => state.users);
+    const { isLoading, isSaving, isEditing, users, meta } = useSelector((state) => state.users);
 
     const getUsers = async ({ page = 1, limit = 10 }) => {
         dispatch(setIsLoading(true));
@@ -22,20 +29,23 @@ const useUsersStore = () => {
     };
 
     const saveUser = async (user) => {
-        dispatch(setIsSaving(true));
         try {
-            if (user.id) {
-                const { data } = await lambdaTecApi.put('/users', user);
+            if (user.user_id) {
+                dispatch(setIsEditing(true));
+                const { data } = await lambdaTecApi.put(`/users/${user.user_id}`, user);
                 dispatch(updateUser(data.data));
                 return data.message;
             }
+            dispatch(setIsSaving(true));
             const { data } = await lambdaTecApi.post('/users', user);
             // dispatch(addUser(data.data));
             return data.message;
         } catch (err) {
+            console.log('err: ', err);
             throw err?.response?.data?.message;
         } finally {
             dispatch(setIsSaving(false));
+            dispatch(setIsEditing(false));
         }
     };
 
@@ -55,6 +65,7 @@ const useUsersStore = () => {
     return {
         isLoading,
         isSaving,
+        isEditing,
         users,
         meta,
         getUsers,

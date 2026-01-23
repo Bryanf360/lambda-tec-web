@@ -7,23 +7,27 @@ import { toast } from 'react-toastify';
 
 import { AddModal, FormAutocomplete, FormTextField } from '../';
 import { useCitiesStore, useProvidersStore, useProvincesStore, useUsersStore } from '../../hooks';
-import { providerValidationSchema, userValidationSchema } from '../../helpers';
+import {
+    editUserValidationSchema,
+    providerValidationSchema,
+    userValidationSchema,
+} from '../../helpers';
 import { Select } from '../../../core/components';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-export default function AddUserModal({ open, onClose }) {
+export default function AddUserModal({ open, onClose, mode = 'create', user }) {
     const { saveUser, isLoading, isSaving, getUsers } = useUsersStore();
     const [showPassword, setShowPassword] = useState(false);
     const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
     const initialValues = {
-        names: '',
-        lastnames: '',
-        email: '',
-        role: '',
-        status: '',
-        password: '',
-        repeatPassword: '',
+        names: user?.names ?? '',
+        lastnames: user?.lastnames ?? '',
+        email: user?.email ?? '',
+        role: user?.role === 'admin' ? 1 : user?.role === 'technician' ? 2 : '',
+        status: user?.status === 'active' ? 1 : user?.status === 'inactive' ? 2 : '',
+        password: mode === 'edit' ? null : '',
+        repeatPassword: mode === 'edit' ? null : '',
     };
 
     const handleTogglePassword = () => {
@@ -35,7 +39,8 @@ export default function AddUserModal({ open, onClose }) {
     };
 
     const handleFormSubmit = async (values, { resetForm }) => {
-        const user = {
+        const userToSave = {
+            user_id: user?.user_id ?? null,
             names: values.names,
             lastnames: values.lastnames,
             email: values.email,
@@ -44,13 +49,13 @@ export default function AddUserModal({ open, onClose }) {
             status: values.status === 1 ? 'active' : 'inactive',
         };
         try {
-            const message = await saveUser(user);
+            const message = await saveUser(userToSave);
             toast.success(message);
             resetForm();
             onClose();
-            console.log('asdfasdf');
-            getUsers({ page: 1, limit: 5 });
+            if (!user?.user_id) getUsers({ page: 1, limit: 5 });
         } catch (error) {
+            console.log('error: ', error);
             toast.error(error || 'Error interno del servidor');
         }
     };
@@ -63,7 +68,8 @@ export default function AddUserModal({ open, onClose }) {
         <Formik
             initialValues={initialValues}
             onSubmit={handleFormSubmit}
-            validationSchema={userValidationSchema}
+            validationSchema={mode === 'create' ? userValidationSchema : editUserValidationSchema}
+            enableReinitialize
         >
             {({
                 values,
@@ -89,6 +95,7 @@ export default function AddUserModal({ open, onClose }) {
                         onSubmit={handleSubmit}
                         isLoading={isSaving}
                         showDate={false}
+                        mode={mode}
                     >
                         <Grid container spacing={1} component={Form}>
                             <Grid size={{ xs: 12, sm: 6 }}>
@@ -177,68 +184,81 @@ export default function AddUserModal({ open, onClose }) {
                                     variant="form"
                                 />
                                 <Box sx={{ mb: 2 }} />
-                                <FormTextField
-                                    labelText="Contraseña*"
-                                    placeholder="Ingrese la contraseña"
-                                    value={values.password}
-                                    name="password"
-                                    onChange={handleChange}
-                                    error={touched.password && Boolean(errors.password)}
-                                    helperText={touched.password && errors.password}
-                                    sx={{ mb: 2 }}
-                                    type={showPassword ? 'text' : 'password'}
-                                    slotProps={{
-                                        input: {
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        onClick={handleTogglePassword}
-                                                        onMouseDown={(e) => e.preventDefault()}
-                                                        edge="end"
-                                                    >
-                                                        {showPassword ? (
-                                                            <VisibilityOff />
-                                                        ) : (
-                                                            <Visibility />
-                                                        )}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            ),
-                                            disableUnderline: true,
-                                        },
-                                    }}
-                                />
-                                <FormTextField
-                                    labelText="Repite Contraseña*"
-                                    placeholder="Repite la contraseña"
-                                    value={values.repeatPassword}
-                                    name="repeatPassword"
-                                    onChange={handleChange}
-                                    error={touched.repeatPassword && Boolean(errors.repeatPassword)}
-                                    helperText={touched.repeatPassword && errors.repeatPassword}
-                                    sx={{ mb: 2 }}
-                                    type={showRepeatPassword ? 'text' : 'password'}
-                                    slotProps={{
-                                        input: {
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        onClick={handleRepeatPasswordToggle}
-                                                        onMouseDown={(e) => e.preventDefault()}
-                                                        edge="end"
-                                                    >
-                                                        {showRepeatPassword ? (
-                                                            <VisibilityOff />
-                                                        ) : (
-                                                            <Visibility />
-                                                        )}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            ),
-                                            disableUnderline: true,
-                                        },
-                                    }}
-                                />
+                                {mode === 'create' && (
+                                    <>
+                                        <FormTextField
+                                            labelText="Contraseña*"
+                                            placeholder="Ingrese la contraseña"
+                                            value={values.password}
+                                            name="password"
+                                            onChange={handleChange}
+                                            error={touched.password && Boolean(errors.password)}
+                                            helperText={touched.password && errors.password}
+                                            sx={{ mb: 2 }}
+                                            type={showPassword ? 'text' : 'password'}
+                                            slotProps={{
+                                                input: {
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                onClick={handleTogglePassword}
+                                                                onMouseDown={(e) =>
+                                                                    e.preventDefault()
+                                                                }
+                                                                edge="end"
+                                                            >
+                                                                {showPassword ? (
+                                                                    <VisibilityOff />
+                                                                ) : (
+                                                                    <Visibility />
+                                                                )}
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                    disableUnderline: true,
+                                                },
+                                            }}
+                                        />
+                                        <FormTextField
+                                            labelText="Repite Contraseña*"
+                                            placeholder="Repite la contraseña"
+                                            value={values.repeatPassword}
+                                            name="repeatPassword"
+                                            onChange={handleChange}
+                                            error={
+                                                touched.repeatPassword &&
+                                                Boolean(errors.repeatPassword)
+                                            }
+                                            helperText={
+                                                touched.repeatPassword && errors.repeatPassword
+                                            }
+                                            sx={{ mb: 2 }}
+                                            type={showRepeatPassword ? 'text' : 'password'}
+                                            slotProps={{
+                                                input: {
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                onClick={handleRepeatPasswordToggle}
+                                                                onMouseDown={(e) =>
+                                                                    e.preventDefault()
+                                                                }
+                                                                edge="end"
+                                                            >
+                                                                {showRepeatPassword ? (
+                                                                    <VisibilityOff />
+                                                                ) : (
+                                                                    <Visibility />
+                                                                )}
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                    disableUnderline: true,
+                                                },
+                                            }}
+                                        />
+                                    </>
+                                )}
                             </Grid>
                         </Grid>
                     </AddModal>
