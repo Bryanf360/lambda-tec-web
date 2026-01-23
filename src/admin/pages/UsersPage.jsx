@@ -26,6 +26,7 @@ import { AddUserModal, CardLayout, DeleteModal, Table } from '../components';
 import { Button } from '../../auth/components';
 import { useUsersStore } from '../hooks';
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
 
 const data = [
     {
@@ -93,7 +94,12 @@ export default function UsersPage() {
     };
 
     const StatusChip = ({ status }) => (
-        <Chip label={status} size="small" color={status === 'active' ? 'success' : 'default'} />
+        <Chip
+            label={status === 'active' ? 'activo' : 'inactivo'}
+            size="small"
+            color={status === 'active' ? 'success' : 'default'}
+            sx={{ borderRadius: 1 }}
+        />
     );
 
     const handleChangePage = (event, newPage) => {
@@ -133,15 +139,33 @@ export default function UsersPage() {
     };
 
     const columns = [
-        { id: 'names', label: 'Nombres', minWidth: 200 },
-        { id: 'lastnames', label: 'Apellidos', minWidth: 200 },
-        { id: 'email', label: 'Email', minWidth: 200 },
-        { id: 'role', label: 'Tipo', minWidth: 200 },
-        { id: 'created_at', label: 'Agregado', minWidth: 200 },
+        { id: 'names', label: 'Nombres', minWidth: 75 },
+        { id: 'lastnames', label: 'Apellidos', minWidth: 75 },
+        { id: 'email', label: 'Email', minWidth: 50 },
+        {
+            id: 'role',
+            label: 'Tipo',
+            minWidth: 75,
+            render: (_, row) => (
+                <Typography variant="tableCell">
+                    {row.role === 'admin' ? 'Administrador' : 'Técnico'}
+                </Typography>
+            ),
+        },
+        {
+            id: 'created_at',
+            label: 'Agregado',
+            minWidth: 50,
+            render: (_, row) => (
+                <Typography variant="tableCell">
+                    {dayjs(row.created_at).format('DD-MM-YYYY')}
+                </Typography>
+            ),
+        },
         {
             id: 'status',
             label: 'Estado',
-            minWidth: 200,
+            minWidth: 50,
             render: (_, row) => {
                 return <StatusChip status={row.status} />;
             },
@@ -149,7 +173,7 @@ export default function UsersPage() {
         {
             id: 'actions',
             label: 'Acciones',
-            minWidth: 150,
+            minWidth: 75,
             render: (_, row) => (
                 <>
                     <IconButton
@@ -163,12 +187,13 @@ export default function UsersPage() {
                         color="error"
                         size="small"
                         onClick={() => handleDeleteButtonClick(row)}
+                        disabled={row?.status === 'inactive'}
                     >
                         <Delete />
                     </IconButton>
-                    <IconButton color="info" size="small" onClick={() => {}}>
+                    {/* <IconButton color="info" size="small" onClick={() => {}}>
                         <Visibility />
-                    </IconButton>
+                    </IconButton> */}
                 </>
             ),
         },
@@ -182,21 +207,19 @@ export default function UsersPage() {
                         Usuarios
                     </Typography>
                 </Grid>
-                <Grid xs={12}>
-                    <Button
-                        kind="tertiary"
-                        sx={
-                            {
-                                // mr: 5,
-                            }
-                        }
-                        startIcon={<AddIcon />}
-                        onClick={handleAddButtonClick}
-                    >
-                        Añadir
-                    </Button>
-                </Grid>
+                <Grid xs={12}></Grid>
             </Grid>
+            <Button
+                kind="tertiary"
+                sx={{
+                    mt: 2,
+                    mb: 2,
+                }}
+                startIcon={<AddIcon />}
+                onClick={handleAddButtonClick}
+            >
+                Añadir
+            </Button>
             <Table
                 data={users}
                 columns={columns}

@@ -18,6 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import UnarchiveOutlinedIcon from '@mui/icons-material/UnarchiveOutlined';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { NavLink, useLocation, useNavigate, useNavigation } from 'react-router-dom';
 
 import { DrawerHeader } from '../atoms';
@@ -57,7 +58,7 @@ export default function ({ width, isOpen, onClose }) {
         {
             text: 'Usuarios',
             path: '/users',
-            icon: <AssignmentTurnedInOutlinedIcon sx={{ color: theme.palette.white[100] }} />,
+            icon: <PersonOutlineOutlinedIcon sx={{ color: theme.palette.white[100] }} />,
         },
     ];
 
