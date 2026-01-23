@@ -26,7 +26,14 @@ const iconContainerStyles = {
     padding: 2,
 };
 
-export default function DeleteModal({ open, onClose, onDelete, isDeleting = false }) {
+export default function DeleteModal({
+    open,
+    onClose,
+    onDelete,
+    isDeleting = false,
+    question = '¿Está seguro de eliminar este registro de forma permanente?',
+    subtitle = 'Esta acción no podrá deshacer.',
+}) {
     const theme = useTheme();
 
     return (
@@ -39,10 +46,10 @@ export default function DeleteModal({ open, onClose, onDelete, isDeleting = fals
                     Borrar Registro
                 </Typography>
                 <Typography variant="h3" color="black.50" sx={{ opacity: 0.5 }}>
-                    ¿Está seguro de eliminar este registro de forma permanente?
+                    {question}
                 </Typography>
                 <Typography variant="h3" color="black.50" sx={{ opacity: 0.5, mt: 0.5, mb: 3 }}>
-                    Esta acción no podrá deshacer.
+                    {subtitle}
                 </Typography>
                 <Grid container sx={{ width: '100%' }} spacing={1}>
                     <Grid size={6}>

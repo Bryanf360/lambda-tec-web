@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import lambdaTecApi from '../../core/api/lambdaTecApi';
 import {
     addUser,
+    deleteUserById,
+    setIsDeleting,
     setIsEditing,
     setIsLoading,
     setIsSaving,
@@ -12,7 +14,9 @@ import {
 
 const useUsersStore = () => {
     const dispatch = useDispatch();
-    const { isLoading, isSaving, isEditing, users, meta } = useSelector((state) => state.users);
+    const { isLoading, isSaving, isEditing, isDeleting, users, meta } = useSelector(
+        (state) => state.users
+    );
 
     const getUsers = async ({ page = 1, limit = 10 }) => {
         dispatch(setIsLoading(true));
@@ -49,28 +53,29 @@ const useUsersStore = () => {
         }
     };
 
-    const removeUser = async (userId) => {
-        // dispatch(setIsLoading(true));
-        // try {
-        //     const { data } = await lambdaTecApi.delete(`/companies/${userId}`);
-        //     dispatch(deleteuserById(userId));
-        //     return data.message;
-        // } catch (err) {
-        //     throw err?.response?.data?.message;
-        // } finally {
-        //     dispatch(setIsLoading(false));
-        // }
+    const deleteUser = async (userId) => {
+        dispatch(setIsDeleting(true));
+        try {
+            const { data } = await lambdaTecApi.delete(`/users/${userId}`);
+            dispatch(deleteUserById(userId));
+            return data.message;
+        } catch (err) {
+            throw err?.response?.data?.message;
+        } finally {
+            dispatch(setIsDeleting(false));
+        }
     };
 
     return {
         isLoading,
         isSaving,
         isEditing,
+        isDeleting,
         users,
         meta,
         getUsers,
         saveUser,
-        removeUser,
+        deleteUser,
     };
 };
 

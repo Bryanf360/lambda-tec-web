@@ -4,6 +4,7 @@ const initialState = {
     isLoading: false,
     isSaving: false,
     isEditing: false,
+    isDeleting: false,
     meta: {
         page: 1,
         limit: 5,
@@ -23,7 +24,10 @@ const usersSlice = createSlice({
             state.isSaving = action.payload;
         },
         setIsEditing: (state, action) => {
-            state.isSaving = action.payload;
+            state.isEditing = action.payload;
+        },
+        setIsDeleting: (state, action) => {
+            state.isDeleting = action.payload;
         },
         setUsers: (state, { payload }) => {
             state.users = payload.data;
@@ -36,8 +40,8 @@ const usersSlice = createSlice({
             const index = state.users.findIndex((user) => user.user_id === action.payload.user_id);
             if (index !== -1) state.users[index] = action.payload;
         },
-        deleteUser: (state, action) => {
-            state.users = state.users.filter((User) => User.id !== action.payload);
+        deleteUserById: (state, action) => {
+            state.users = state.users.filter((user) => user.user_id !== action.payload);
         },
     },
 });
@@ -46,10 +50,11 @@ export const {
     setIsLoading,
     setIsSaving,
     setIsEditing,
+    setIsDeleting,
     setUsers,
     addUser,
     updateUser,
-    deleteUser,
+    deleteUserById,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

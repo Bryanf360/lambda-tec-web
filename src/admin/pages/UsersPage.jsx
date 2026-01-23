@@ -22,9 +22,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { Delete, Edit, Visibility } from '@mui/icons-material';
 
 import { useFetch } from '../../core/hooks';
-import { AddUserModal, CardLayout, Table } from '../components';
+import { AddUserModal, CardLayout, DeleteModal, Table } from '../components';
 import { Button } from '../../auth/components';
 import { useUsersStore } from '../hooks';
+import { toast } from 'react-toastify';
 
 const data = [
     {
@@ -72,10 +73,11 @@ const data = [
 export default function UsersPage() {
     const {} = useFetch('https://jsonplaceholder.typicode.com/users');
     const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
-    const { isLoading, users, meta, getUsers } = useUsersStore();
+    const { isLoading, isDeleting, users, meta, getUsers, deleteUser } = useUsersStore();
     const [page, setPage] = useState(meta.page - 1);
     const [limit, setLimit] = useState(meta.limit);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     useEffect(() => {
         getUsers({ page: page + 1, limit });
@@ -109,6 +111,27 @@ export default function UsersPage() {
         setSelectedUser(user);
     };
 
+    const handleDeleteButtonClick = (user) => {
+        setIsDeleteModalOpen(true);
+        setSelectedUser(user);
+    };
+
+    const handleDeleteModalClose = () => {
+        setIsDeleteModalOpen(false);
+    };
+
+    const handleUserDelete = async () => {
+        try {
+            const message = await deleteUser(selectedUser.user_id);
+            toast.success(message);
+            setIsDeleteModalOpen(false);
+            getUsers({ page: page + 1, limit: 5 });
+        } catch (error) {
+            console.log('errror: ', error);
+            toast.error(error || 'Error interno del servidor');
+        }
+    };
+
     const columns = [
         { id: 'names', label: 'Nombres', minWidth: 200 },
         { id: 'lastnames', label: 'Apellidos', minWidth: 200 },
@@ -136,7 +159,11 @@ export default function UsersPage() {
                     >
                         <Edit />
                     </IconButton>
-                    <IconButton color="error" size="small" onClick={() => {}}>
+                    <IconButton
+                        color="error"
+                        size="small"
+                        onClick={() => handleDeleteButtonClick(row)}
+                    >
                         <Delete />
                     </IconButton>
                     <IconButton color="info" size="small" onClick={() => {}}>
@@ -185,6 +212,14 @@ export default function UsersPage() {
                 onClose={handleAddUserModalClose}
                 mode={selectedUser ? 'edit' : 'create'}
                 user={selectedUser}
+            />
+            <DeleteModal
+                open={isDeleteModalOpen}
+                onClose={handleDeleteModalClose}
+                onDelete={handleUserDelete}
+                isDeleting={isDeleting}
+                question="¿Está seguro de eliminar este registro?"
+                subtitle=""
             />
         </CardLayout>
     );
