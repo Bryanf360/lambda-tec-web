@@ -16,3 +16,4 @@ export { default as useReasonsStore } from './useReasonsStore';
 export { default as useRows } from './useRows';
 export { default as useUnitTypesStore } from './useUnitTypesStore';
 export { default as useUsersStore } from './useUsersStore';
+export { default as useWarehousesStore } from './useWarehousesStore';

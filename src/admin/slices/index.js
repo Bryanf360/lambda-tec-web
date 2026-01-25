@@ -15,3 +15,4 @@ export { default as provincesReducer } from './provincesSlice';
 export { default as reasonsReducer } from './reasonsSlice';
 export { default as unitTypesReducer } from './unitTypesSlice';
 export { default as usersReducer } from './usersSlice';
+export { default as warehousesReducer } from './warehousesSlice';

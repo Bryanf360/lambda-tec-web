@@ -18,6 +18,7 @@ import {
     movementsReducer,
     usersReducer,
     productDetailsReducer,
+    warehousesReducer,
 } from './admin/slices';
 
 export default configureStore({
@@ -39,5 +40,6 @@ export default configureStore({
         reasons: reasonsReducer,
         unitTypes: unitTypesReducer,
         users: usersReducer,
+        warehouses: warehousesReducer,
     },
 });

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { IconButton, Typography, useTheme } from '@mui/material';
 import { Delete } from '@mui/icons-material';
@@ -12,10 +12,10 @@ import {
     productInstances,
     serialNumbers,
     statuses,
-    warehouses,
+    // warehouses,
 } from '../../../data/dummyData';
 import { DeleteModal, SerialNumberSelect } from '../atoms';
-import { useRows } from '../../hooks';
+import { useRows, useWarehousesStore } from '../../hooks';
 import { decreaseQuantity, deleteSelectedProduct } from '../../slices/inputsSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -28,15 +28,20 @@ export default function InputsTable({
     mode = 'input',
     ...props
 }) {
-    const [selectedWarehouse, setSelectedWarehouse] = useState(warehouses[0].id);
     const [selectedStatus, setSelectedStatus] = useState(statuses[0].id);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const dispatch = useDispatch();
     const theme = useTheme();
     const usedInstanceIds = data.map((r) => r.instanceId).filter(Boolean);
+    // const [selectedWarehouse, setSelectedWarehouse] = useState(warehouses[0].id);
+    const { warehouses, startLoadingWarehouses } = useWarehousesStore();
+
+    useEffect(() => {
+        startLoadingWarehouses();
+    }, []);
 
     const handleWarehouseSelectChange = (event) => {
-        setSelectedWarehouse(event.target.value);
+        // setSelectedWarehouse(event.target.value);
     };
 
     const handleStatusSelectChange = (event) => {
@@ -165,8 +170,8 @@ export default function InputsTable({
                                 instance?.status === 'new'
                                     ? 1
                                     : instance?.status === 'used'
-                                    ? 2
-                                    : '';
+                                      ? 2
+                                      : '';
                             updateRow(row.rowId, 'status', value);
                         }}
                         usedInstanceIds={usedInstanceIds}
@@ -213,8 +218,8 @@ export default function InputsTable({
                                 instance?.status === 'new'
                                     ? 1
                                     : instance?.status === 'used'
-                                    ? 2
-                                    : '';
+                                      ? 2
+                                      : '';
                             updateRow(row.rowId, 'status', value);
                         }}
                         getOptionLabel={(o) => o.asset_number}
