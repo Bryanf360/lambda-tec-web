@@ -216,7 +216,7 @@ export default function ProductsPage() {
     };
 
     const handleViewButtonClick = (product) => {
-        navigate('/admin/product-details/1234');
+        navigate(`/product-details/${product?.id}`);
     };
 
     const handleDeleteModalClose = () => {
@@ -267,8 +267,7 @@ export default function ProductsPage() {
                 columns={columns}
                 isLoading={isLoading}
                 page={page}
-                // TODO: review if is a neccessary
-                // rowsPerPage={limit}
+                limit={limit}
                 total={meta.total}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}

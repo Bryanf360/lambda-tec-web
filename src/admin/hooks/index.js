@@ -8,6 +8,7 @@ export { default as useInstancesStore } from './useInstancesStore';
 export { default as useModelsStore } from './useModelsStore';
 export { default as useMovementsStore } from './useMovementsStore';
 export { default as usePartNumbersStore } from './usePartNumbersStore';
+export { default as useProductDetailsStore } from './useProductDetailsStore';
 export { default as useProductsStore } from './useProductsStore';
 export { default as useProvidersStore } from './useProvidersStore';
 export { default as useProvincesStore } from './useProvincesStore';

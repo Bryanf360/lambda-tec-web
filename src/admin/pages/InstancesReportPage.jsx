@@ -164,7 +164,7 @@ export default function InstancesReportPage() {
                 data={instances}
                 page={page}
                 total={meta.total}
-                rowsPerPage={limit}
+                limit={limit}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />

@@ -173,7 +173,7 @@ export default function InputsReportPage() {
                 data={movements}
                 page={page}
                 total={meta.total}
-                rowsPerPage={limit}
+                limit={limit}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />

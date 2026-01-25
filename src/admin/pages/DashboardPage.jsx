@@ -38,7 +38,7 @@ export default function DashboardPage() {
         },
         {
             title: 'Recepción de artículos',
-            quantity: 2,
+            // quantity: 2,
             svg: (props) => (
                 <svg
                     width="90"
@@ -57,7 +57,7 @@ export default function DashboardPage() {
         },
         {
             title: 'Despacho de artículos',
-            quantity: 2,
+            // quantity: stats?.users_quantity,
             svg: (props) => (
                 <svg
                     width="90"
@@ -93,7 +93,7 @@ export default function DashboardPage() {
         },
         {
             title: 'Reportes',
-            // quantity: 2,
+            quantity: 3,
             svg: (props) => (
                 <svg
                     width="90"
@@ -112,6 +112,7 @@ export default function DashboardPage() {
         },
         {
             title: 'Usuarios',
+            quantity: stats?.users_quantity,
             svg: (props) => (
                 <svg
                     width="90"
@@ -126,7 +127,7 @@ export default function DashboardPage() {
                     />
                 </svg>
             ),
-            path: 'users',
+            path: '/users',
         },
     ];
 
