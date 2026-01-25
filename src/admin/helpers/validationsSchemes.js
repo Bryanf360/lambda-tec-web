@@ -98,3 +98,10 @@ export const editUserValidationSchema = Yup.object({
         (value) => value !== '' && value !== undefined && value !== null
     ),
 });
+
+export const updatePasswordValidationSchema = Yup.object({
+    password: Yup.string().required('La contraseña es requerida').min(6, 'Mínimo 6 caracteres'),
+    repeatPassword: Yup.string()
+        .required('Debe repetir la contraseña')
+        .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden'),
+});

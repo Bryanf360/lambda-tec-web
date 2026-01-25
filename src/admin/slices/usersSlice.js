@@ -5,6 +5,7 @@ const initialState = {
     isSaving: false,
     isEditing: false,
     isDeleting: false,
+    isChangingPassword: false,
     meta: {
         page: 1,
         limit: 5,
@@ -29,6 +30,9 @@ const usersSlice = createSlice({
         setIsDeleting: (state, action) => {
             state.isDeleting = action.payload;
         },
+        setIsChangingPassword: (state, action) => {
+            state.isChangingPassword = action.payload;
+        },
         setUsers: (state, { payload }) => {
             state.users = payload.data;
             state.meta = payload.meta;
@@ -51,6 +55,7 @@ export const {
     setIsSaving,
     setIsEditing,
     setIsDeleting,
+    setIsChangingPassword,
     setUsers,
     addUser,
     updateUser,

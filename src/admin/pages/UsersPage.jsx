@@ -1,84 +1,24 @@
 import { useEffect, useState } from 'react';
 
-import {
-    Box,
-    Chip,
-    Grid,
-    IconButton,
-    Pagination,
-    Paper,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography,
-} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import LockIcon from '@mui/icons-material/Lock';
+import { Chip, Grid, IconButton, Typography } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
-import { Delete, Edit, Visibility } from '@mui/icons-material';
-
-import { useFetch } from '../../core/hooks';
-import { AddUserModal, CardLayout, DeleteModal, Table } from '../components';
-import { Button } from '../../auth/components';
-import { useUsersStore } from '../hooks';
+import { Delete, Edit } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 
-const data = [
-    {
-        names: 'Jhon Doe',
-        lastnames: 'Smith',
-        email: 'jhondoe@gmail.com',
-        role: 'Technician',
-        created_at: '01-01-2025',
-        status: 'active',
-    },
-    {
-        names: 'Jorge Vedón',
-        lastnames: 'Andrade',
-        email: 'jorge.vedon@gmail.com',
-        role: 'Administrator',
-        created_at: '01-02-2025',
-        status: 'inactive',
-    },
-    {
-        names: 'Liseth Vargas',
-        lastnames: 'Castillo',
-        email: 'liseth.vargas@gmail.com',
-        role: 'Manager',
-        created_at: '02-01-2025',
-        status: 'inactive',
-    },
-    {
-        names: 'Andrés Hernández',
-        lastnames: 'Hernández',
-        email: 'andres.hernandez@gmail.com',
-        role: 'Technician',
-        created_at: '01-03-2025',
-        status: 'active',
-    },
-    {
-        names: 'Jhon Smith',
-        lastnames: 'Gutierrez',
-        email: 'jhon.smith@gmail.com',
-        role: 'Administrator',
-        created_at: '01-01-2025',
-        status: 'inactive',
-    },
-];
+import { AddUserModal, CardLayout, DeleteModal, Table, UpdatePasswordModal } from '../components';
+import { Button } from '../../auth/components';
+import { useUsersStore } from '../hooks';
 
 export default function UsersPage() {
-    const {} = useFetch('https://jsonplaceholder.typicode.com/users');
     const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
     const { isLoading, isDeleting, users, meta, getUsers, deleteUser } = useUsersStore();
     const [page, setPage] = useState(meta.page - 1);
     const [limit, setLimit] = useState(meta.limit);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isUpdatePasswordModalOpen, setIsUpdatePasswordModalOpen] = useState(false);
 
     useEffect(() => {
         getUsers({ page: page + 1, limit });
@@ -103,7 +43,6 @@ export default function UsersPage() {
     );
 
     const handleChangePage = (event, newPage) => {
-        // TODO: test pagination to reset to 5
         setPage(newPage);
     };
 
@@ -136,6 +75,16 @@ export default function UsersPage() {
             console.log('errror: ', error);
             toast.error(error || 'Error interno del servidor');
         }
+    };
+
+    const handleChangePasswordButtonClick = (user) => {
+        setIsUpdatePasswordModalOpen(true);
+        setSelectedUser(user);
+    };
+
+    const handleUpdatePasswordModalClose = () => {
+        setIsUpdatePasswordModalOpen(false);
+        setSelectedUser(null);
     };
 
     const columns = [
@@ -191,9 +140,13 @@ export default function UsersPage() {
                     >
                         <Delete />
                     </IconButton>
-                    {/* <IconButton color="info" size="small" onClick={() => {}}>
-                        <Visibility />
-                    </IconButton> */}
+                    <IconButton
+                        color="info"
+                        size="small"
+                        onClick={() => handleChangePasswordButtonClick(row)}
+                    >
+                        <SettingsIcon />
+                    </IconButton>
                 </>
             ),
         },
@@ -244,58 +197,11 @@ export default function UsersPage() {
                 question="¿Está seguro de eliminar este registro?"
                 subtitle=""
             />
+            <UpdatePasswordModal
+                open={isUpdatePasswordModalOpen}
+                onClose={handleUpdatePasswordModalClose}
+                user={selectedUser}
+            />
         </CardLayout>
-    );
-
-    return (
-        <Box sx={{ p: 2 }}>
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead sx={{ backgroundColor: '#3d0d99' }}>
-                        <TableRow>
-                            {['Name', 'Email', 'Role', 'Added', 'Status', 'Actions'].map((col) => (
-                                <TableCell key={col} sx={{ color: 'white', fontWeight: 'bold' }}>
-                                    {col}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {userList.map((user, index) => (
-                            <TableRow
-                                key={index}
-                                sx={{ backgroundColor: index % 2 === 0 ? '#f8f8fc' : 'white' }}
-                            >
-                                <TableCell>{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.role}</TableCell>
-                                <TableCell>{user.createdAt}</TableCell>
-                                <TableCell>
-                                    <StatusChip status={user.status} />
-                                </TableCell>
-                                <TableCell>
-                                    <IconButton color="warning">
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton color="error">
-                                        <DeleteIcon />
-                                    </IconButton>
-                                    <IconButton color="default">
-                                        <LockIcon />
-                                    </IconButton>
-                                    <IconButton color="default">
-                                        <SettingsIcon />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
-            <Box display="flex" justifyContent="end" mt={2}>
-                <Pagination count={5} page={1} color="primary" showFirstButton showLastButton />
-            </Box>
-        </Box>
     );
 }

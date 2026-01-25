@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import lambdaTecApi from '../../core/api/lambdaTecApi';
 import {
-    addUser,
     deleteUserById,
+    setIsChangingPassword,
     setIsDeleting,
     setIsEditing,
     setIsLoading,
@@ -14,9 +14,8 @@ import {
 
 const useUsersStore = () => {
     const dispatch = useDispatch();
-    const { isLoading, isSaving, isEditing, isDeleting, users, meta } = useSelector(
-        (state) => state.users
-    );
+    const { isLoading, isSaving, isEditing, isDeleting, isChangingPassword, users, meta } =
+        useSelector((state) => state.users);
 
     const getUsers = async ({ page = 1, limit = 10 }) => {
         dispatch(setIsLoading(true));
@@ -42,7 +41,6 @@ const useUsersStore = () => {
             }
             dispatch(setIsSaving(true));
             const { data } = await lambdaTecApi.post('/users', user);
-            // dispatch(addUser(data.data));
             return data.message;
         } catch (err) {
             console.log('err: ', err);
@@ -66,16 +64,31 @@ const useUsersStore = () => {
         }
     };
 
+    const changePasswordByUserId = async (userId, password) => {
+        dispatch(setIsChangingPassword(true));
+        try {
+            const { data } = await lambdaTecApi.patch(`/users/${userId}/password`, { password });
+            return data.message;
+        } catch (error) {
+            console.log('error: ', error);
+            throw err?.response?.data?.message;
+        } finally {
+            dispatch(setIsChangingPassword(false));
+        }
+    };
+
     return {
         isLoading,
         isSaving,
         isEditing,
         isDeleting,
+        isChangingPassword,
         users,
         meta,
         getUsers,
         saveUser,
         deleteUser,
+        changePasswordByUserId,
     };
 };
 
