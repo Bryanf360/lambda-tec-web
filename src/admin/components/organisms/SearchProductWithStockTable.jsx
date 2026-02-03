@@ -88,18 +88,22 @@ export default function SearchProductWithStockTable({
                             },
                             ...textFieldStyles,
                         }}
+                        // value={
+                        //     // data de cantidades de productos local
+                        //     row.type === 'consumable'
+                        //         ? row.stock
+                        //         : (selectedProductInputs[row.id]?.quantity ??
+                        //           selectedProducts[row.id]?.quantity)
+                        //     // row.type === 'consumable'
+                        //     //     ? row.stock
+                        //     //     : ''
+                        // }
                         value={
-                            // data de cantidades de productos local
-                            row.type === 'consumable'
-                                ? row.stock
-                                : selectedProductInputs[row.id]?.quantity ??
-                                  selectedProducts[row.id]?.quantity
-                            // row.type === 'consumable'
-                            //     ? row.stock
-                            //     : ''
+                            selectedProductInputs[row.id]?.quantity ??
+                            selectedProducts[row.id]?.quantity
                         }
                         onChange={(e) => handleQuantityInputChange(row.id, e.target.value)}
-                        disabled={row.type === 'consumable'}
+                        // disabled={row.type === 'consumable'}
                     />
                 );
             },
