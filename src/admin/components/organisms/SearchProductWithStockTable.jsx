@@ -100,7 +100,8 @@ export default function SearchProductWithStockTable({
                         // }
                         value={
                             selectedProductInputs[row.id]?.quantity ??
-                            selectedProducts[row.id]?.quantity
+                            selectedProducts[`p${row.id}`]?.quantity ??
+                            0
                         }
                         onChange={(e) => handleQuantityInputChange(row.id, e.target.value)}
                         // disabled={row.type === 'consumable'}
@@ -192,20 +193,20 @@ export default function SearchProductWithStockTable({
 
     const handleShoppingCartButtonClick = (row) => {
         const productLocalData = selectedProductInputs[row.id];
-        const productStoreData = selectedProducts[row.id];
+        const productStoreData = selectedProducts[`p${row.id}`];
 
         let quantity = Number(productLocalData?.quantity ?? productStoreData?.quantity ?? 0);
-        if (row.type === 'consumable') quantity = row.stock;
+        if (quantity === 0) {
+            toast.error('Debes ingresar una cantidad');
+            return;
+        }
+
+        // if (row.type === 'consumable') quantity = row.stock;
         const storedQuantity = Number(
             productStoreData?.quantity ?? productLocalData?.quantity ?? 0
         );
         const singleWarehouse =
             productLocalData?.singleWarehouse ?? productLocalData?.singleWarehouse ?? false;
-
-        if (row.type !== 'consumable' && (!quantity || quantity <= 0)) {
-            toast.error('Debes ingresar una cantidad');
-            return;
-        }
 
         if (row.stock === 0) {
             toast.error(`El producto ${row.name} no tiene stock para añadir unidades`);

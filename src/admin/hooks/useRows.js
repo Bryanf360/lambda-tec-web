@@ -70,6 +70,13 @@ function syncRows(selectedProducts, currentRows, productOrderRef) {
         const existing = rows.filter((r) => r.productId === product.id);
         const currentCount = existing.length;
 
+        if (currentCount === 1 && product.type === 'consumable') {
+            const rowIndex = rows.findIndex((row) => row.productId === product.id);
+            if (rowIndex >= 0) {
+                rows[rowIndex].quantity = product.quantity;
+            }
+        }
+
         // -----------------------------
         // 1. AÑADIR FILAS NUEVAS
         // -----------------------------
@@ -114,8 +121,8 @@ function syncRows(selectedProducts, currentRows, productOrderRef) {
         }
     });
 
-    const validProductIds = Object.keys(selectedProducts).map(Number);
-    rows = rows.filter((row) => validProductIds.includes(row.productId));
+    const validProductIds = Object.keys(selectedProducts); //.map(Number);
+    rows = rows.filter((row) => validProductIds.includes(`p${row.productId}`));
 
     return rows;
 }
@@ -135,7 +142,6 @@ function reindexRows(rows, productOrderRef) {
     return rows.map((row, idx, arr) => {
         const sameProductRows = arr.filter((r) => r.productId === row.productId);
         const newIndex = sameProductRows.findIndex((r) => r.rowId === row.rowId) + 1;
-
         return {
             ...row,
             productIndex: productOrderRef.current[row.productId],
