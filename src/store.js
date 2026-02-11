@@ -1,10 +1,45 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
 
-import { authReducer, productsReducer } from './admin/slices'
+import {
+    authReducer,
+    productsReducer,
+    dashboardReducer,
+    brandsReducer,
+    modelsReducer,
+    unitTypesReducer,
+    partNumbersReducer,
+    reasonsReducer,
+    provincesReducer,
+    citiesReducer,
+    providersReducer,
+    inputsReducer,
+    clientsReducer,
+    instancesReducer,
+    movementsReducer,
+    usersReducer,
+    productDetailsReducer,
+    warehousesReducer,
+} from './admin/slices';
 
 export default configureStore({
     reducer: {
         auth: authReducer,
+        brands: brandsReducer,
+        cities: citiesReducer,
+        clients: clientsReducer,
+        dashboard: dashboardReducer,
+        inputs: inputsReducer,
+        instances: instancesReducer,
+        models: modelsReducer,
+        movements: movementsReducer,
+        partNumbers: partNumbersReducer,
+        productDetails: productDetailsReducer,
         products: productsReducer,
-    }
-})
+        providers: providersReducer,
+        provinces: provincesReducer,
+        reasons: reasonsReducer,
+        unitTypes: unitTypesReducer,
+        users: usersReducer,
+        warehouses: warehousesReducer,
+    },
+});

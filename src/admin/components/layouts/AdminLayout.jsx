@@ -16,6 +16,7 @@ import { Button } from "../../../auth/components";
 import { DrawerHeader } from "../atoms";
 import { Drawer } from "../organisms";
 import { useAuthStore } from "../../../auth/hooks/useAuthStore";
+import { ToastContainer } from "react-toastify";
 
 const drawerWidth = 240;
 
@@ -69,7 +70,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 );
 
 
-export const AdminLayout = () => {
+export default function AdminLayout() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const navigate = useNavigate();
     const { startLogout } = useAuthStore();
@@ -141,6 +142,7 @@ export const AdminLayout = () => {
                     <DrawerHeader />
                     <Outlet />
                 </Main>
+                <ToastContainer />
             </Box>
         </>
     )

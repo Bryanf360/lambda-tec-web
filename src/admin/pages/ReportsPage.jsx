@@ -1,10 +1,47 @@
-import { CardLayout } from "../components"
+import { Grid, Typography } from '@mui/material';
 
-export const ReportsPage = () => {
+import { CardLayout } from '../components';
+import { Button } from '../../auth/components';
+import { useNavigate } from 'react-router-dom';
+
+export default function ReportsPage() {
+    const navigate = useNavigate();
+
+    const handleInstancesButtonClick = () => {
+        navigate('/report/instances');
+    };
+
+    const handleInputsButtonClick = () => {
+        navigate('/report/inputs');
+    };
+
+    const handleOutputsButtonClick = () => {
+        navigate('/report/outputs');
+    };
+
     return (
-        <CardLayout
-            title="Reportes"
-        >
+        <CardLayout>
+            <Grid xs={12}>
+                <Typography variant="h1" sx={{ mr: 5, mb: 2 }}>
+                    Reportes de Inventario
+                </Typography>
+            </Grid>
+            <Button kind="tertiary" onClick={handleInstancesButtonClick}>
+                Productos en Bodega
+            </Button>
+            {/* TODO: fix stick buttons */}
+            <Button kind="tertiary" onClick={handleInputsButtonClick} sx={{ mx: 1 }}>
+                Historial de Ingresos de Productos
+            </Button>
+            <Button kind="tertiary" onClick={handleOutputsButtonClick}>
+                Historial de Salidas de Productos
+            </Button>
+            {/* <Button variant="contained" kind="primary" onClick={handleInstancesButtonClick}>
+                Instancias
+            </Button>
+            <Button variant="contained" kind="primary" onClick={handleInstancesButtonClick}>
+                Instancias
+            </Button> */}
         </CardLayout>
-    )
+    );
 }

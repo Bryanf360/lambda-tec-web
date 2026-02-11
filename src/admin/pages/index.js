@@ -1,8 +1,10 @@
+export { default as DashboardPage } from './DashboardPage';
+export { default as InputsPage } from './InputsPage';
+export { default as InputsReportPage } from './InputsReportPage';
+export { default as InstancesReportPage } from './InstancesReportPage';
+export { default as OutputsPage } from './OutputsPage';
+export { default as OutputsReportPage } from './OutputsReportPage';
 export { default as ProductDetailsPage } from './ProductDetailsPage';
-
-export * from './/InputsPage';
-export * from './DashboardPage';
-export * from './OutputsPage';
-export * from './ProductsPage';
-export * from './ReportsPage';
-export * from './UsersPage';
+export { default as ProductsPage } from './ProductsPage';
+export { default as ReportsPage } from './ReportsPage';
+export { default as UsersPage } from './UsersPage';

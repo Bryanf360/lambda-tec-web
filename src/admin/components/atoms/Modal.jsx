@@ -1,15 +1,9 @@
-import { Dialog } from "@mui/material";
+import { Dialog, DialogContent } from '@mui/material';
 
-export default function Modal({
-    open,
-    onClose,
-    padding,
-    children,
-    ...props
-}) {
+export default function Modal({ open, onClose, padding, children, ...props }) {
     return (
-        <Dialog 
-            open={open} 
+        <Dialog
+            open={open}
             onClose={onClose}
             {...props}
             sx={{
@@ -18,11 +12,11 @@ export default function Modal({
                     paddingBlock: 2,
                     paddingInline: 3,
                     padding: padding,
-                    ...props.sx
-                }
+                    ...props.sx,
+                },
             }}
         >
             {children}
         </Dialog>
-    )
+    );
 }

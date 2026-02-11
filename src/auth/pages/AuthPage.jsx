@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
-    Alert,
     Box,
     Grid,
     Typography,
@@ -11,7 +10,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from "@mui/icons-material/Lock";
 import { Form, Formik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 
 import { TextField, Button } from "../components";
 import logo from './../assets/logo.png';
@@ -19,9 +17,8 @@ import { loginValidationSchema } from "../../admin/helpers";
 import { useAuthStore } from "../hooks/useAuthStore";
 
 export const AuthPage = () => {
-    const navigate = useNavigate();
     const theme = useTheme();
-    const { errorMessage, status, startLogin } = useAuthStore();
+    const { startLogin } = useAuthStore();
     const [isLoading, setIsLoading] = useState(false);
 
     const handleFormSubmit = (values) => {

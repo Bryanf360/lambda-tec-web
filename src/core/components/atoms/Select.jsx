@@ -23,9 +23,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         marginLeft: 9,
         minHeight: 'auto !important',
         paddingBlock: 0,
-
     },
-}))
+}));
 
 export default function ({
     value,
@@ -33,10 +32,10 @@ export default function ({
     onChange,
     options = [],
     name,
-    placeholder = "",
+    placeholder = '',
     size = 'small',
     sx = {},
-    variant = "table",
+    variant = 'table',
     error,
     errorMessage,
     ...props
@@ -67,7 +66,15 @@ export default function ({
     return (
         <>
             {/* <InputLabel>{labelText}</InputLabel> */}
-            <Typography variant="h2" sx={{ mb: 0.5, ...(variant === 'form' ? { ...theme.typography.inputFormLabel } : {}), }}>{labelText}</Typography>
+            <Typography
+                variant="h2"
+                sx={{
+                    mb: 0.5,
+                    ...(variant === 'form' ? { ...theme.typography.inputFormLabel } : {}),
+                }}
+            >
+                {labelText}
+            </Typography>
             <FormControl fullWidth size={size} variant="filled">
                 <Select
                     displayEmpty
@@ -76,16 +83,13 @@ export default function ({
                     name={name}
                     {...props}
                     input={
-                        variant === 'auth'
-                            ? (
-                                <StyledInputBase
-                                    startAdornment={
-                                        <AssignmentIndIcon
-                                            sx={{ color: '#CFA968', opacity: 0.5 }}
-                                        />
-                                    }
-                                />
-                            ) : null
+                        variant === 'auth' ? (
+                            <StyledInputBase
+                                startAdornment={
+                                    <AssignmentIndIcon sx={{ color: '#CFA968', opacity: 0.5 }} />
+                                }
+                            />
+                        ) : null
                     }
                     sx={{
                         backgroundColor: '#f5f5f5',
@@ -97,15 +101,11 @@ export default function ({
                     }}
                     IconComponent={ExpandMoreIcon}
                     renderValue={(selected) => {
-                        if (selected === 0) {
+                        if (selected === 0 || selected === null || selected === '') {
                             return (
                                 <Typography
                                     variant={
-                                        variant === "auth"
-                                            ? "h2"
-                                            : variant === 'form'
-                                                ? "h4"
-                                                : "h5"
+                                        variant === 'auth' ? 'h2' : variant === 'form' ? 'h4' : ''
                                     }
                                     sx={{
                                         opacity: 0.4,
@@ -113,23 +113,25 @@ export default function ({
                                 >
                                     {placeholder}
                                 </Typography>
-                            )
+                            );
                         }
-                        return options.find(option => option.id === selected)?.name;
+                        return options.find((option) => option.id === selected)?.name;
                     }}
                     disableUnderline
                 >
+                    <MenuItem value={0} disabled>
+                        <Typography variant="h4">{placeholder}</Typography>
+                    </MenuItem>
+
                     {options.map((option) => (
                         <MenuItem
                             key={option.id}
                             value={option.id}
                             sx={{
                                 ...theme.typography.selectText,
-                                fontSize:
-                                    variant === 'table'
-                                        ? '0.75rem'
-                                        : '0.875rem'
-                            }}>
+                                fontSize: variant === 'table' ? '0.75rem' : '0.875rem',
+                            }}
+                        >
                             {option.name}
                         </MenuItem>
                     ))}

@@ -1,18 +1,15 @@
-import { 
-    IconButton, 
-    InputBase, 
-    Paper, 
-    useTheme,
-} from "@mui/material";
+import { IconButton, InputBase, Paper, useTheme } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
 
-export default function SearchInput({
-    placeholder = "Buscar...",
-    onChange,
-    sx,
-}) {
+export default function SearchInput({ placeholder = 'Buscar...', onSearch, sx }) {
     const theme = useTheme();
+
+    const handleTextInputChange = (event) => {
+        const searchTerm = event.target.value.trim();
+        // if (searchTerm.length < 1) return;
+        onSearch(searchTerm);
+    };
 
     return (
         <Paper
@@ -30,16 +27,17 @@ export default function SearchInput({
                 boxShadow: 3,
                 paddingInlineEnd: 0,
                 paddingBlock: 0,
-                ...sx
+                ...sx,
             }}
+            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
         >
-            <IconButton 
-                sx={{ 
+            <IconButton
+                sx={{
                     p: '10px',
                     '&:hover ': {
                         backgroundColor: 'transparent',
-                    }
-                }} 
+                    },
+                }}
                 aria-label="menu"
             >
                 <SearchIcon />
@@ -48,7 +46,7 @@ export default function SearchInput({
                 sx={{ ml: 1, flex: 1 }}
                 placeholder={placeholder}
                 inputProps={{ 'aria-label': 'search google maps' }}
-                onChange={onChange}
+                onChange={handleTextInputChange}
             />
             <IconButton
                 type="button"
@@ -65,5 +63,5 @@ export default function SearchInput({
                 <SearchIcon />
             </IconButton>
         </Paper>
-    )
+    );
 }

@@ -1,2 +1,2 @@
-export * from './AdminLayout';
-export * from './CardLayout';
+export { default as AdminLayout } from './AdminLayout';
+export { default as CardLayout } from './CardLayout';

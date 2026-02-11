@@ -1,11 +1,11 @@
-import { DatePicker } from "@mui/x-date-pickers";
-import { Box, InputAdornment, styled, TextField } from "@mui/material";
-import { useState } from "react";
-import dayjs from "dayjs";
+import { DatePicker } from '@mui/x-date-pickers';
+import { Box, InputAdornment, styled, TextField } from '@mui/material';
+import { useState } from 'react';
+import dayjs from 'dayjs';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
-import { InputLabel } from "../atoms";
+import { InputLabel } from '../atoms';
 
 const StyledDatePicker = styled(DatePicker)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.main,
@@ -17,17 +17,16 @@ const StyledDatePicker = styled(DatePicker)(({ theme }) => ({
         letterSpacing: 0,
         paddingBlock: 6.8,
     },
-}))
-
+}));
 
 export default function ({
-    labelText = "",
+    labelText = '',
     value = dayjs(),
     onChange,
     marginEnd,
+    containerStyles = {},
     ...props
 }) {
-
     return (
         <Box
             sx={{
@@ -35,20 +34,20 @@ export default function ({
                 justifyContent: 'center',
                 alignItems: 'center',
                 mr: marginEnd,
+                ...containerStyles,
             }}
         >
-            <InputLabel sx={{ mr: 1, }}>{labelText}</InputLabel>
+            <InputLabel sx={{ mr: 1 }}>{labelText}</InputLabel>
             <StyledDatePicker
                 value={value}
                 onChange={onChange}
                 format="DD/MM/YYYY"
                 slots={{
-                    openPickerIcon: () => <KeyboardArrowDownIcon sx={{ color: 'primary.main', }}/>,
-
+                    openPickerIcon: () => <KeyboardArrowDownIcon sx={{ color: 'primary.main' }} />,
                 }}
                 slotProps={{
                     textField: {
-                        variant: "filled",
+                        variant: 'filled',
                         size: 'small',
                         sx: {
                             height: '100%',
@@ -57,7 +56,7 @@ export default function ({
                             },
                             '& .MuiPickersSectionList-root': {
                                 paddingBlock: 0,
-                            }
+                            },
                         },
                         InputProps: {
                             startAdornment: (
@@ -67,12 +66,11 @@ export default function ({
                             ),
                             disableUnderline: true,
                         },
-
                     },
                 }}
                 {...props}
                 sx={{ ...props.sx }}
             />
         </Box>
-    )
+    );
 }

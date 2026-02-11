@@ -6,7 +6,7 @@ import { AdminRoutes } from "../admin/routes/AdminRoutes"
 import { AuthRoutes } from "../auth/routes/AuthRoutes"
 import { useAuthStore } from "../auth/hooks/useAuthStore"
 
-export const AppRoutes = () => {
+export default function AppRoutes() {
     const { status, checkAuthToken } = useAuthStore();
 
     useEffect(() => {

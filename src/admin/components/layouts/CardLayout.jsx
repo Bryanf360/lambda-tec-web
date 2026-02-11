@@ -1,8 +1,8 @@
 import { Card, CardContent, Typography } from "@mui/material"
 
-export const CardLayout = ({
+export default function CardLayout({
     children,
-}) => {
+}) {
     return (
         <Card
             sx={{
